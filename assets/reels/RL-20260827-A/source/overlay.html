@@ -1,0 +1,169 @@
+<meta charset="utf-8">
+<style>
+@font-face{font-family:P;src:url(Poppins-400.ttf);font-weight:400}
+@font-face{font-family:P;src:url(Poppins-500.ttf);font-weight:500}
+@font-face{font-family:P;src:url(Poppins-600.ttf);font-weight:600}
+@font-face{font-family:P;src:url(Poppins-700.ttf);font-weight:700}
+@font-face{font-family:P;src:url(Poppins-800.ttf);font-weight:800}
+@font-face{font-family:P;src:url(Poppins-900.ttf);font-weight:900}
+
+:root{
+  --blue:#238FFE; --pink:#FE0178; --green:#5FE127; --cream:#F2EBDD; --ink:#1B1338;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;background:transparent;overflow:hidden}
+body{font-family:P,sans-serif;-webkit-font-smoothing:antialiased}
+#stage{position:relative;width:1080px;height:1920px}
+
+/* ---------- scrims ---------- */
+.scrim-b{position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(12,8,26,.88) 0%,rgba(12,8,26,.72) 18%,rgba(12,8,26,.30) 42%,rgba(12,8,26,0) 60%)}
+.scrim-t{position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(12,8,26,.55) 0%,rgba(12,8,26,.12) 14%,rgba(12,8,26,0) 26%)}
+
+/* ---------- text cards ---------- */
+.card{position:absolute;left:96px;right:96px;bottom:330px}
+.eyebrow{display:inline-flex;align-items:center;gap:14px;
+  padding:16px 30px 16px 26px;border-radius:999px;background:var(--pink);
+  color:#fff;font-weight:700;font-size:29px;letter-spacing:.16em;text-transform:uppercase;
+  box-shadow:0 12px 34px rgba(254,1,120,.35)}
+.eyebrow.blue{background:var(--blue);box-shadow:0 12px 34px rgba(35,143,254,.35)}
+.eyebrow.green{background:var(--green);color:#0E2A05;box-shadow:0 12px 34px rgba(95,225,39,.32)}
+.eyebrow i{display:block;width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.9)}
+.eyebrow.green i{background:rgba(14,42,5,.85)}
+.row{display:flex;gap:30px;margin-top:34px}
+.bar{width:9px;border-radius:9px;flex:none;transform-origin:top}
+h1{color:#fff;font-weight:800;font-size:80px;line-height:1.13;letter-spacing:-.02em;
+   text-shadow:0 6px 40px rgba(0,0,0,.55)}
+h1 .w{display:inline-block;white-space:pre}
+h1 em{font-style:normal;color:var(--green)}
+h1 u{text-decoration:none;color:#FFD8EA}
+
+/* ---------- watermark ---------- */
+#wm{position:absolute;top:74px;left:96px;transform-origin:top left;filter:drop-shadow(0 6px 18px rgba(0,0,0,.45))}
+#wm .tag{display:none}
+
+/* ---------- logo ---------- */
+.logo{display:inline-block;text-align:center}
+.mic{position:relative;display:inline-flex;font-weight:900;font-size:210px;line-height:.9;letter-spacing:-.045em}
+.mic .m{color:var(--blue)} .mic .i{color:var(--green)} .mic .c{color:var(--pink)}
+.leaf{position:absolute;width:58px;right:-16px;top:-30px;fill:var(--pink);transform:rotate(14deg);transform-origin:50% 90%}
+.tag{margin-top:6px;display:flex;justify-content:center;gap:12px;font-weight:800;font-size:30px;letter-spacing:.15em}
+.tag .p{color:var(--pink)} .tag .b{color:var(--blue)} .tag .g{color:var(--green)}
+
+/* ---------- outro ---------- */
+#outro{position:absolute;inset:0;background:var(--cream);overflow:hidden}
+.blob{position:absolute;border-radius:50%}
+.b1{width:760px;height:760px;background:#F9C9DA;right:-230px;top:-210px}
+.b2{width:620px;height:620px;background:#BFE4FB;left:-220px;bottom:520px}
+.b3{width:560px;height:560px;background:#FBEEC2;right:-160px;bottom:-190px}
+#outro .inner{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:0}
+#outro .logo{transform-origin:50% 60%}
+.oline{margin-top:78px;color:var(--ink);font-weight:600;font-size:40px;text-align:center;line-height:1.4;max-width:760px}
+.handle{margin-top:36px;display:inline-flex;align-items:center;gap:16px;
+  padding:20px 40px;border-radius:999px;background:var(--ink);color:#fff;
+  font-weight:700;font-size:36px;letter-spacing:.02em}
+.handle svg{width:38px;height:38px;fill:none;stroke:#fff;stroke-width:2.1}
+
+/* ---------- keyframes ---------- */
+@keyframes wordIn{from{opacity:0;transform:translateY(42px) rotate(1.2deg)}to{opacity:1;transform:none}}
+@keyframes chipIn{from{opacity:0;transform:translateY(26px) scale(.9)}to{opacity:1;transform:none}}
+@keyframes barIn{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes cardOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-46px)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeOut{from{opacity:1}to{opacity:0}}
+@keyframes riseIn{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
+@keyframes logoIn{from{opacity:0;transform:scale(.78) translateY(30px)}to{opacity:1;transform:none}}
+@keyframes leafIn{0%{opacity:0;transform:rotate(-70deg) scale(0)}70%{opacity:1;transform:rotate(24deg) scale(1.14)}100%{opacity:1;transform:rotate(14deg) scale(1)}}
+@keyframes wmIn{from{opacity:0;transform:scale(.50) translateY(14px)}to{opacity:.97;transform:scale(.50)}}
+</style>
+
+<div id="stage">
+  <div class="scrim-t" id="scrimT"></div>
+  <div class="scrim-b" id="scrimB"></div>
+
+  <div id="wm">
+    <div class="logo">
+      <div class="mic"><span class="m">M</span><span class="i">I</span><span class="c">C</span>
+        <svg class="leaf" viewBox="0 0 100 112"><path d="M50 2 L45 33 L32 17 L28 28 L6 22 L12 44 L3 50 L24 68 L20 86 L47 80 L47 110 L53 110 L53 80 L80 86 L76 68 L97 50 L88 44 L94 22 L72 28 L68 17 L55 33 Z"/></svg>
+      </div>
+      <div class="tag"><span class="p">MASHA</span><span class="b">IN</span><span class="g">CANADA</span></div>
+    </div>
+  </div>
+
+  <div id="cards"></div>
+
+  <div id="outro">
+    <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+    <div class="inner">
+      <div class="logo" id="olg">
+        <div class="mic"><span class="m">M</span><span class="i">I</span><span class="c">C</span>
+          <svg class="leaf" id="oleaf" viewBox="0 0 100 112"><path d="M50 2 L45 33 L32 17 L28 28 L6 22 L12 44 L3 50 L24 68 L20 86 L47 80 L47 110 L53 110 L53 80 L80 86 L76 68 L97 50 L88 44 L94 22 L72 28 L68 17 L55 33 Z"/></svg>
+        </div>
+        <div class="tag"><span class="p">MASHA</span><span class="b">IN</span><span class="g">CANADA</span></div>
+      </div>
+      <div class="oline" id="oline">Tips reales para construir<br>tu vida en Canadá</div>
+      <div class="handle" id="ohandle">
+        <svg viewBox="0 0 24 24"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.6"/><circle cx="17.6" cy="6.4" r="1.1" fill="#fff" stroke="none"/></svg>
+        @mashaincanada
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const CARDS = [
+  {s:0.60, e:5.90, eb:'LA VIDA EN CANADÁ', ebc:'',      bar:'var(--pink)',  h:'No todo son <u>papeles</u> y aplicaciones.'},
+  {s:6.10, e:11.40,eb:'LO QUE NADIE POSTEA', ebc:'blue',bar:'var(--blue)',  h:'A veces es un fin de semana entre árboles, una fogata y cero señal.'},
+  {s:11.60,e:16.90,eb:'LOS PRIMEROS MESES', ebc:'',     bar:'var(--pink)',  h:'Al principio cuesta. Y está bien que cueste.'},
+  {s:17.10,e:22.40,eb:'Y UN DÍA', ebc:'green',          bar:'var(--green)', h:'Dejas de sobrevivir y empiezas a <em>vivir aquí.</em>'},
+  {s:22.60,e:25.90,eb:'', ebc:'',                       bar:'var(--blue)',  h:'Si estás empezando, escríbeme. Yo también empecé desde cero.'}
+];
+const OUTRO_START = 25.95;
+
+const cont = document.getElementById('cards');
+CARDS.forEach((c,i)=>{
+  const d = document.createElement('div');
+  d.className = 'card';
+  d.style.animation = `cardOut .45s cubic-bezier(.4,0,.7,.2) ${(c.e-0.45).toFixed(2)}s both`;
+  let inner = '';
+  if(c.eb) inner += `<div class="eyebrow ${c.ebc}" style="animation:chipIn .55s cubic-bezier(.18,.9,.26,1.02) ${c.s.toFixed(2)}s both"><i></i>${c.eb}</div>`;
+  // split headline into words, keeping inline tags
+  const tmp = document.createElement('div'); tmp.innerHTML = c.h;
+  let words = [];
+  tmp.childNodes.forEach(n=>{
+    if(n.nodeType===3){ n.textContent.split(/(\s+)/).forEach(t=>{ if(t.trim()) words.push(['',t]); }); }
+    else { n.textContent.split(/(\s+)/).forEach(t=>{ if(t.trim()) words.push([n.tagName.toLowerCase(),t]); }); }
+  });
+  const startDelay = c.eb ? c.s+0.18 : c.s+0.02;
+  const ws = words.map((w,k)=>{
+    const dly = (startDelay + k*0.055).toFixed(3);
+    const txt = w[0] ? `<${w[0]}>${w[1]}</${w[0]}>` : w[1];
+    return `<span class="w" style="animation:wordIn .62s cubic-bezier(.16,.86,.28,1) ${dly}s both">${txt}</span> `;
+  }).join('');
+  inner += `<div class="row">
+      <div class="bar" style="background:${c.bar};animation:barIn .5s cubic-bezier(.2,.9,.3,1) ${(c.s+0.10).toFixed(2)}s both"></div>
+      <h1>${ws}</h1></div>`;
+  d.innerHTML = inner;
+  cont.appendChild(d);
+});
+
+// watermark: in at 0.9s, out when the outro panel arrives
+document.getElementById('wm').style.animation =
+  `wmIn .7s cubic-bezier(.2,.9,.3,1) .9s both, fadeOut .3s linear ${(OUTRO_START-0.15).toFixed(2)}s both`;
+
+// scrims fade out right before the outro panel
+const sc = `fadeOut .4s linear ${(OUTRO_START-0.10).toFixed(2)}s both`;
+document.getElementById('scrimT').style.animation = sc;
+document.getElementById('scrimB').style.animation = sc;
+
+// outro
+document.getElementById('outro').style.animation = `fadeIn .55s cubic-bezier(.4,0,.2,1) ${OUTRO_START}s both`;
+document.getElementById('olg').style.animation   = `logoIn .8s cubic-bezier(.18,.92,.24,1.02) ${(OUTRO_START+0.28).toFixed(2)}s both`;
+document.getElementById('oleaf').style.animation = `leafIn .75s cubic-bezier(.2,.9,.3,1) ${(OUTRO_START+0.70).toFixed(2)}s both`;
+document.getElementById('oline').style.animation = `riseIn .7s cubic-bezier(.18,.9,.26,1) ${(OUTRO_START+0.95).toFixed(2)}s both`;
+document.getElementById('ohandle').style.animation = `riseIn .7s cubic-bezier(.18,.9,.26,1) ${(OUTRO_START+1.25).toFixed(2)}s both`;
+
+window.__seek = (ms)=>{ document.getAnimations().forEach(a=>{ a.pause(); a.currentTime = ms; }); };
+</script>
