@@ -8,8 +8,9 @@ laborales en Canadá alineadas con tu perfil, listas para aplicar.
 
 | Archivo | Uso |
 |---|---|
-| `masha-talent-network-60s.mp4` | **Versión principal** — 1080×1920, 30 fps, 60,0 s exactos, con cama musical suave |
-| `masha-talent-network-60s-silent.mp4` | Misma imagen sin audio, para montar voz en off o música propia |
+| `masha-talent-network-voz.mp4` | **Versión final con voz en off de Masha** — 1080×1920, 30 fps, 1:11, voz limpiada + música con ducking |
+| `masha-talent-network-60s.mp4` | Versión de 60 s solo con música (sin locución) |
+| `masha-talent-network-60s-silent.mp4` | Misma imagen sin audio, para montar otra locución o música propia |
 | `cover.jpg` | Frame de portada (miniatura) |
 | `src/` | Fuente del video (HTML animado + script de render) |
 
@@ -64,6 +65,19 @@ estilo). El perfil de «María Fernanda Ríos» y las ofertas de trabajo son **e
 ilustrativos**, no vacantes reales. Si prefieres cifras distintas (número de empleos,
 salarios, rubro del perfil), están en `src/_04_script.html` (`JOBS`) y en
 `src/_02_screens.html`.
+
+## Versión con voz en off (`masha-talent-network-voz.mp4`)
+
+La locución fue grabada en celular y procesada así: reducción espectral con
+perfil de ruido tomado de las pausas de la propia grabación (el ambiente de
+60–160 Hz se solapaba con la voz), filtro paso-altos, EQ de calidez y presencia,
+de-esser, compresión y nivelación a −14 LUFS. La música se mezcla con *ducking*
+(baja automáticamente cuando entra la voz).
+
+Como la lectura natural dura ~57 s de voz efectiva, el video se **re-sincronizó
+al ritmo de la locución** con un time-warp por anclas (`src/render_vo.js`): cada
+escena y cada clic caen exactamente donde la voz los menciona, y la duración
+final es 1:11. Los subtítulos de esta versión están retimeados a la voz.
 
 ## Cómo volver a generar el video
 
