@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>MASHA Talent Network — 60s</title>
+<style>
+@font-face{font-family:'Inter';src:url('inter-latin.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:block;}
+
+:root{
+  --navy:#121e46; --navy2:#1a2757; --drawer:#151f4b;
+  --bg:#eef0f7; --card:#ffffff; --line:#e4e8f2;
+  --ink:#0f172a; --muted:#6b748d; --soft:#98a0b8;
+  --blue:#2b7cf6; --green:#22c55e; --pink:#e6007e; --violet:#7c3aed; --amber:#dd9b13;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+html,body{width:1080px;height:1920px;background:#05070f;overflow:hidden;}
+body{font-family:'Inter','Liberation Sans',sans-serif;}
+
+#stage{position:absolute;top:0;left:0;width:420px;height:746.6667px;overflow:hidden;
+  transform:scale(2.5714286);transform-origin:top left;background:#05070f;}
+
+.screen{position:absolute;inset:0;overflow:hidden;background:var(--bg);opacity:0;will-change:opacity,transform;}
+
+/* ---------- chrome ---------- */
+.urlbar{height:30px;background:#e2e5ef;display:flex;align-items:center;justify-content:center;}
+.urlpill{background:#fff;border-radius:99px;padding:3.5px 13px;font-size:10.5px;color:#4a5470;font-weight:500;
+  display:flex;align-items:center;gap:5px;box-shadow:0 1px 2px rgba(15,23,42,.10);}
+.urlpill .lk{width:8px;height:8px;border:1.4px solid #7c869f;border-radius:2px;position:relative;}
+.urlpill .lk:before{content:'';position:absolute;left:1.4px;top:-3.4px;width:4px;height:4px;border:1.4px solid #7c869f;border-bottom:none;border-radius:3px 3px 0 0;}
+
+.hdr{height:52px;background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:0 16px;}
+.logo{display:flex;flex-direction:column;gap:4px;}
+.logo .w{font-size:16.5px;letter-spacing:-.2px;color:#fff;font-weight:400;}
+.logo .w b{font-weight:800;}
+.logo .bar{display:flex;width:98px;height:3px;border-radius:2px;overflow:hidden;}
+.logo .bar i{flex:1;}
+.logo .bar i:nth-child(1){background:#2b7cf6;}
+.logo .bar i:nth-child(2){background:#3ddc6b;}
+.logo .bar i:nth-child(3){background:#e6007e;}
+.burger{width:22px;display:flex;flex-direction:column;gap:4.5px;}
+.burger i{height:2px;background:#dfe4f5;border-radius:2px;}
+
+.view{position:absolute;top:82px;left:0;right:0;bottom:0;overflow:hidden;background:var(--bg);}
+.page{position:absolute;top:0;left:0;right:0;padding:16px 14px 220px;will-change:transform;}
+
+/* ---------- cards ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:14px;
+  box-shadow:0 1px 2px rgba(16,24,54,.05),0 6px 18px rgba(16,24,54,.05);margin-bottom:11px;}
+.ic{width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.ic.b{background:#e8f0fe;} .ic.g{background:#e6f8ee;} .ic.p{background:#fde8f3;}
+.ic.v{background:#eee9fd;} .ic.a{background:#fdf1dc;} .ic.s{background:#eef1f8;}
+
+.h1{font-size:23px;font-weight:800;letter-spacing:-.6px;color:var(--ink);}
+.h2{font-size:17px;font-weight:800;letter-spacing:-.35px;color:var(--ink);}
+.h3{font-size:14.5px;font-weight:700;letter-spacing:-.2px;color:var(--ink);}
+.sub{font-size:11.5px;color:var(--muted);line-height:1.45;}
+.tiny{font-size:9.5px;color:var(--soft);font-weight:600;letter-spacing:.4px;text-transform:uppercase;}
+.row{display:flex;align-items:center;gap:10px;}
+.between{display:flex;align-items:center;justify-content:space-between;}
+
+.pill{display:inline-flex;align-items:center;gap:4px;border-radius:99px;padding:3.5px 9px;font-size:9px;font-weight:800;letter-spacing:.35px;text-transform:uppercase;}
+.pill.g{background:#dff6e7;color:#12813f;} .pill.p{background:#fde4f0;color:#c1046d;}
+.pill.b{background:#e3edfe;color:#1c5fd0;} .pill.a{background:#fdefd6;color:#9b6a05;}
+.pill.s{background:#eaeef7;color:#5b6483;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:10px;padding:9px 15px;
+  font-size:12px;font-weight:700;background:var(--blue);color:#fff;}
+.btn.wide{width:100%;padding:12px;font-size:13.5px;border-radius:12px;}
+.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink);}
+.btn.pinkb{background:var(--pink);}
+.btn.greenb{background:#16a34a;}
+.lnk{font-size:11.5px;font-weight:700;color:var(--blue);}
+
+.field{border:1px solid #dfe4ef;border-radius:9px;padding:8.5px 10px;font-size:11.5px;color:var(--ink);background:#fff;margin-top:4px;}
+.lbl{font-size:10.5px;color:#4b5570;font-weight:600;margin-top:9px;}
+
+.hero{border-radius:17px;padding:17px;color:#fff;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#171442 0%,#2a1856 45%,#0f2b52 100%);}
+.hero:after{content:'';position:absolute;right:-10px;top:-10px;width:120px;height:120px;opacity:.28;
+  background-image:radial-gradient(#7c8cff 1.1px,transparent 1.1px);background-size:9px 9px;}
+
+.prog{height:6px;border-radius:99px;background:#e6eaf4;overflow:hidden;}
+.prog i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#2b7cf6,#3ddc6b);}
+
+/* ---------- captions ---------- */
+#cap{position:absolute;left:0;right:0;bottom:0;height:210px;display:flex;align-items:flex-end;
+  padding:0 22px 30px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(6,9,24,0) 0%,rgba(6,9,24,.55) 32%,rgba(6,9,24,.90) 72%,rgba(6,9,24,.95) 100%);}
+#capT{font-size:20.5px;font-weight:800;line-height:1.26;letter-spacing:-.4px;color:#fff;
+  text-shadow:0 2px 14px rgba(0,0,0,.5);}
+#capT em{font-style:normal;color:#4ade80;}
+#capT u{text-decoration:none;color:#ff5bb0;}
+
+/* ---------- cursor ---------- */
+#cur{position:absolute;width:27px;height:27px;border-radius:99px;background:rgba(255,255,255,.28);
+  border:2px solid rgba(255,255,255,.9);box-shadow:0 3px 14px rgba(0,0,0,.35);
+  transform:translate(-50%,-50%);pointer-events:none;opacity:0;z-index:60;}
+#rip{position:absolute;width:27px;height:27px;border-radius:99px;border:2.5px solid rgba(255,255,255,.85);
+  transform:translate(-50%,-50%);pointer-events:none;opacity:0;z-index:59;}
+</style>
+</head>
+<body>
+<div id="stage">
+<!-- ============ 1. INTRO ============ -->
+<div class="screen" id="s-intro" style="background:linear-gradient(160deg,#0d1030 0%,#241247 48%,#0b2a4e 100%);">
+  <div style="position:absolute;inset:0;opacity:.30;background-image:radial-gradient(#6f86ff 1.2px,transparent 1.2px);background-size:16px 16px;"></div>
+  <div style="position:absolute;left:-70px;top:120px;width:260px;height:260px;border-radius:99px;background:radial-gradient(circle,#e6007e55,transparent 66%);"></div>
+  <div style="position:absolute;right:-80px;bottom:150px;width:280px;height:280px;border-radius:99px;background:radial-gradient(circle,#22c55e44,transparent 66%);"></div>
+  <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 30px;">
+    <div class="logo" id="in-logo" style="margin-bottom:26px;">
+      <div class="w" style="font-size:22px;"><b>MASHA</b> Talent</div>
+      <div class="bar" style="width:134px;height:4px;"></div>
+    </div>
+    <div id="in-l1" style="font-size:35px;font-weight:900;letter-spacing:-1.5px;line-height:1.06;color:#fff;">¿Buscas trabajo<br>en Canadá?</div>
+    <div id="in-l2" style="font-size:29.5px;font-weight:900;letter-spacing:-1.1px;line-height:1.1;margin-top:12px;
+      background:linear-gradient(90deg,#4ade80,#38bdf8,#ff5bb0);-webkit-background-clip:text;background-clip:text;color:transparent;">
+      Deja que MASHA Talent<br>lo busque por ti.</div>
+    <div id="in-l3" style="margin-top:24px;font-size:15px;color:#c3cce8;font-weight:500;line-height:1.5;">
+      Creas tu perfil <b style="color:#fff;">gratis</b> y la herramienta<br>te trae las ofertas que van contigo.</div>
+  </div>
+</div>
+
+<!-- ============ 2. LOGIN ============ -->
+<div class="screen" id="s-login" style="background:linear-gradient(180deg,#f6f7fb,#e9ecf6);">
+  <div class="urlbar"><div class="urlpill"><span class="lk"></span>talent.mashaincanada.com</div></div>
+  <div style="position:absolute;top:30px;left:0;right:0;bottom:0;display:flex;align-items:center;padding:0 22px 90px;">
+    <div class="card" style="width:100%;padding:22px 20px;border-radius:18px;">
+      <div class="logo" style="margin-bottom:14px;">
+        <div class="w" style="color:#0f172a;"><b style="color:#2b7cf6;">MASHA</b> Talent</div>
+        <div class="bar"></div>
+      </div>
+      <div style="font-size:21px;font-weight:800;letter-spacing:-.6px;color:var(--ink);">Crea tu cuenta MIC</div>
+      <div class="sub" style="margin-top:7px;">Accede a tus herramientas, recursos y oportunidades desde un solo lugar.</div>
+      <div class="lbl" style="margin-top:15px;">Correo electrónico</div>
+      <div class="field" id="lg-inp" style="background:#fbfbe6;border-color:#e3e3bd;">
+        <span id="lg-txt"></span><span id="lg-car" style="color:#2b7cf6;">|</span>
+      </div>
+      <div class="btn wide" id="lg-btn" style="margin-top:13px;">Crear mi perfil gratis</div>
+      <div class="row" style="margin-top:11px;align-items:flex-start;gap:7px;">
+        <span style="color:#2b7cf6;font-size:11px;">&#9679;</span>
+        <div class="sub" style="font-size:10.5px;">Te enviaremos un enlace seguro a tu correo. Sin tarjeta, sin costo.</div>
+      </div>
+      <div id="lg-free" class="pill g" style="margin-top:13px;opacity:0;">Registro 100% gratis</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 3. DASHBOARD ============ -->
+<div class="screen" id="s-dash">
+  <div class="urlbar"><div class="urlpill"><span class="lk"></span>talent.mashaincanada.com</div></div>
+  <div class="hdr"><div class="logo"><div class="w"><b>MASHA</b> Talent</div><div class="bar"></div></div><div class="burger"><i></i><i></i><i></i></div></div>
+  <div class="view"><div class="page" id="dash-pg">
+    <div style="font-size:21px;font-weight:800;letter-spacing:-.6px;color:var(--ink);">¡Bienvenida,</div>
+    <div style="font-size:21px;font-weight:800;letter-spacing:-.6px;color:var(--pink);margin-bottom:5px;">María Fernanda! &#128075;</div>
+    <div class="sub" style="margin-bottom:13px;">Accede a todos tus recursos y herramientas para tu éxito profesional en Canadá.</div>
+
+    <div class="hero" style="margin-bottom:12px;">
+      <div style="font-size:9.5px;font-weight:800;letter-spacing:.6px;color:#ff7bc0;text-transform:uppercase;margin-bottom:8px;">Tu camino profesional empieza aquí</div>
+      <div style="font-size:19px;font-weight:800;letter-spacing:-.5px;line-height:1.2;">Tu camino profesional en<br><span style="color:#4ade80;">Canadá</span>, en un solo lugar.</div>
+      <div style="font-size:11.5px;color:#c0cae6;margin-top:9px;line-height:1.45;">Accede a tus herramientas, recursos y oportunidades desde tu cuenta MIC.</div>
+    </div>
+
+    <div class="card"><div class="row">
+      <div class="ic b" style="color:#2b7cf6;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.9L19 9.8l-4.1 2.9L15.6 18 12 15.2 8.4 18l.7-5.3L5 9.8l5.1-.9z"/></svg></div>
+      <div style="flex:1;">
+        <div style="font-size:26px;font-weight:800;letter-spacing:-1px;color:var(--ink);line-height:1;" id="d-n1">24</div>
+        <div class="sub" style="margin-top:3px;">Recommended Jobs para ti</div>
+        <div class="lnk" style="margin-top:5px;">Ver coincidencias &#8594;</div>
+      </div></div></div>
+
+    <div class="card"><div class="row">
+      <div class="ic g" style="color:#16a34a;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6l7-3v18M11 21h9V10l-9-3"/><path d="M14.5 13h2M14.5 16.5h2M7 9.5h1M7 13h1M7 16.5h1"/></svg></div>
+      <div style="flex:1;">
+        <div style="font-size:20px;font-weight:800;letter-spacing:-.6px;color:var(--ink);line-height:1.1;">Pronto</div>
+        <div class="sub" style="margin-top:3px;">MIC Partner Jobs &middot; próximamente</div>
+        <div class="lnk" style="margin-top:5px;color:#16a34a;">Conocer más &#8594;</div>
+      </div></div></div>
+
+    <div class="card"><div class="row">
+      <div class="ic p" style="color:#e6007e;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3L10.5 13.5M21 3l-6.8 18-3.7-7.5L3 9.8z"/></svg></div>
+      <div style="flex:1;">
+        <div style="font-size:26px;font-weight:800;letter-spacing:-1px;color:var(--ink);line-height:1;" id="d-n2">3</div>
+        <div class="sub" style="margin-top:3px;">Aplicaciones activas</div>
+        <div class="lnk" style="margin-top:5px;color:#e6007e;">Ver mis aplicaciones &#8594;</div>
+      </div></div></div>
+
+    <div class="card"><div class="row">
+      <div class="ic v" style="color:#7c3aed;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg></div>
+      <div style="flex:1;">
+        <div style="font-size:26px;font-weight:800;letter-spacing:-1px;color:var(--ink);line-height:1;" id="d-n3">100%</div>
+        <div class="sub" style="margin-top:3px;">Perfil completo</div>
+        <div class="prog" style="margin-top:7px;"><i style="width:100%"></i></div>
+      </div></div></div>
+  </div></div>
+</div>
+
+<!-- ============ 4. PERFIL ============ -->
+<div class="screen" id="s-prof">
+  <div class="urlbar"><div class="urlpill"><span class="lk"></span>talent.mashaincanada.com/perfil</div></div>
+  <div class="hdr"><div class="logo"><div class="w"><b>MASHA</b> Talent</div><div class="bar"></div></div><div class="burger"><i></i><i></i><i></i></div></div>
+  <div class="view"><div class="page" id="prof-pg">
+    <div class="h1">Mi Perfil</div>
+    <div class="between" style="margin:9px 0 13px;">
+      <div class="sub" style="font-weight:700;color:#16a34a;"><span id="pf-pct">100</span>% completo</div>
+      <div class="pill g">Listo para aplicar</div>
+    </div>
+    <div class="prog" style="margin-bottom:13px;"><i id="pf-bar" style="width:100%"></i></div>
+
+    <div class="card">
+      <div class="row" style="margin-bottom:11px;"><div class="ic b" style="color:#2b7cf6;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg></div><div class="h3">Información personal</div></div>
+      <div class="lbl">Nombre</div><div class="field">María Fernanda</div>
+      <div class="lbl">Apellido</div><div class="field">Ríos Herrera</div>
+      <div class="lbl">Ciudad</div><div class="field">Toronto</div>
+      <div class="lbl">Provincia / Estado</div><div class="field">Ontario</div>
+    </div>
+
+    <div class="card">
+      <div class="row" style="margin-bottom:11px;"><div class="ic v" style="color:#7c3aed;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M8.5 7V5.5A1.5 1.5 0 0 1 10 4h4a1.5 1.5 0 0 1 1.5 1.5V7"/></svg></div><div class="h3">Perfil profesional</div></div>
+      <div class="lbl">Titular profesional</div><div class="field">Supply Chain Coordinator</div>
+      <div class="lbl">Puesto actual</div><div class="field">Coordinadora de Logística &middot; Bogotá, CO</div>
+      <div class="lbl">Años de experiencia</div><div class="field">6</div>
+    </div>
+
+    <div class="card">
+      <div class="row" style="margin-bottom:11px;"><div class="ic p" style="color:#e6007e;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/></svg></div><div class="h3">Roles objetivo</div></div>
+      <div class="row" style="flex-wrap:wrap;gap:6px;">
+        <span class="pill b">Supply Chain Coordinator</span>
+        <span class="pill b">Logistics Analyst</span>
+        <span class="pill b">Inventory Planner</span>
+        <span class="pill b">Procurement Specialist</span>
+      </div>
+      <div class="lbl" style="margin-top:13px;">Skills</div>
+      <div class="row" style="flex-wrap:wrap;gap:6px;margin-top:6px;">
+        <span class="pill s">SAP</span><span class="pill s">Excel avanzado</span><span class="pill s">Forecasting</span>
+        <span class="pill s">Inventory Control</span><span class="pill s">Power BI</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row" style="margin-bottom:11px;"><div class="ic g" style="color:#16a34a;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg></div><div class="h3">Documentos (CV / otros)</div></div>
+      <div class="row" style="border:1px solid var(--line);border-radius:10px;padding:9px 11px;gap:9px;">
+        <div style="width:26px;height:26px;border-radius:7px;background:#e6f8ee;display:flex;align-items:center;justify-content:center;color:#16a34a;font-size:11px;font-weight:800;">PDF</div>
+        <div style="flex:1;"><div style="font-size:11.5px;font-weight:700;color:var(--ink);">Maria_Rios_CV.pdf</div><div class="sub" style="font-size:10px;">Subido &middot; Canadian format</div></div>
+        <div style="color:#16a34a;font-size:13px;font-weight:800;">&#10003;</div>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ============ 5. MENU ============ -->
+<div class="screen" id="s-menu" style="background:#cfd4e2;">
+  <div id="mn-drawer" style="position:absolute;top:0;left:0;right:0;height:648px;background:var(--drawer);padding:18px 16px;">
+    <div class="between" style="margin-bottom:20px;">
+      <div class="logo"><div class="w"><b>MASHA</b> Talent</div><div class="bar"></div></div>
+      <div style="width:26px;height:26px;border-radius:99px;background:#fff;display:flex;align-items:center;justify-content:center;color:#111;font-size:13px;font-weight:700;">&#10005;</div>
+    </div>
+    <div style="font-size:9px;font-weight:800;letter-spacing:1px;color:#7f8ab5;text-transform:uppercase;margin-bottom:9px;">Principal</div>
+    <div class="mi" style="color:#c9d2ee;">Inicio</div>
+    <div class="mi" style="color:#c9d2ee;">Mi perfil</div>
+    <div class="mi" id="mn-jobs" style="color:#fff;font-weight:700;background:#22305f;border-radius:9px;position:relative;">
+      <span style="position:absolute;left:-16px;top:8px;width:3px;height:18px;background:#e6007e;border-radius:2px;"></span>Jobs</div>
+    <div class="mi sm" id="mn-rec" style="color:#dbe3fb;padding-left:20px;">&#9679;&nbsp; Recommended Jobs <span class="pill p" style="margin-left:6px;">24</span></div>
+    <div class="mi sm" style="color:#98a3c9;padding-left:20px;">&#9679;&nbsp; MIC Partner Jobs <span class="pill g" style="margin-left:6px;">Pronto</span></div>
+    <div style="font-size:9px;font-weight:800;letter-spacing:1px;color:#7f8ab5;text-transform:uppercase;margin:16px 0 9px;">Herramientas MIC</div>
+    <div class="mi" style="color:#c9d2ee;">Método MIC <span style="float:right;opacity:.55;">&#128274;</span></div>
+    <div class="mi" style="color:#c9d2ee;">Digital Solutions</div>
+    <div class="mi" style="color:#c9d2ee;">Recursos incluidos en tu paquete <span style="opacity:.55;">&#128274;</span></div>
+    <div style="font-size:9px;font-weight:800;letter-spacing:1px;color:#7f8ab5;text-transform:uppercase;margin:16px 0 9px;">Mi actividad</div>
+    <div class="mi" style="color:#c9d2ee;">Mis aplicaciones</div>
+    <div style="margin-top:16px;background:#1d2a5c;border-radius:12px;padding:12px;display:flex;align-items:center;gap:10px;">
+      <div style="width:32px;height:32px;border-radius:99px;background:#2f4287;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;">MR</div>
+      <div><div style="font-size:12px;font-weight:700;color:#fff;">María Fernanda Ríos</div><div style="font-size:10px;color:#93a0cc;">Perfil 100% completo</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 6. JOBS LIST ============ -->
+<div class="screen" id="s-jobs">
+  <div class="urlbar"><div class="urlpill"><span class="lk"></span>talent.mashaincanada.com/jobs</div></div>
+  <div class="hdr"><div class="logo"><div class="w"><b>MASHA</b> Talent</div><div class="bar"></div></div><div class="burger"><i></i><i></i><i></i></div></div>
+  <div class="view"><div class="page" id="jobs-pg" style="padding-top:14px;">
+    <div class="h1">Recommended Jobs</div>
+    <div class="sub" style="margin:7px 0 12px;">Estos son los trabajos que MASHA Talent encontró para ti según tu perfil.</div>
+    <div class="row" style="gap:8px;margin-bottom:11px;">
+      <div style="flex:1;background:#e8f0fe;border:1px solid #cfe0fd;border-radius:11px;padding:9px 11px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:11.5px;font-weight:700;color:#1c5fd0;">Recommended Jobs</span>
+        <span class="pill b" id="jb-count" style="background:#2b7cf6;color:#fff;">24</span></div>
+      <div style="flex:1;background:#fff;border:1px solid var(--line);border-radius:11px;padding:9px 11px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:11.5px;font-weight:600;color:#6b748d;">MIC Partner Jobs</span>
+        <span class="pill g">Pronto</span></div>
+    </div>
+    <div class="card" style="padding:11px;">
+      <div class="row" style="border:1px solid #dfe4ef;border-radius:9px;padding:8px 10px;gap:7px;color:#98a0b8;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span style="font-size:11.5px;">Buscar por título o empresa</span></div>
+      <div class="row" style="flex-wrap:wrap;gap:6px;margin-top:9px;">
+        <span class="pill s">Ontario &#9662;</span><span class="pill s">Hybrid / On-site &#9662;</span>
+        <span class="pill s">Full-time &#9662;</span><span class="pill s">Últimos 7 días &#9662;</span></div>
+      <div style="font-size:11px;font-weight:700;color:#16a34a;margin-top:10px;"><span id="jb-count2">24</span> empleos alineados con tu perfil</div>
+    </div>
+    <div id="jobcards"></div>
+  </div></div>
+</div>
+
+<!-- ============ 7. JOB DETAIL ============ -->
+<div class="screen" id="s-detail">
+  <div class="urlbar"><div class="urlpill"><span class="lk"></span>talent.mashaincanada.com/jobs/sc-coordinator</div></div>
+  <div class="hdr"><div class="logo"><div class="w"><b>MASHA</b> Talent</div><div class="bar"></div></div><div class="burger"><i></i><i></i><i></i></div></div>
+  <div class="view"><div class="page" id="det-pg" style="padding-top:13px;">
+    <div class="row" style="gap:6px;margin-bottom:11px;color:#6b748d;font-size:11px;font-weight:600;">&#8592; Back to Recommended Jobs</div>
+    <div class="card" style="padding:16px;">
+      <div class="row" style="gap:11px;margin-bottom:11px;">
+        <div style="width:42px;height:42px;border-radius:12px;background:#0f2b52;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;">MR</div>
+        <div style="flex:1;">
+          <div class="h2" style="line-height:1.15;">Supply Chain Coordinator</div>
+          <div class="sub" style="margin-top:3px;font-weight:600;color:#3f4a66;">Maple Ridge Logistics Inc.</div>
+        </div>
+      </div>
+      <div class="row" style="flex-wrap:wrap;gap:6px;">
+        <span class="pill s">Toronto, ON</span><span class="pill s">Hybrid</span><span class="pill s">Full-time</span>
+        <span class="pill g">94% match</span></div>
+      <div class="row" style="margin-top:12px;gap:8px;">
+        <div style="flex:1;background:#f6f8fc;border-radius:10px;padding:9px 11px;">
+          <div class="tiny">Salary</div><div style="font-size:13px;font-weight:800;color:var(--ink);margin-top:2px;">$62,000 &ndash; $74,000</div></div>
+        <div style="flex:1;background:#f6f8fc;border-radius:10px;padding:9px 11px;">
+          <div class="tiny">Posted</div><div style="font-size:13px;font-weight:800;color:var(--ink);margin-top:2px;">2 days ago</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="h3" style="margin-bottom:7px;">About the role</div>
+      <div class="sub">Coordinate inbound and outbound shipments across three Ontario distribution centres, manage supplier schedules and keep inventory accuracy above 98%. You will work closely with procurement, warehouse and transport partners.</div>
+    </div>
+
+    <div class="card">
+      <div class="h3" style="margin-bottom:9px;">What you&rsquo;ll need</div>
+      <div class="rq">3+ years in supply chain, logistics or operations</div>
+      <div class="rq">ERP experience (SAP or NetSuite)</div>
+      <div class="rq">Advanced Excel and data reporting</div>
+      <div class="rq">English required &mdash; Spanish is an asset</div>
+      <div class="rq">Valid work permit or PR in Canada</div>
+    </div>
+
+    <div class="card" style="border-color:#cfe0fd;background:#f4f8ff;">
+      <div class="row" style="gap:9px;">
+        <div class="ic b" style="color:#2b7cf6;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3l1.9 4.9L19 9.8l-4.1 2.9L15.6 18 12 15.2 8.4 18l.7-5.3L5 9.8l5.1-.9z"/></svg></div>
+        <div style="flex:1;"><div class="h3" style="font-size:13px;">Coincide con tu perfil</div>
+        <div class="sub" style="margin-top:3px;">SAP &middot; Forecasting &middot; Inventory Control &middot; 6 años de experiencia</div></div>
+      </div>
+    </div>
+
+    <div id="det-cta">
+      <div class="btn wide" id="det-apply" style="margin-bottom:8px;">Apply now</div>
+      <div class="btn wide ghost">Save job</div>
+    </div>
+  </div></div>
+
+  <!-- apply sheet -->
+  <div id="ap-scrim" style="position:absolute;inset:0;background:rgba(9,13,32,.5);opacity:0;"></div>
+  <div id="ap-sheet" style="position:absolute;left:0;right:0;bottom:0;height:474px;background:#fff;border-radius:20px 20px 0 0;padding:18px 18px 0;transform:translateY(100%);box-shadow:0 -8px 40px rgba(9,13,32,.3);">
+    <div style="width:38px;height:4px;border-radius:99px;background:#dfe4ef;margin:0 auto 14px;"></div>
+    <div id="ap-form">
+      <div class="h2" style="margin-bottom:5px;">Apply with your MIC profile</div>
+      <div class="sub" style="margin-bottom:13px;">Supply Chain Coordinator &middot; Maple Ridge Logistics Inc.</div>
+      <div class="row" style="border:1px solid var(--line);border-radius:10px;padding:9px 11px;gap:9px;margin-bottom:8px;">
+        <div style="width:26px;height:26px;border-radius:7px;background:#e6f8ee;display:flex;align-items:center;justify-content:center;color:#16a34a;font-size:10px;font-weight:800;">PDF</div>
+        <div style="flex:1;"><div style="font-size:11.5px;font-weight:700;color:var(--ink);">Maria_Rios_CV.pdf</div>
+        <div class="sub" style="font-size:10px;">Desde tu perfil MASHA Talent</div></div>
+        <div style="color:#16a34a;font-size:13px;font-weight:800;">&#10003;</div>
+      </div>
+      <div class="row" style="border:1px solid var(--line);border-radius:10px;padding:9px 11px;gap:9px;margin-bottom:13px;">
+        <div style="width:26px;height:26px;border-radius:7px;background:#e8f0fe;display:flex;align-items:center;justify-content:center;color:#2b7cf6;font-size:12px;font-weight:800;">&#9998;</div>
+        <div style="flex:1;"><div style="font-size:11.5px;font-weight:700;color:var(--ink);">Cover letter</div>
+        <div class="sub" style="font-size:10px;">Generada con Método MIC</div></div>
+        <div style="color:#16a34a;font-size:13px;font-weight:800;">&#10003;</div>
+      </div>
+      <div class="btn wide" id="ap-submit">Submit application</div>
+      <div class="prog" style="margin-top:12px;opacity:0;" id="ap-progw"><i id="ap-prog" style="width:0%"></i></div>
+    </div>
+    <div id="ap-done" style="opacity:0;text-align:center;padding:6px 0 4px;">
+      <div id="ap-check" style="width:56px;height:56px;border-radius:99px;background:#e6f8ee;color:#16a34a;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;margin:0 auto 13px;">&#10003;</div>
+      <div class="h2">Application submitted</div>
+      <div class="sub" style="margin-top:6px;">Supply Chain Coordinator &middot; Maple Ridge Logistics<br>La verás en <b style="color:#e6007e;">Mis aplicaciones</b>.</div>
+      <div class="pill g" style="margin-top:12px;">Aplicaste sin salir de MASHA Talent</div>
+    </div>
+  </div>
+</div>
+<style>
+.mi{font-size:13.5px;font-weight:500;padding:8px 12px;margin:0 -4px;}
+.mi.sm{font-size:12px;padding:6px 12px;}
+.rq{position:relative;padding-left:16px;font-size:11.5px;color:#4b5570;line-height:1.5;margin-bottom:5px;}
+.rq:before{content:'';position:absolute;left:2px;top:6.5px;width:5px;height:5px;border-radius:99px;background:#2b7cf6;}
+.tool{transition:none;}
+</style>
+
+<!-- ============ 8. TOOLS / UNLOCK ============ -->
+<div class="screen" id="s-tools">
+  <div class="urlbar"><div class="urlpill"><span class="lk"></span>talent.mashaincanada.com</div></div>
+  <div class="hdr"><div class="logo"><div class="w"><b>MASHA</b> Talent</div><div class="bar"></div></div><div class="burger"><i></i><i></i><i></i></div></div>
+  <div class="view"><div class="page" id="tools-pg" style="padding-top:14px;">
+    <div class="h1">Herramientas MIC</div>
+    <div class="sub" style="margin:7px 0 12px;">Todo lo que se activa con tu Paquete de Optimización.</div>
+
+    <div id="tk-badge" class="row" style="opacity:0;background:linear-gradient(100deg,#e6007e,#7c3aed);border-radius:13px;padding:11px 13px;gap:10px;margin-bottom:12px;">
+      <div style="width:28px;height:28px;border-radius:99px;background:rgba(255,255,255,.22);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;">&#10003;</div>
+      <div><div style="font-size:12.5px;font-weight:800;color:#fff;letter-spacing:-.2px;">Paquete de Optimización activo</div>
+      <div style="font-size:10.5px;color:#f6dcef;">Todos tus recursos desbloqueados</div></div>
+    </div>
+
+    <div class="card tool" id="tk1">
+      <div class="row" style="gap:11px;">
+        <div class="ic b" style="color:#2b7cf6;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.9L19 9.8l-4.1 2.9L15.6 18 12 15.2 8.4 18l.7-5.3L5 9.8l5.1-.9z"/></svg></div>
+        <div style="flex:1;"><div class="h3">Método MIC &mdash; Masha AI</div>
+        <div class="sub" style="margin-top:3px;">Convierte una vacante en una estrategia de aplicación.</div></div>
+        <div class="lockw" id="lk1"></div>
+      </div>
+      <div class="pill p" style="margin-top:10px;">Incluido con tu paquete</div>
+    </div>
+
+    <div class="card tool" id="tk2">
+      <div class="row" style="gap:11px;">
+        <div class="ic a" style="color:#dd9b13;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h6a2.5 2.5 0 0 1 2 2.2V20a2.2 2.2 0 0 0-2-1.6H4z"/><path d="M20 4h-6a2.5 2.5 0 0 0-2 2.2V20a2.2 2.2 0 0 1 2-1.6h6z"/></svg></div>
+        <div style="flex:1;"><div class="h3">Recursos incluidos</div>
+        <div class="sub" style="margin-top:3px;">Guías, plantillas y formación para tu búsqueda de empleo.</div></div>
+        <div class="lockw" id="lk2"></div>
+      </div>
+      <div class="pill p" style="margin-top:10px;">Incluido con tu paquete</div>
+    </div>
+
+    <div class="card tool" id="tk3">
+      <div class="row" style="gap:11px;">
+        <div class="ic v" style="color:#7c3aed;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg></div>
+        <div style="flex:1;"><div class="h3">Digital Solutions</div>
+        <div class="sub" style="margin-top:3px;">Herramientas MIC para trabajar, inmigrar o estudiar en Canadá.</div></div>
+        <div class="lockw" id="lk3"></div>
+      </div>
+      <div class="pill p" style="margin-top:10px;">Incluido con tu paquete</div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ============ 9. PARTNER ============ -->
+<div class="screen" id="s-partner">
+  <div class="urlbar"><div class="urlpill"><span class="lk"></span>talent.mashaincanada.com/jobs</div></div>
+  <div class="hdr"><div class="logo"><div class="w"><b>MASHA</b> Talent</div><div class="bar"></div></div><div class="burger"><i></i><i></i><i></i></div></div>
+  <div class="view"><div class="page" id="ptr-pg" style="padding-top:14px;">
+    <div class="row" style="gap:8px;margin-bottom:12px;">
+      <div style="flex:1;background:#fff;border:1px solid var(--line);border-radius:11px;padding:9px 11px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:11.5px;font-weight:600;color:#6b748d;">Recommended Jobs</span><span class="pill s">24</span></div>
+      <div style="flex:1;background:#e9f9ef;border:1px solid #bfe9cf;border-radius:11px;padding:9px 11px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:11.5px;font-weight:700;color:#12813f;">MIC Partner Jobs</span><span class="pill g">Pronto</span></div>
+    </div>
+
+    <div class="card" style="background:linear-gradient(160deg,#ecfaf1,#e6f6ff);border-color:#c9e9d6;padding:17px;">
+      <div class="row" style="gap:11px;margin-bottom:12px;">
+        <div class="ic g" style="color:#16a34a;width:38px;height:38px;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6l7-3v18M11 21h9V10l-9-3"/><path d="M14.5 13h2M14.5 16.5h2M7 9.5h1M7 13h1M7 16.5h1"/></svg></div>
+        <div><span class="pill g">Próximamente</span>
+        <div class="h2" style="margin-top:6px;line-height:1.15;">MIC Partner Jobs</div></div>
+      </div>
+      <div class="sub" style="font-size:12.5px;color:#33405e;">Ofertas de <b style="color:#0f172a;">empleadores en partnership con MIC</b>, publicadas dentro de tu cuenta. Tus aplicaciones llegan directamente a través de MIC.</div>
+    </div>
+
+    <div class="card" style="opacity:.75;"><div class="row" style="gap:10px;">
+      <div style="width:34px;height:34px;border-radius:10px;background:#eef1f8;"></div>
+      <div style="flex:1;"><div style="height:9px;width:62%;background:#e7eaf3;border-radius:9px;"></div>
+      <div style="height:8px;width:40%;background:#eef1f8;border-radius:9px;margin-top:7px;"></div></div>
+      <span class="pill s">Soon</span></div></div>
+    <div class="card" style="opacity:.55;"><div class="row" style="gap:10px;">
+      <div style="width:34px;height:34px;border-radius:10px;background:#eef1f8;"></div>
+      <div style="flex:1;"><div style="height:9px;width:54%;background:#e7eaf3;border-radius:9px;"></div>
+      <div style="height:8px;width:34%;background:#eef1f8;border-radius:9px;margin-top:7px;"></div></div>
+      <span class="pill s">Soon</span></div></div>
+    <div class="card" style="opacity:.35;"><div class="row" style="gap:10px;">
+      <div style="width:34px;height:34px;border-radius:10px;background:#eef1f8;"></div>
+      <div style="flex:1;"><div style="height:9px;width:58%;background:#e7eaf3;border-radius:9px;"></div>
+      <div style="height:8px;width:44%;background:#eef1f8;border-radius:9px;margin-top:7px;"></div></div>
+      <span class="pill s">Soon</span></div></div>
+  </div></div>
+</div>
+
+<!-- ============ 10. OUTRO ============ -->
+<div class="screen" id="s-outro" style="background:linear-gradient(160deg,#0d1030 0%,#241247 50%,#0b2a4e 100%);">
+  <div style="position:absolute;inset:0;opacity:.26;background-image:radial-gradient(#6f86ff 1.2px,transparent 1.2px);background-size:16px 16px;"></div>
+  <div style="position:absolute;left:-60px;bottom:60px;width:240px;height:240px;border-radius:99px;background:radial-gradient(circle,#e6007e50,transparent 66%);"></div>
+  <div style="position:absolute;right:-70px;top:90px;width:250px;height:250px;border-radius:99px;background:radial-gradient(circle,#22c55e40,transparent 66%);"></div>
+  <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 30px;">
+    <div class="logo" id="ou-logo" style="margin-bottom:22px;">
+      <div class="w" style="font-size:20px;"><b>MASHA</b> Talent</div>
+      <div class="bar" style="width:120px;height:4px;"></div>
+    </div>
+    <div id="ou-l1" style="font-size:33px;font-weight:900;letter-spacing:-1.4px;line-height:1.08;color:#fff;">Crear tu perfil<br>es <span style="color:#4ade80;">GRATIS</span>.</div>
+    <div id="ou-l2" style="margin-top:14px;font-size:15px;color:#c6cfe9;line-height:1.55;font-weight:500;">
+      Desbloquea todo su potencial con el<br><b style="color:#ff5bb0;">Paquete de Optimización</b> y listo.</div>
+    <div id="ou-l3" style="margin-top:24px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:14px 16px;">
+      <div style="font-size:9.5px;font-weight:800;letter-spacing:1px;color:#8fa0d6;text-transform:uppercase;">Regístrate hoy en</div>
+      <div style="font-size:19px;font-weight:800;color:#fff;letter-spacing:-.5px;margin-top:5px;">talent.mashaincanada.com</div>
+    </div>
+    <div id="ou-l4" style="margin-top:18px;font-size:12.5px;color:#93a0cc;font-weight:600;">Masha In Canada &middot; MIC</div>
+  </div>
+</div>
+
+<!-- ============ overlays ============ -->
+<div id="rip"></div>
+<div id="cur"></div>
+<div id="cap"><div id="capT"></div></div>
+</div>
+<script>
+const S=1080/420, VIEWTOP=82, DUR=60.0;
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
+const lin=(t,a,b)=>clamp((t-a)/(b-a||1e-6),0,1);
+const eo=u=>1-Math.pow(1-u,3);
+const eio=u=>u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2;
+const mix=(a,b,u)=>a+(b-a)*u;
+const bell=(t,c,w)=>Math.max(0,1-Math.abs(t-c)/w);
+
+/* ---------- job data ---------- */
+const JOBS=[
+ {t:'Supply Chain Coordinator',   c:'Maple Ridge Logistics Inc.', ab:'MR', bg:'#0f2b52',
+  tags:['Toronto, ON','Hybrid','Full-time'],  s:'$62,000 – $74,000', m:94, p:'Posted 2 days ago'},
+ {t:'Inventory & Demand Planner', c:'Great Lakes Foods Ltd.',     ab:'GL', bg:'#166534',
+  tags:['Mississauga, ON','On-site','Full-time'], s:'$58,000 – $70,000', m:91, p:'Posted 3 days ago'},
+ {t:'Procurement Analyst',        c:'Aurora Retail Group',        ab:'AR', bg:'#7c2d67',
+  tags:['Vaughan, ON','Hybrid','Full-time'],  s:'$65,000 – $78,000', m:89, p:'Posted 4 days ago'},
+ {t:'Warehouse Operations Supervisor', c:'NorthBay Distribution', ab:'NB', bg:'#1e3a8a',
+  tags:['Brampton, ON','On-site','Full-time'],s:'$60,000 – $72,000', m:87, p:'Posted 5 days ago'},
+ {t:'Logistics Administrator',    c:'TrueNorth Freight Systems',  ab:'TN', bg:'#0f766e',
+  tags:['Hamilton, ON','Remote','Full-time'], s:'$55,000 – $64,000', m:85, p:'Posted 6 days ago'},
+ {t:'Supply Chain Analyst',       c:'Cascadia Manufacturing',     ab:'CM', bg:'#9a3412',
+  tags:['Burlington, ON','Hybrid','Full-time'],s:'$68,000 – $80,000',m:83, p:'Posted 1 week ago'}
+];
+$('#jobcards').innerHTML=JOBS.map((j,i)=>`
+<div class="card jc" id="jc${i}" style="padding:13px;">
+  <div class="row" style="gap:10px;align-items:flex-start;">
+    <div style="width:36px;height:36px;border-radius:10px;background:${j.bg};color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex:none;">${j.ab}</div>
+    <div style="flex:1;min-width:0;">
+      <div style="font-size:13.5px;font-weight:700;letter-spacing:-.25px;color:#0f172a;line-height:1.22;">${j.t}</div>
+      <div style="font-size:11.5px;font-weight:600;color:#3f4a66;margin-top:3px;">${j.c}</div>
+    </div>
+    <div style="flex:none;text-align:center;background:#e6f8ee;border-radius:9px;padding:5px 7px;">
+      <div style="font-size:12.5px;font-weight:800;color:#12813f;line-height:1;">${j.m}%</div>
+      <div style="font-size:7.5px;font-weight:700;color:#3f9663;letter-spacing:.3px;margin-top:2px;">MATCH</div>
+    </div>
+  </div>
+  <div class="row" style="flex-wrap:wrap;gap:5px;margin-top:9px;">${j.tags.map(x=>`<span class="pill s">${x}</span>`).join('')}</div>
+  <div class="between" style="margin-top:9px;">
+    <div style="font-size:12px;font-weight:800;color:#0f172a;letter-spacing:-.2px;">${j.s}</div>
+    <div style="font-size:9.5px;color:#98a0b8;font-weight:600;">${j.p}</div>
+  </div>
+</div>`).join('');
+
+$$('.lockw').forEach(w=>{w.innerHTML=`<div style="position:relative;width:27px;height:27px;flex:none;">
+  <div class="lkc" style="position:absolute;inset:0;border-radius:9px;background:#eef1f8;color:#8a93ad;display:flex;align-items:center;justify-content:center;font-size:12px;">&#128274;</div>
+  <div class="ckc" style="position:absolute;inset:0;border-radius:9px;background:#e6f8ee;color:#16a34a;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;opacity:0;">&#10003;</div></div>`;});
+
+/* ---------- measure ---------- */
+const SCN=[
+ ['s-intro',   0.0,  3.6, 'fade'],
+ ['s-login',   3.6,  9.0, 'fade'],
+ ['s-dash',    9.0, 14.0, 'up'],
+ ['s-prof',   14.0, 18.5, 'left'],
+ ['s-menu',   18.5, 21.5, 'fade'],
+ ['s-jobs',   21.5, 33.6, 'left'],
+ ['s-detail', 33.6, 46.6, 'left'],
+ ['s-tools',  46.6, 52.2, 'left'],
+ ['s-partner',52.2, 56.2, 'left'],
+ ['s-outro',  56.2, 60.0, 'fade']
+];
+const M={};
+function measure(){
+  SCN.forEach(s=>{const e=$('#'+s[0]);e.style.display='block';e.style.opacity='1';e.style.transform='none';});
+  $$('.page').forEach(p=>p.style.transform='none');
+  const rel=(sel,pageSel)=>{const r=$(sel).getBoundingClientRect(),p=$(pageSel).getBoundingClientRect();return (r.top-p.top)/S;};
+  M.jobH  = $('#jobs-pg').offsetHeight;
+  M.detH  = $('#det-pg').offsetHeight;
+  M.dashH = $('#dash-pg').offsetHeight;
+  M.profH = $('#prof-pg').offsetHeight;
+  M.jc0   = rel('#jc0','#jobs-pg');
+  M.apply = rel('#det-apply','#det-pg');
+  M.tk1   = rel('#tk1','#tools-pg');
+}
+/* translateY needed so element top sits at screen-y D */
+const toY=(relTop,D)=>D-VIEWTOP-relTop;
+
+/* ---------- pointer ---------- */
+const cur=$('#cur'), rip=$('#rip');
+function ptOf(el){const r=el.getBoundingClientRect();return {x:(r.left+r.width/2)/S,y:(r.top+r.height/2)/S};}
+function ptr(t,x0,y0,el,t0,t1,tTap,dy){
+  const u=eio(lin(t,t0,t1)); let x=x0,y=y0;
+  if(el){const p=ptOf(el); x=mix(x0,p.x,u); y=mix(y0,p.y+(dy||0),u);}
+  const vis=lin(t,t0-0.25,t0)*(1-lin(t,tTap+0.5,tTap+0.9));
+  const sc=1-0.30*bell(t,tTap,0.18);
+  cur.style.left=x+'px'; cur.style.top=y+'px'; cur.style.opacity=vis;
+  cur.style.transform=`translate(-50%,-50%) scale(${sc})`;
+  const ru=lin(t,tTap,tTap+0.55);
+  if(ru>0&&ru<1){rip.style.left=x+'px';rip.style.top=y+'px';rip.style.opacity=(1-ru)*0.9;
+    rip.style.transform=`translate(-50%,-50%) scale(${1+ru*2.4})`;}
+  else rip.style.opacity=0;
+}
+function ptrOff(){cur.style.opacity=0;rip.style.opacity=0;}
+
+/* ---------- captions ---------- */
+const CAPS=[
+ [4.10, 8.85,'Regístrate <em>gratis</em> en<br>talent.mashaincanada.com'],
+ [9.25,13.80,'Creas tu perfil una vez…<br>y la herramienta trabaja para ti'],
+ [14.20,18.35,'Tu experiencia, tus roles objetivo<br>y tu CV, en un solo lugar'],
+ [18.75,21.35,'Entras a la sección <u>Jobs</u>…'],
+ [21.90,26.90,'…y ya tienes ofertas reales<br>en Canadá para <em>tu</em> perfil'],
+ [27.15,31.35,'En inglés, con % de match,<br>salario y ubicación'],
+ [31.60,33.45,'Abres la que te interesa…'],
+ [34.10,40.90,'Ves la oferta completa:<br>rol, requisitos y salario'],
+ [41.25,46.40,'Y <em>aplicas ahí mismo</em>,<br>con tu perfil MIC'],
+ [46.95,51.95,'Con el <u>Paquete de Optimización</u><br>desbloqueas todos los recursos'],
+ [52.45,55.95,'Y muy pronto: ofertas de<br>empleadores <em>partner de MIC</em>']
+];
+function caption(t){
+  let op=0,html='';
+  for(const [a,b,h] of CAPS){ if(t>=a-0.3&&t<=b+0.3){ const o=lin(t,a,a+0.28)*(1-lin(t,b-0.28,b)); if(o>op){op=o;html=h;} } }
+  const c=$('#cap'), ct=$('#capT');
+  c.style.opacity=op; if(html&&ct.dataset.h!==html){ct.innerHTML=html;ct.dataset.h=html;}
+  ct.style.transform=`translateY(${mix(9,0,op)}px)`;
+}
+
+/* ---------- scenes ---------- */
+function fx(el,o,tr){el.style.opacity=o;el.style.transform=tr||'none';}
+function setY(id,y){$(id).style.transform=`translateY(${y}px)`;}
+function show(el,o,y){el.style.opacity=o;el.style.transform=`translateY(${y}px)`;}
+
+function seek(t){
+  t=clamp(t,0,DUR);
+  /* screen visibility + enter transition */
+  SCN.forEach(([id,a,b,type],i)=>{
+    /* cuando la escena siguiente entra con fade, esta sale a negro antes (corte limpio) */
+    const nxt=SCN[i+1], dip=nxt&&nxt[3]==='fade';
+    const e=$('#'+id), on=(t>=a-0.05&&t<=(dip?b:b+0.45));
+    e.style.display=on?'block':'none';
+    if(!on)return;
+    const out=dip?(1-lin(t,b-0.28,b)):1;
+    if(type==='left'){ e.style.opacity=out; e.style.transform=`translateX(${mix(420,0,eo(lin(t,a,a+0.42)))}px)`; }
+    else if(type==='up'){ e.style.opacity=lin(t,a,a+0.30)*out; e.style.transform=`translateY(${mix(22,0,eo(lin(t,a,a+0.45)))}px)`; }
+    else { e.style.opacity=lin(t,a,a+0.32)*out; e.style.transform='none'; }
+  });
+  ptrOff(); caption(t);
+
+  /* 1 INTRO */
+  if(t<4.1){ const l=t;
+    show($('#in-logo'), lin(l,0.15,0.60), mix(14,0,eo(lin(l,0.15,0.75))));
+    show($('#in-l1'),   lin(l,0.40,0.90), mix(20,0,eo(lin(l,0.40,1.05))));
+    show($('#in-l2'),   lin(l,0.78,1.30), mix(20,0,eo(lin(l,0.78,1.45))));
+    show($('#in-l3'),   lin(l,1.25,1.75), mix(16,0,eo(lin(l,1.25,1.90))));
+  }
+  /* 2 LOGIN */
+  if(t>3.4&&t<9.5){ const l=t-3.6, EM='mariafernanda.rios@gmail.com';
+    const n=Math.floor(lin(l,0.55,2.45)*EM.length);
+    $('#lg-txt').textContent=EM.slice(0,n);
+    $('#lg-car').style.opacity=(l<2.6&&l>0.4&&(l*1.8)%1<0.55)?1:0;
+    const btn=$('#lg-btn'), pr=bell(l,3.25,0.18);
+    btn.style.transform=`scale(${1-0.05*pr})`;
+    btn.style.background=l>3.25?'#1f66d8':'#2b7cf6';
+    $('#lg-free').style.opacity=lin(l,3.45,3.95);
+    $('#lg-free').style.transform=`translateY(${mix(8,0,eo(lin(l,3.45,4.05)))}px)`;
+    ptr(t,330,690,btn,2.55+3.6,3.15+3.6,3.25+3.6,0);
+  }
+  /* 3 DASHBOARD */
+  if(t>8.9&&t<14.5){ const l=t-9.0;
+    setY('#dash-pg', mix(0,-232,eio(lin(l,1.15,4.30))));
+    $('#d-n1').textContent=Math.round(mix(0,24,eo(lin(l,1.45,2.75))));
+    $('#d-n2').textContent=Math.round(mix(0,3,eo(lin(l,2.35,3.15))));
+    $('#d-n3').textContent=Math.round(mix(0,100,eo(lin(l,3.05,4.15))))+'%';
+  }
+  /* 4 PERFIL */
+  if(t>13.9&&t<19.0){ const l=t-14.0;
+    const p=eo(lin(l,0.35,1.55));
+    $('#pf-bar').style.width=(p*100)+'%';
+    $('#pf-pct').textContent=Math.round(p*100);
+    setY('#prof-pg', mix(0,-322,eio(lin(l,1.30,4.30))));
+  }
+  /* 5 MENU */
+  if(t>18.4&&t<21.9){ const l=t-18.5;
+    $('#mn-drawer').style.transform=`translateY(${mix(-648,0,eo(lin(l,0.05,0.55)))}px)`;
+    const rec=$('#mn-rec'), pr=lin(l,1.95,2.10);
+    rec.style.background=pr>0?'rgba(230,0,126,'+(0.30*pr)+')':'transparent';
+    rec.style.borderRadius='9px';
+    ptr(t,330,700,rec,18.5+0.85,18.5+1.80,18.5+1.98,0);
+  }
+  /* 6 JOBS */
+  if(t>21.4&&t<34.1){ const l=t-21.5;
+    const maxS=-(M.jobH-664+18);
+    let y=0;
+    if(l<1.10) y=0;
+    else if(l<6.20) y=mix(0,maxS,eio(lin(l,1.10,6.20)));
+    else if(l<7.30) y=maxS;
+    else y=mix(maxS,0,eio(lin(l,7.30,8.80)));
+    setY('#jobs-pg',y);
+    $$('.jc').forEach((c,i)=>{const a=0.15+i*0.13;
+      c.style.opacity=lin(l,a,a+0.42);
+      c.style.transform=`translateY(${mix(16,0,eo(lin(l,a,a+0.55)))}px) scale(${1-0.035*bell(l,10.35,0.22)})`;
+      if(i===0)c.style.boxShadow=l>10.2?'0 0 0 2px rgba(43,124,246,'+(0.55*bell(l,10.5,0.6))+')':'';
+    });
+    ptr(t,330,700,$('#jc0'),21.5+8.90,21.5+10.15,21.5+10.35,0);
+  }
+  /* 7 DETAIL + APPLY */
+  if(t>33.5&&t<47.1){ const l=t-33.6;
+    let y=0;
+    if(l<0.95) y=0;
+    else if(l<4.60) y=mix(0,-300,eio(lin(l,0.95,4.60)));
+    else if(l<5.40) y=-300;
+    else y=mix(-300,toY(M.apply,392),eio(lin(l,5.40,7.00)));
+    setY('#det-pg',y);
+    const ap=$('#det-apply'); ap.style.transform=`scale(${1-0.05*bell(l,7.75,0.18)})`;
+    ap.style.background=l>7.75?'#1f66d8':'#2b7cf6';
+    if(l<8.2) ptr(t,330,700,ap,33.6+6.95,33.6+7.62,33.6+7.75,0);
+    /* sheet */
+    const su=eo(lin(l,7.85,8.45));
+    $('#ap-scrim').style.opacity=0.55*su;
+    $('#ap-sheet').style.transform=`translateY(${mix(100,0,su)}%)`;
+    const sub=$('#ap-submit'), pr=bell(l,9.55,0.18);
+    sub.style.transform=`scale(${1-0.05*pr})`; sub.style.background=l>9.55?'#1f66d8':'#2b7cf6';
+    if(l>8.6&&l<10.1) ptr(t,210,470,sub,33.6+8.75,33.6+9.42,33.6+9.55,0);
+    const load=lin(l,9.60,10.75);
+    $('#ap-progw').style.opacity=(l>9.55&&l<10.95)?1:0;
+    $('#ap-prog').style.width=(load*100)+'%';
+    const done=lin(l,10.85,11.15);
+    $('#ap-form').style.opacity=1-done; $('#ap-form').style.display=done>=1?'none':'block';
+    const dn=$('#ap-done'); dn.style.opacity=done; dn.style.display=done>0?'block':'none';
+    $('#ap-check').style.transform=`scale(${mix(0.55,1,eo(lin(l,10.90,11.35)))})`;
+  }
+  /* 8 TOOLS */
+  if(t>46.5&&t<52.7){ const l=t-46.6;
+    setY('#tools-pg', mix(0,-42,eio(lin(l,0.8,4.2))));
+    [[1,1.35],[2,1.95],[3,2.55]].forEach(([i,tu])=>{
+      const u=lin(l,tu,tu+0.34), w=$('#lk'+i);
+      w.querySelector('.lkc').style.opacity=1-u;
+      w.querySelector('.ckc').style.opacity=u;
+      w.querySelector('.ckc').style.transform=`scale(${mix(0.5,1,eo(u))})`;
+      const card=$('#tk'+i), g=bell(l,tu+0.2,0.55);
+      card.style.boxShadow=`0 1px 2px rgba(16,24,54,.05),0 6px 18px rgba(16,24,54,.05),0 0 0 ${2*g}px rgba(230,0,126,${0.45*g})`;
+    });
+    const b=$('#tk-badge'), bo=eo(lin(l,3.05,3.55));
+    b.style.opacity=lin(l,3.05,3.40); b.style.overflow='hidden';
+    b.style.maxHeight=(bo*52)+'px'; b.style.paddingTop=(bo*11)+'px';
+    b.style.paddingBottom=(bo*11)+'px'; b.style.marginBottom=(bo*12)+'px';
+  }
+  /* 9 PARTNER */
+  if(t>52.1&&t<56.7){ const l=t-52.2;
+    setY('#ptr-pg', mix(0,-52,eio(lin(l,0.9,3.6))));
+  }
+  /* 10 OUTRO */
+  if(t>56.1){ const l=t-56.2;
+    show($('#ou-logo'), lin(l,0.10,0.50), mix(12,0,eo(lin(l,0.10,0.65))));
+    show($('#ou-l1'),   lin(l,0.30,0.78), mix(18,0,eo(lin(l,0.30,0.95))));
+    show($('#ou-l2'),   lin(l,0.62,1.10), mix(16,0,eo(lin(l,0.62,1.25))));
+    const b3=$('#ou-l3'); b3.style.opacity=lin(l,0.95,1.45);
+    b3.style.transform=`translateY(${mix(16,0,eo(lin(l,0.95,1.60)))}px) scale(${1+0.018*Math.sin((l-1.5)*3.4)*(l>1.5?1:0)})`;
+    show($('#ou-l4'), lin(l,1.35,1.85), mix(10,0,eo(lin(l,1.35,2.0))));
+  }
+}
+measure();
+window.__measure=measure;
+window.__seek=seek;
+window.__ready=true;
+seek(0);
+</script>
+</body></html>

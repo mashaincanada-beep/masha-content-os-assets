@@ -1,0 +1,258 @@
+<script>
+const S=1080/420, VIEWTOP=82, DUR=60.0;
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
+const lin=(t,a,b)=>clamp((t-a)/(b-a||1e-6),0,1);
+const eo=u=>1-Math.pow(1-u,3);
+const eio=u=>u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2;
+const mix=(a,b,u)=>a+(b-a)*u;
+const bell=(t,c,w)=>Math.max(0,1-Math.abs(t-c)/w);
+
+/* ---------- job data ---------- */
+const JOBS=[
+ {t:'Supply Chain Coordinator',   c:'Maple Ridge Logistics Inc.', ab:'MR', bg:'#0f2b52',
+  tags:['Toronto, ON','Hybrid','Full-time'],  s:'$62,000 – $74,000', m:94, p:'Posted 2 days ago'},
+ {t:'Inventory & Demand Planner', c:'Great Lakes Foods Ltd.',     ab:'GL', bg:'#166534',
+  tags:['Mississauga, ON','On-site','Full-time'], s:'$58,000 – $70,000', m:91, p:'Posted 3 days ago'},
+ {t:'Procurement Analyst',        c:'Aurora Retail Group',        ab:'AR', bg:'#7c2d67',
+  tags:['Vaughan, ON','Hybrid','Full-time'],  s:'$65,000 – $78,000', m:89, p:'Posted 4 days ago'},
+ {t:'Warehouse Operations Supervisor', c:'NorthBay Distribution', ab:'NB', bg:'#1e3a8a',
+  tags:['Brampton, ON','On-site','Full-time'],s:'$60,000 – $72,000', m:87, p:'Posted 5 days ago'},
+ {t:'Logistics Administrator',    c:'TrueNorth Freight Systems',  ab:'TN', bg:'#0f766e',
+  tags:['Hamilton, ON','Remote','Full-time'], s:'$55,000 – $64,000', m:85, p:'Posted 6 days ago'},
+ {t:'Supply Chain Analyst',       c:'Cascadia Manufacturing',     ab:'CM', bg:'#9a3412',
+  tags:['Burlington, ON','Hybrid','Full-time'],s:'$68,000 – $80,000',m:83, p:'Posted 1 week ago'}
+];
+$('#jobcards').innerHTML=JOBS.map((j,i)=>`
+<div class="card jc" id="jc${i}" style="padding:13px;">
+  <div class="row" style="gap:10px;align-items:flex-start;">
+    <div style="width:36px;height:36px;border-radius:10px;background:${j.bg};color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex:none;">${j.ab}</div>
+    <div style="flex:1;min-width:0;">
+      <div style="font-size:13.5px;font-weight:700;letter-spacing:-.25px;color:#0f172a;line-height:1.22;">${j.t}</div>
+      <div style="font-size:11.5px;font-weight:600;color:#3f4a66;margin-top:3px;">${j.c}</div>
+    </div>
+    <div style="flex:none;text-align:center;background:#e6f8ee;border-radius:9px;padding:5px 7px;">
+      <div style="font-size:12.5px;font-weight:800;color:#12813f;line-height:1;">${j.m}%</div>
+      <div style="font-size:7.5px;font-weight:700;color:#3f9663;letter-spacing:.3px;margin-top:2px;">MATCH</div>
+    </div>
+  </div>
+  <div class="row" style="flex-wrap:wrap;gap:5px;margin-top:9px;">${j.tags.map(x=>`<span class="pill s">${x}</span>`).join('')}</div>
+  <div class="between" style="margin-top:9px;">
+    <div style="font-size:12px;font-weight:800;color:#0f172a;letter-spacing:-.2px;">${j.s}</div>
+    <div style="font-size:9.5px;color:#98a0b8;font-weight:600;">${j.p}</div>
+  </div>
+</div>`).join('');
+
+$$('.lockw').forEach(w=>{w.innerHTML=`<div style="position:relative;width:27px;height:27px;flex:none;">
+  <div class="lkc" style="position:absolute;inset:0;border-radius:9px;background:#eef1f8;color:#8a93ad;display:flex;align-items:center;justify-content:center;font-size:12px;">&#128274;</div>
+  <div class="ckc" style="position:absolute;inset:0;border-radius:9px;background:#e6f8ee;color:#16a34a;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;opacity:0;">&#10003;</div></div>`;});
+
+/* ---------- measure ---------- */
+const SCN=[
+ ['s-intro',   0.0,  3.6, 'fade'],
+ ['s-login',   3.6,  9.0, 'fade'],
+ ['s-dash',    9.0, 14.0, 'up'],
+ ['s-prof',   14.0, 18.5, 'left'],
+ ['s-menu',   18.5, 21.5, 'fade'],
+ ['s-jobs',   21.5, 33.6, 'left'],
+ ['s-detail', 33.6, 46.6, 'left'],
+ ['s-tools',  46.6, 52.2, 'left'],
+ ['s-partner',52.2, 56.2, 'left'],
+ ['s-outro',  56.2, 60.0, 'fade']
+];
+const M={};
+function measure(){
+  SCN.forEach(s=>{const e=$('#'+s[0]);e.style.display='block';e.style.opacity='1';e.style.transform='none';});
+  $$('.page').forEach(p=>p.style.transform='none');
+  const rel=(sel,pageSel)=>{const r=$(sel).getBoundingClientRect(),p=$(pageSel).getBoundingClientRect();return (r.top-p.top)/S;};
+  M.jobH  = $('#jobs-pg').offsetHeight;
+  M.detH  = $('#det-pg').offsetHeight;
+  M.dashH = $('#dash-pg').offsetHeight;
+  M.profH = $('#prof-pg').offsetHeight;
+  M.jc0   = rel('#jc0','#jobs-pg');
+  M.apply = rel('#det-apply','#det-pg');
+  M.tk1   = rel('#tk1','#tools-pg');
+}
+/* translateY needed so element top sits at screen-y D */
+const toY=(relTop,D)=>D-VIEWTOP-relTop;
+
+/* ---------- pointer ---------- */
+const cur=$('#cur'), rip=$('#rip');
+function ptOf(el){const r=el.getBoundingClientRect();return {x:(r.left+r.width/2)/S,y:(r.top+r.height/2)/S};}
+function ptr(t,x0,y0,el,t0,t1,tTap,dy){
+  const u=eio(lin(t,t0,t1)); let x=x0,y=y0;
+  if(el){const p=ptOf(el); x=mix(x0,p.x,u); y=mix(y0,p.y+(dy||0),u);}
+  const vis=lin(t,t0-0.25,t0)*(1-lin(t,tTap+0.5,tTap+0.9));
+  const sc=1-0.30*bell(t,tTap,0.18);
+  cur.style.left=x+'px'; cur.style.top=y+'px'; cur.style.opacity=vis;
+  cur.style.transform=`translate(-50%,-50%) scale(${sc})`;
+  const ru=lin(t,tTap,tTap+0.55);
+  if(ru>0&&ru<1){rip.style.left=x+'px';rip.style.top=y+'px';rip.style.opacity=(1-ru)*0.9;
+    rip.style.transform=`translate(-50%,-50%) scale(${1+ru*2.4})`;}
+  else rip.style.opacity=0;
+}
+function ptrOff(){cur.style.opacity=0;rip.style.opacity=0;}
+
+/* ---------- captions ---------- */
+const CAPS=[
+ [4.10, 8.85,'Regístrate <em>gratis</em> en<br>talent.mashaincanada.com'],
+ [9.25,13.80,'Creas tu perfil una vez…<br>y la herramienta trabaja para ti'],
+ [14.20,18.35,'Tu experiencia, tus roles objetivo<br>y tu CV, en un solo lugar'],
+ [18.75,21.35,'Entras a la sección <u>Jobs</u>…'],
+ [21.90,26.90,'…y ya tienes ofertas reales<br>en Canadá para <em>tu</em> perfil'],
+ [27.15,31.35,'En inglés, con % de match,<br>salario y ubicación'],
+ [31.60,33.45,'Abres la que te interesa…'],
+ [34.10,40.90,'Ves la oferta completa:<br>rol, requisitos y salario'],
+ [41.25,46.40,'Y <em>aplicas ahí mismo</em>,<br>con tu perfil MIC'],
+ [46.95,51.95,'Con el <u>Paquete de Optimización</u><br>desbloqueas todos los recursos'],
+ [52.45,55.95,'Y muy pronto: ofertas de<br>empleadores <em>partner de MIC</em>']
+];
+function caption(t){
+  let op=0,html='';
+  for(const [a,b,h] of CAPS){ if(t>=a-0.3&&t<=b+0.3){ const o=lin(t,a,a+0.28)*(1-lin(t,b-0.28,b)); if(o>op){op=o;html=h;} } }
+  const c=$('#cap'), ct=$('#capT');
+  c.style.opacity=op; if(html&&ct.dataset.h!==html){ct.innerHTML=html;ct.dataset.h=html;}
+  ct.style.transform=`translateY(${mix(9,0,op)}px)`;
+}
+
+/* ---------- scenes ---------- */
+function fx(el,o,tr){el.style.opacity=o;el.style.transform=tr||'none';}
+function setY(id,y){$(id).style.transform=`translateY(${y}px)`;}
+function show(el,o,y){el.style.opacity=o;el.style.transform=`translateY(${y}px)`;}
+
+function seek(t){
+  t=clamp(t,0,DUR);
+  /* screen visibility + enter transition */
+  SCN.forEach(([id,a,b,type],i)=>{
+    /* cuando la escena siguiente entra con fade, esta sale a negro antes (corte limpio) */
+    const nxt=SCN[i+1], dip=nxt&&nxt[3]==='fade';
+    const e=$('#'+id), on=(t>=a-0.05&&t<=(dip?b:b+0.45));
+    e.style.display=on?'block':'none';
+    if(!on)return;
+    const out=dip?(1-lin(t,b-0.28,b)):1;
+    if(type==='left'){ e.style.opacity=out; e.style.transform=`translateX(${mix(420,0,eo(lin(t,a,a+0.42)))}px)`; }
+    else if(type==='up'){ e.style.opacity=lin(t,a,a+0.30)*out; e.style.transform=`translateY(${mix(22,0,eo(lin(t,a,a+0.45)))}px)`; }
+    else { e.style.opacity=lin(t,a,a+0.32)*out; e.style.transform='none'; }
+  });
+  ptrOff(); caption(t);
+
+  /* 1 INTRO */
+  if(t<4.1){ const l=t;
+    show($('#in-logo'), lin(l,0.15,0.60), mix(14,0,eo(lin(l,0.15,0.75))));
+    show($('#in-l1'),   lin(l,0.40,0.90), mix(20,0,eo(lin(l,0.40,1.05))));
+    show($('#in-l2'),   lin(l,0.78,1.30), mix(20,0,eo(lin(l,0.78,1.45))));
+    show($('#in-l3'),   lin(l,1.25,1.75), mix(16,0,eo(lin(l,1.25,1.90))));
+  }
+  /* 2 LOGIN */
+  if(t>3.4&&t<9.5){ const l=t-3.6, EM='mariafernanda.rios@gmail.com';
+    const n=Math.floor(lin(l,0.55,2.45)*EM.length);
+    $('#lg-txt').textContent=EM.slice(0,n);
+    $('#lg-car').style.opacity=(l<2.6&&l>0.4&&(l*1.8)%1<0.55)?1:0;
+    const btn=$('#lg-btn'), pr=bell(l,3.25,0.18);
+    btn.style.transform=`scale(${1-0.05*pr})`;
+    btn.style.background=l>3.25?'#1f66d8':'#2b7cf6';
+    $('#lg-free').style.opacity=lin(l,3.45,3.95);
+    $('#lg-free').style.transform=`translateY(${mix(8,0,eo(lin(l,3.45,4.05)))}px)`;
+    ptr(t,330,690,btn,2.55+3.6,3.15+3.6,3.25+3.6,0);
+  }
+  /* 3 DASHBOARD */
+  if(t>8.9&&t<14.5){ const l=t-9.0;
+    setY('#dash-pg', mix(0,-232,eio(lin(l,1.15,4.30))));
+    $('#d-n1').textContent=Math.round(mix(0,24,eo(lin(l,1.45,2.75))));
+    $('#d-n2').textContent=Math.round(mix(0,3,eo(lin(l,2.35,3.15))));
+    $('#d-n3').textContent=Math.round(mix(0,100,eo(lin(l,3.05,4.15))))+'%';
+  }
+  /* 4 PERFIL */
+  if(t>13.9&&t<19.0){ const l=t-14.0;
+    const p=eo(lin(l,0.35,1.55));
+    $('#pf-bar').style.width=(p*100)+'%';
+    $('#pf-pct').textContent=Math.round(p*100);
+    setY('#prof-pg', mix(0,-322,eio(lin(l,1.30,4.30))));
+  }
+  /* 5 MENU */
+  if(t>18.4&&t<21.9){ const l=t-18.5;
+    $('#mn-drawer').style.transform=`translateY(${mix(-648,0,eo(lin(l,0.05,0.55)))}px)`;
+    const rec=$('#mn-rec'), pr=lin(l,1.95,2.10);
+    rec.style.background=pr>0?'rgba(230,0,126,'+(0.30*pr)+')':'transparent';
+    rec.style.borderRadius='9px';
+    ptr(t,330,700,rec,18.5+0.85,18.5+1.80,18.5+1.98,0);
+  }
+  /* 6 JOBS */
+  if(t>21.4&&t<34.1){ const l=t-21.5;
+    const maxS=-(M.jobH-664+18);
+    let y=0;
+    if(l<1.10) y=0;
+    else if(l<6.20) y=mix(0,maxS,eio(lin(l,1.10,6.20)));
+    else if(l<7.30) y=maxS;
+    else y=mix(maxS,0,eio(lin(l,7.30,8.80)));
+    setY('#jobs-pg',y);
+    $$('.jc').forEach((c,i)=>{const a=0.15+i*0.13;
+      c.style.opacity=lin(l,a,a+0.42);
+      c.style.transform=`translateY(${mix(16,0,eo(lin(l,a,a+0.55)))}px) scale(${1-0.035*bell(l,10.35,0.22)})`;
+      if(i===0)c.style.boxShadow=l>10.2?'0 0 0 2px rgba(43,124,246,'+(0.55*bell(l,10.5,0.6))+')':'';
+    });
+    ptr(t,330,700,$('#jc0'),21.5+8.90,21.5+10.15,21.5+10.35,0);
+  }
+  /* 7 DETAIL + APPLY */
+  if(t>33.5&&t<47.1){ const l=t-33.6;
+    let y=0;
+    if(l<0.95) y=0;
+    else if(l<4.60) y=mix(0,-300,eio(lin(l,0.95,4.60)));
+    else if(l<5.40) y=-300;
+    else y=mix(-300,toY(M.apply,392),eio(lin(l,5.40,7.00)));
+    setY('#det-pg',y);
+    const ap=$('#det-apply'); ap.style.transform=`scale(${1-0.05*bell(l,7.75,0.18)})`;
+    ap.style.background=l>7.75?'#1f66d8':'#2b7cf6';
+    if(l<8.2) ptr(t,330,700,ap,33.6+6.95,33.6+7.62,33.6+7.75,0);
+    /* sheet */
+    const su=eo(lin(l,7.85,8.45));
+    $('#ap-scrim').style.opacity=0.55*su;
+    $('#ap-sheet').style.transform=`translateY(${mix(100,0,su)}%)`;
+    const sub=$('#ap-submit'), pr=bell(l,9.55,0.18);
+    sub.style.transform=`scale(${1-0.05*pr})`; sub.style.background=l>9.55?'#1f66d8':'#2b7cf6';
+    if(l>8.6&&l<10.1) ptr(t,210,470,sub,33.6+8.75,33.6+9.42,33.6+9.55,0);
+    const load=lin(l,9.60,10.75);
+    $('#ap-progw').style.opacity=(l>9.55&&l<10.95)?1:0;
+    $('#ap-prog').style.width=(load*100)+'%';
+    const done=lin(l,10.85,11.15);
+    $('#ap-form').style.opacity=1-done; $('#ap-form').style.display=done>=1?'none':'block';
+    const dn=$('#ap-done'); dn.style.opacity=done; dn.style.display=done>0?'block':'none';
+    $('#ap-check').style.transform=`scale(${mix(0.55,1,eo(lin(l,10.90,11.35)))})`;
+  }
+  /* 8 TOOLS */
+  if(t>46.5&&t<52.7){ const l=t-46.6;
+    setY('#tools-pg', mix(0,-42,eio(lin(l,0.8,4.2))));
+    [[1,1.35],[2,1.95],[3,2.55]].forEach(([i,tu])=>{
+      const u=lin(l,tu,tu+0.34), w=$('#lk'+i);
+      w.querySelector('.lkc').style.opacity=1-u;
+      w.querySelector('.ckc').style.opacity=u;
+      w.querySelector('.ckc').style.transform=`scale(${mix(0.5,1,eo(u))})`;
+      const card=$('#tk'+i), g=bell(l,tu+0.2,0.55);
+      card.style.boxShadow=`0 1px 2px rgba(16,24,54,.05),0 6px 18px rgba(16,24,54,.05),0 0 0 ${2*g}px rgba(230,0,126,${0.45*g})`;
+    });
+    const b=$('#tk-badge'), bo=eo(lin(l,3.05,3.55));
+    b.style.opacity=lin(l,3.05,3.40); b.style.overflow='hidden';
+    b.style.maxHeight=(bo*52)+'px'; b.style.paddingTop=(bo*11)+'px';
+    b.style.paddingBottom=(bo*11)+'px'; b.style.marginBottom=(bo*12)+'px';
+  }
+  /* 9 PARTNER */
+  if(t>52.1&&t<56.7){ const l=t-52.2;
+    setY('#ptr-pg', mix(0,-52,eio(lin(l,0.9,3.6))));
+  }
+  /* 10 OUTRO */
+  if(t>56.1){ const l=t-56.2;
+    show($('#ou-logo'), lin(l,0.10,0.50), mix(12,0,eo(lin(l,0.10,0.65))));
+    show($('#ou-l1'),   lin(l,0.30,0.78), mix(18,0,eo(lin(l,0.30,0.95))));
+    show($('#ou-l2'),   lin(l,0.62,1.10), mix(16,0,eo(lin(l,0.62,1.25))));
+    const b3=$('#ou-l3'); b3.style.opacity=lin(l,0.95,1.45);
+    b3.style.transform=`translateY(${mix(16,0,eo(lin(l,0.95,1.60)))}px) scale(${1+0.018*Math.sin((l-1.5)*3.4)*(l>1.5?1:0)})`;
+    show($('#ou-l4'), lin(l,1.35,1.85), mix(10,0,eo(lin(l,1.35,2.0))));
+  }
+}
+measure();
+window.__measure=measure;
+window.__seek=seek;
+window.__ready=true;
+seek(0);
+</script>
+</body></html>
