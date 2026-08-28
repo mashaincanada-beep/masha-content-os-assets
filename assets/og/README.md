@@ -44,6 +44,23 @@ Medios de WordPress. Al subirlo, WordPress agrega el año y el mes a la ruta
 (por ejemplo `/wp-content/uploads/2026/08/paquete-de-optimizacion-og.jpg`):
 hay que usar la URL real que muestra la Biblioteca de Medios.
 
+## URL alternativa, lista para usar hoy mismo
+
+Este repositorio es público, así que la imagen ya está servida en HTTPS y se puede
+usar como `og:image` sin subir nada, mientras se sube el archivo a la Biblioteca
+de Medios:
+
+```
+https://raw.githubusercontent.com/mashaincanada-beep/masha-content-os-assets/main/assets/og/paquete-de-optimizacion-og.jpg
+```
+
+(Verificado: responde `200` con `content-type: image/jpeg`, que es lo que necesita
+el scraper de Meta. Mientras el cambio siga en la rama y no en `main`, reemplazar
+`main` por `claude/mashaincanada-og-metadata-bdccwh` en la URL.)
+
+Aun así, lo preferible a mediano plazo es alojar la imagen en el propio dominio:
+mantiene todo bajo el control del sitio y evita depender de GitHub.
+
 ## Cómo publicarlos en WordPress
 
 Ni WordPress ni Elementor generan etiquetas Open Graph por su cuenta: las produce
