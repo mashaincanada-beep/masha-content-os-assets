@@ -8,19 +8,19 @@ escribe a mano, en cursiva, como una nota personal.
 | Archivo | `RL-20260827-A.mp4` |
 | Formato | 1080 × 1920 (9:16), 30 fps, 30 s |
 | Audio | ambiente original, con fade in (0.6 s) y fade out al cierre |
-| Portada | `cover.jpg` (frame 4.6 s) |
+| Portada | `cover.jpg` (frame 3.8 s) |
 | Tipografías | Dancing Script (texto manuscrito) · Poppins (logo y handle) |
 
 ## Guion en pantalla
 
 | Empieza a escribirse | Sale | Texto |
 |---|---|---|
-| 0.70 s | 5.70 s | Hoy no hubo trámites, / ni correos, ni entrevistas. |
-| 5.95 s | 11.00 s | Solo una carpa, / una fogata, / y un bosque enorme. |
-| 11.25 s | 16.30 s | Cuando recién llegué, / esto se sentía imposible. |
-| 16.55 s | 21.20 s | Y mírame: / ahora esto también / es **mi casa**. *(verde)* |
-| 21.45 s | 25.90 s | Si vas empezando, / **escríbeme**. *(magenta)* / Yo también empecé así. |
-| 25.95 s | 30 s | Cierre: logo MIC + "Te cuento cómo es vivir aquí, de verdad" + @mashaincanada |
+| 0.70 s | 5.30 s | No todo son **papeles** *(magenta)* / y aplicaciones. |
+| 5.55 s | 10.90 s | A veces es un fin / de semana entre árboles, / una fogata y cero señal. |
+| 11.15 s | 15.90 s | Al principio cuesta. / Y está bien que cueste. |
+| 16.15 s | 20.80 s | Dejas de sobrevivir / y empiezas a **vivir aquí**. *(verde)* |
+| 21.05 s | 25.90 s | Si estás empezando, / escríbeme. Yo también / empecé desde cero. |
+| 25.95 s | 30 s | Cierre: logo MIC + "Tips reales para construir tu vida en Canadá" + @mashaincanada |
 
 ## Animación
 
