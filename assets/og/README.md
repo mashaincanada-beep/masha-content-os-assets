@@ -83,6 +83,28 @@ toca el diseño ni el contenido visible** de la página.
    con la URL de la página y pulsar **Scrape Again** para forzar el refresco de la
    caché de Facebook, Instagram y WhatsApp.
 
+### Opción de un solo paso: el plugin `tools/wordpress/`
+
+Si prefieres no tocar paneles, en `tools/wordpress/mic-og-paquete-de-optimizacion.php`
+hay un plugin mínimo que hace exactamente esto y nada más:
+
+- Actúa **solo** en la página cuyo slug es `paquete-de-optimizacion`; el resto del
+  sitio queda intacto.
+- Borra las etiquetas `og:` y `twitter:` que haya emitido cualquier plugin de SEO
+  **en esa página**, y publica las de arriba en su lugar. Así funciona con Yoast,
+  Rank Math, All in One SEO, SEOPress o sin ningún plugin de SEO, sin duplicar
+  etiquetas.
+- No toca el diseño, el contenido, ni la configuración de ningún plugin.
+
+Instalación: subir el archivo a `wp-content/mu-plugins/` (se activa solo) o a
+`wp-content/plugins/` y activarlo desde **Plugins**. Después, editar las
+constantes del principio del archivo si cambian el texto o la URL de la imagen.
+
+`tools/wordpress/test-mic-og.php` es la prueba automática del filtrado: simula la
+salida de Yoast, Rank Math y AIOSEO y verifica que queda una sola etiqueta de cada
+tipo, que es la nuestra, y que el resto del `<head>` (title, canonical, scripts)
+sobrevive intacto. Se ejecuta con `php tools/wordpress/test-mic-og.php`.
+
 ### Si el sitio no tiene plugin de SEO
 
 Como alternativa, las etiquetas se pueden inyectar solo en esa página desde
