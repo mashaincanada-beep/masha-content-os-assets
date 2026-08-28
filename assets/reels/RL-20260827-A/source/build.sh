@@ -5,11 +5,13 @@ set -euo pipefail
 SRC="$1"
 cd "$(dirname "$0")"
 
-# 1. Fuentes (Poppins, OFL) — el overlay las carga desde esta carpeta
-for w in 400 500 600 700 800 900; do
-  [ -f "Poppins-$w.ttf" ] || curl -sS -o "Poppins-$w.ttf" \
-    "$(curl -sS "https://fonts.googleapis.com/css2?family=Poppins:wght@$w" | grep -o 'https://[^)]*\.ttf' | head -1)"
-done
+# 1. Fuentes (Poppins para el logo, Dancing Script para la letra manuscrita; ambas OFL)
+fetch_font () {  # $1 = familia (con +), $2 = peso, $3 = nombre de archivo
+  [ -f "$3-$2.ttf" ] || curl -sS -o "$3-$2.ttf" "$(curl -sS \
+    "https://fonts.googleapis.com/css2?family=$1:wght@$2" | grep -o 'https://[^)]*\.ttf' | head -1)"
+}
+for w in 600 700 800 900; do fetch_font "Poppins" "$w" "Poppins"; done
+for w in 600 700;         do fetch_font "Dancing+Script" "$w" "DancingScript"; done
 
 # 2. Base normalizada: 1080x1920, 30 fps, 30 s, con un ligero realce de color
 ffmpeg -y -i "$SRC" -t 30 -map 0:v:0 -map 0:a:0 \

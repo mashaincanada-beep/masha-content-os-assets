@@ -1,32 +1,36 @@
 # RL-20260827-A — "La vida en Canadá" (camping)
 
-Reel / Story vertical hecho sobre el video de camping (IMG_2296.mov).
+Reel / Story vertical sobre el video de camping (IMG_2296.mov). El texto se
+escribe a mano, en cursiva, como una nota personal.
 
 | | |
 |---|---|
 | Archivo | `RL-20260827-A.mp4` |
 | Formato | 1080 × 1920 (9:16), 30 fps, 30 s |
 | Audio | ambiente original, con fade in (0.6 s) y fade out al cierre |
-| Portada | `cover.jpg` (frame 9 s) |
+| Portada | `cover.jpg` (frame 4.6 s) |
+| Tipografías | Dancing Script (texto manuscrito) · Poppins (logo y handle) |
 
 ## Guion en pantalla
 
-| Tiempo | Etiqueta | Texto |
+| Empieza a escribirse | Sale | Texto |
 |---|---|---|
-| 0.6 – 5.9 s | LA VIDA EN CANADÁ | No todo son **papeles** y aplicaciones. |
-| 6.1 – 11.4 s | LO QUE NADIE POSTEA | A veces es un fin de semana entre árboles, una fogata y cero señal. |
-| 11.6 – 16.9 s | LOS PRIMEROS MESES | Al principio cuesta. Y está bien que cueste. |
-| 17.1 – 22.4 s | Y UN DÍA | Dejas de sobrevivir y empiezas a **vivir aquí**. |
-| 22.6 – 25.9 s | — | Si estás empezando, escríbeme. Yo también empecé desde cero. |
-| 25.9 – 30 s | Cierre | Logo MIC + "Tips reales para construir tu vida en Canadá" + @mashaincanada |
+| 0.70 s | 5.70 s | Hoy no hubo trámites, / ni correos, ni entrevistas. |
+| 5.95 s | 11.00 s | Solo una carpa, / una fogata, / y un bosque enorme. |
+| 11.25 s | 16.30 s | Cuando recién llegué, / esto se sentía imposible. |
+| 16.55 s | 21.20 s | Y mírame: / ahora esto también / es **mi casa**. *(verde)* |
+| 21.45 s | 25.90 s | Si vas empezando, / **escríbeme**. *(magenta)* / Yo también empecé así. |
+| 25.95 s | 30 s | Cierre: logo MIC + "Te cuento cómo es vivir aquí, de verdad" + @mashaincanada |
 
 ## Animación
 
-- Entrada de texto palabra por palabra (fade + subida, escalonada 55 ms).
-- Píldora de categoría con rebote suave y barra de color que crece de arriba a abajo.
-- Salida de cada bloque con fade + desplazamiento hacia arriba.
-- Cierre: panel crema de marca con círculos pastel, logo con pop de escala,
-  hoja de maple con giro, y línea + handle que suben en secuencia.
+- Cada línea se **escribe** de izquierda a derecha (máscara `clip-path` a
+  velocidad constante), con un punto de tinta que avanza en la punta del trazo.
+- Ritmo: 0.049 s por carácter, 0.16 s de pausa entre líneas; cada bloque sale
+  con fade + desplazamiento hacia arriba antes de que entre el siguiente.
+- Cada nota va ligeramente inclinada (±1°) para que no se vea alineada a regla.
+- Cierre: panel crema con círculos pastel, logo con pop de escala, hoja de
+  maple con giro, y frase + handle que suben en secuencia.
 - Marca de agua MIC arriba a la izquierda durante todo el video.
 
 ## Colores de marca usados
@@ -39,5 +43,6 @@ Reel / Story vertical hecho sobre el video de camping (IMG_2296.mov).
 source/build.sh /ruta/al/IMG_2296.mov
 ```
 
-Requiere `ffmpeg`, `python3`, `playwright` y Chromium. El texto y los tiempos
-se editan en `source/overlay.html` (array `CARDS` y `OUTRO_START`).
+Requiere `ffmpeg`, `python3`, `playwright` y Chromium. El texto, los tiempos y
+la velocidad de escritura se editan en `source/overlay.html`
+(array `CARDS`, constantes `SPEED`, `GAP` y `OUTRO_START`).
