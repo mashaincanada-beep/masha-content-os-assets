@@ -1,0 +1,61 @@
+{
+  "_como_se_lee": [
+    "Un objeto por grupo de subtitulo. Un grupo = una idea = ~1 s en pantalla.",
+    "l1 es la linea de apoyo (lo que prepara la frase), l2 es la linea de golpe.",
+    "*asteriscos* ponen una palabra en cursiva: como mucho una por grupo, y solo en l1.",
+    "color: nombre de la paleta activa del preset (blanco, amarillo, rosa, verde).",
+    "estilo: apoyo | golpe | neutro. Si no se pone, l1 es apoyo y l2 es golpe.",
+    "Los emoji van tal cual dentro del texto, uno por grupo como maximo.",
+    "Los tiempos van contra el clip YA cortado (el que sale de quitar_pausas.py)."
+  ],
+
+  "paleta": "mic",
+  "lienzo": { "ancho": 1080, "alto": 1920, "fps": 30 },
+
+  "grupos": [
+    {
+      "in": 0.00, "out": 1.00,
+      "l1": { "texto": "⚠️ Si aplicas *sin* esto" },
+      "l2": { "texto": "te van a rechazar", "color": "rosa" }
+    },
+    {
+      "in": 1.00, "out": 2.05,
+      "l1": { "texto": "y no va a ser" },
+      "l2": { "texto": "por tu puntaje", "color": "amarillo" }
+    },
+    {
+      "in": 2.05, "out": 3.10,
+      "l1": { "texto": "es porque *nadie*" },
+      "l2": { "texto": "te lo explicó", "color": "blanco" }
+    },
+    {
+      "in": 3.10, "out": 4.15,
+      "l1": { "texto": "Piénsalo así", "estilo": "neutro", "color": "amarillo" },
+      "l2": { "texto": "es una fila con reglas", "estilo": "neutro" }
+    },
+    {
+      "in": 4.15, "out": 5.20,
+      "l1": { "texto": "🇨🇦 todos entramos" },
+      "l2": { "texto": "por la misma puerta", "color": "amarillo" }
+    },
+    {
+      "in": 5.20, "out": 6.20,
+      "l1": { "texto": "pero *casi nadie*" },
+      "l2": { "texto": "lee el letrero", "color": "rosa" }
+    },
+    {
+      "in": 6.20, "out": 7.20,
+      "l1": { "texto": "y ahí es donde" },
+      "l2": { "texto": "se pierde el año", "color": "rosa" }
+    },
+    {
+      "in": 7.20, "out": 8.20,
+      "l1": { "texto": "👀 guárdate esto" },
+      "l2": { "texto": "antes de aplicar", "color": "amarillo" }
+    },
+    {
+      "in": 8.20, "out": 9.15,
+      "l2": { "texto": "te ahorra meses", "color": "blanco" }
+    }
+  ]
+}

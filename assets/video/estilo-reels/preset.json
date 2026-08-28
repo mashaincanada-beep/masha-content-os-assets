@@ -1,0 +1,99 @@
+{
+  "nombre": "reels-subtitulos-v1",
+  "descripcion": "Estilo de edicion de reels de cabeza parlante: corte seco sin aire muerto y subtitulos de dos registros (linea de apoyo + linea de golpe).",
+
+  "lienzo": {
+    "ancho": 1080,
+    "alto": 1920,
+    "fps": 30
+  },
+
+  "bloque": {
+    "_comentario": "Posicion del bloque de subtitulos. centro_y_rel se mide desde el borde superior; el bloque nunca se mueve entre grupos.",
+    "centro_y_rel": 0.494,
+    "ancho_max_rel": 0.86,
+    "interlineado_px": 140
+  },
+
+  "tipografia": {
+    "apoyo": {
+      "_comentario": "Linea 1: lo que prepara la frase. Grotesca ancha, caja mixta, una sola palabra en cursiva.",
+      "fuente": "Roboto-Bold.ttf",
+      "cursiva": "Roboto-BoldItalic.ttf",
+      "tamano": 92,
+      "tracking": 0,
+      "mayusculas": false
+    },
+    "golpe": {
+      "_comentario": "Linea 2: la palabra que la gente se lleva. Condensada pesada, siempre en mayusculas.",
+      "fuente": "Anton-Regular.ttf",
+      "cursiva": "Anton-Regular.ttf",
+      "tamano": 120,
+      "tracking": 2,
+      "mayusculas": true
+    },
+    "neutro": {
+      "_comentario": "Excepcion: frases de transicion que no tienen una palabra de golpe. Las dos lineas van en la condensada al cuerpo pequeno y el color va en la primera.",
+      "fuente": "Anton-Regular.ttf",
+      "cursiva": "Anton-Regular.ttf",
+      "tamano": 96,
+      "tracking": 1,
+      "mayusculas": false
+    }
+  },
+
+  "contorno": {
+    "grosor": 9,
+    "color": "#000000"
+  },
+
+  "sombra": {
+    "dx": 0,
+    "dy": 7,
+    "desenfoque": 10,
+    "opacidad": 0.55
+  },
+
+  "paleta": "mic",
+  "paletas": {
+    "mic": {
+      "_comentario": "Paleta de marca (MIC): amarillo resaltador y rosa del kit de carruseles, subidos de saturacion para que aguanten sobre video.",
+      "blanco": "#FFFFFF",
+      "amarillo": "#F5D33F",
+      "rosa": "#FF4F97",
+      "verde": "#86F442"
+    },
+    "viral": {
+      "_comentario": "Paleta del reel de referencia. Mas agresiva, sin relacion con la marca.",
+      "blanco": "#FFFFFF",
+      "verde": "#86F442",
+      "rojo": "#E8100C",
+      "amarillo": "#F3D914"
+    }
+  },
+
+  "emoji": {
+    "fuente": "NotoColorEmoji.ttf",
+    "alto_rel": 1.15,
+    "max_por_grupo": 1
+  },
+
+  "audio": {
+    "lufs": -14.0,
+    "true_peak": -1.0,
+    "lra": 5
+  },
+
+  "cortes": {
+    "_comentario": "Umbral de silencio para el corte seco automatico. colchon_s es el aire que se deja a cada lado para no cortar consonantes.",
+    "umbral_db": -32,
+    "pausa_min_s": 0.22,
+    "colchon_s": 0.06
+  },
+
+  "export": {
+    "crf": 19,
+    "preset": "slow",
+    "aac_kbps": 192
+  }
+}

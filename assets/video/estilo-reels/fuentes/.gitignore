@@ -1,0 +1,3 @@
+# Las tipografias se descargan con descargar.sh, no se versionan.
+*.ttf
+*.otf
