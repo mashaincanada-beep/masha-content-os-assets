@@ -1,0 +1,65 @@
+{
+  "rules": [
+    "Una plantilla no se repite hasta pasados 5 dias (cooldown en el ledger).",
+    "Toda plantilla es 1080x1920 y respeta la safe area del brandkit.",
+    "El fondo siempre lleva movimiento: video stock, clip o animacion. Fondo plano estatico esta prohibido.",
+    "El texto va sobre una capa de contraste (degradado o bloque solido) para que se lea sin sonido.",
+    "La firma discreta va en la esquina inferior izquierda en todas las pantallas menos el hook."
+  ],
+  "templates": [
+    {
+      "id": "T1-fullbleed",
+      "name": "Video a sangre + titular gigante",
+      "layout": "Clip de video ocupando las 1080x1920 completas, degradado vertical de #0B1220 (0% arriba, 75% abajo), titular anclado al tercio inferior sobre la zona oscura.",
+      "textPlacement": "inferior",
+      "motion": "El clip corre en loop; el texto entra con fade-up de 6 frames.",
+      "bestFor": ["noticia-mercado", "cambios-profesionales-internacionales", "trabajo-remoto"],
+      "canvaDirective": "Fondo de video vertical a sangre completa, degradado oscuro de abajo hacia arriba, un solo titular blanco muy grande anclado abajo, sin cajas ni marcos."
+    },
+    {
+      "id": "T2-split",
+      "name": "Split horizontal 60/40",
+      "layout": "60% superior de video, 40% inferior en color solido de acento. El texto vive en el bloque de color.",
+      "textPlacement": "bloque-inferior",
+      "motion": "El corte entre video y bloque se desliza 40 px en cada cambio de pantalla.",
+      "bestFor": ["industrias-contratando", "sectores-demanda", "salarios"],
+      "canvaDirective": "Composicion partida: arriba video vertical, abajo un bloque de color solido de borde recto con el texto en blanco alineado a la izquierda."
+    },
+    {
+      "id": "T3-tarjetas",
+      "name": "Tarjetas apiladas",
+      "layout": "Video de fondo desenfocado y oscurecido; cada mensaje aparece como una tarjeta blanca de esquinas redondeadas (radio 32) con una barra de acento de 12 px a la izquierda.",
+      "textPlacement": "centro",
+      "motion": "Las tarjetas entran deslizandose desde la derecha, una por pantalla.",
+      "bestFor": ["errores-aplicar", "conseguir-entrevistas", "linkedin"],
+      "canvaDirective": "Fondo de video desenfocado y oscuro, tarjetas blancas flotantes de esquinas redondeadas con una barra de color vertical a la izquierda y texto oscuro dentro."
+    },
+    {
+      "id": "T4-dato",
+      "name": "Dato dominante",
+      "layout": "La cifra ocupa el centro optico a 300-360 px de altura tipografica, con una etiqueta corta debajo. Video sutil detras al 35% de opacidad.",
+      "textPlacement": "centro",
+      "motion": "La cifra hace un conteo rapido o un punch-in del 108% al 100%.",
+      "bestFor": ["noticia-mercado", "salarios", "sectores-demanda"],
+      "canvaDirective": "Una cifra enorme centrada como protagonista absoluto, etiqueta pequena debajo, fondo de video muy tenue, maximo contraste."
+    },
+    {
+      "id": "T5-linea",
+      "name": "Linea de tiempo / pasos",
+      "layout": "Columna vertical con una linea de acento y puntos; cada pantalla ilumina un punto y apaga los anteriores.",
+      "textPlacement": "derecha-de-linea",
+      "motion": "El punto activo pulsa; la linea se dibuja progresivamente.",
+      "bestFor": ["conseguir-entrevistas", "entrevistas", "networking", "empleabilidad-post-estudio"],
+      "canvaDirective": "Guia visual de pasos numerados sobre una linea vertical de color, un paso destacado por pantalla, fondo de video discreto."
+    },
+    {
+      "id": "T6-contraste",
+      "name": "Antes / despues",
+      "layout": "Pantalla dividida en vertical: izquierda en gris con el enfoque equivocado tachado, derecha en acento con el correcto.",
+      "textPlacement": "dos-columnas",
+      "motion": "El lado correcto entra empujando al incorrecto.",
+      "bestFor": ["errores-aplicar", "recruiters", "ai-busqueda-empleo", "consejos-carrera"],
+      "canvaDirective": "Comparacion lado a lado en formato vertical: una mitad apagada en gris con una marca de error, la otra mitad en color de marca con una marca de acierto."
+    }
+  ]
+}

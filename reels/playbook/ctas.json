@@ -1,0 +1,38 @@
+{
+  "rules": [
+    "El CTA es la ultima pantalla y dura 3-4 segundos.",
+    "Se elige segun el tema, no al azar: el CTA tiene que ser la accion logica despues de lo que se explico.",
+    "'dm' es el CTA prioritario. Puede repetirse cada 2 dias; los demas tienen cooldown de 3 dias.",
+    "Nunca dos CTA en el mismo Reel."
+  ],
+  "options": [
+    {
+      "id": "dm",
+      "text": "Te interesa saber mas? Hablame por DM y te cuento.",
+      "priority": 1,
+      "cooldownDays": 2,
+      "useWhen": "El tema abre una pregunta personal: cada caso se resuelve distinto."
+    },
+    {
+      "id": "guardar",
+      "text": "Guardalo para tu busqueda de empleo.",
+      "priority": 2,
+      "cooldownDays": 3,
+      "useWhen": "El Reel es una lista, un checklist o algo que se consulta despues."
+    },
+    {
+      "id": "compartir",
+      "text": "Compartelo con alguien que este buscando trabajo en Canada.",
+      "priority": 2,
+      "cooldownDays": 3,
+      "useWhen": "El tema le sirve a un tercero tanto como a quien lo ve."
+    },
+    {
+      "id": "seguir",
+      "text": "Sigueme para mas estrategias de empleo en Canada.",
+      "priority": 3,
+      "cooldownDays": 3,
+      "useWhen": "El Reel es noticioso y anticipa que habra mas datos pronto."
+    }
+  ]
+}

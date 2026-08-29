@@ -1,0 +1,132 @@
+{
+  "rules": [
+    "El hook ocupa los primeros 2-3 segundos y va solo en pantalla: nada compite con el.",
+    "Maximo 62 caracteres y maximo 2 lineas. Si no cabe, el hook es debil, no largo.",
+    "Nunca se reutiliza un hook literal ya publicado. El ledger guarda el texto exacto de los ultimos 60 dias.",
+    "Cada dia se usa una familia distinta de las 4 ultimas usadas (cooldown de familia).",
+    "Prohibido empezar con 'Hola', 'En el video de hoy', 'Te voy a contar' o cualquier calentamiento. La primera palabra ya es el gancho.",
+    "El hook promete exactamente lo que el Reel entrega. Si no lo entrega, es clickbait y quema audiencia."
+  ],
+  "families": [
+    {
+      "id": "dato-choque",
+      "name": "Dato que choca",
+      "when": "Hay una cifra reciente y contraintuitiva.",
+      "patterns": [
+        "{cifra} y casi nadie lo esta comentando.",
+        "El {indicador} acaba de {movimiento}.",
+        "{cifra} empleos en un solo mes. Mira donde.",
+        "Esto cambio en Canada y afecta tu busqueda.",
+        "El dato que explica por que no te llaman."
+      ]
+    },
+    {
+      "id": "senalar-audiencia",
+      "name": "Senalar a la audiencia",
+      "when": "El tema aplica a un perfil muy concreto.",
+      "patterns": [
+        "Si estas buscando trabajo en Canada, mira esto.",
+        "Si estas aplicando en Canada, necesitas saber esto.",
+        "Si acabas de llegar a Canada, esto es para ti.",
+        "Si terminas tu programa este ano, presta atencion.",
+        "Si llevas meses aplicando sin respuesta, es por esto."
+      ]
+    },
+    {
+      "id": "error-comun",
+      "name": "El error que casi todos cometen",
+      "when": "Hay una practica extendida que penaliza.",
+      "patterns": [
+        "Hay algo que muchos candidatos todavia estan haciendo mal.",
+        "Este error te esta costando entrevistas.",
+        "Lo estas haciendo al reves y no es tu culpa.",
+        "Nadie te dijo que esto penaliza en Canada.",
+        "El 90% comete este error en la primera linea."
+      ]
+    },
+    {
+      "id": "lista-cerrada",
+      "name": "Lista cerrada",
+      "when": "El contenido son 3-5 items paralelos.",
+      "patterns": [
+        "Estas industrias estan contratando.",
+        "{n} sectores que sumaron empleo este mes.",
+        "{n} cosas que un recruiter mira antes que tu experiencia.",
+        "{n} cambios de 10 minutos en tu LinkedIn.",
+        "Estas {n} palabras estan matando tu CV."
+      ]
+    },
+    {
+      "id": "cambio-mercado",
+      "name": "Algo cambio",
+      "when": "Noticia, regla nueva o giro de tendencia.",
+      "patterns": [
+        "Esto esta cambiando en el mercado laboral canadiense.",
+        "Cambio la regla y casi nadie se entero.",
+        "Lo que funcionaba hace un ano ya no funciona.",
+        "El mercado se movio. Esto es lo que significa.",
+        "Nueva senal en el empleo canadiense."
+      ]
+    },
+    {
+      "id": "pregunta-directa",
+      "name": "Pregunta directa",
+      "when": "La pregunta ya expone el problema.",
+      "patterns": [
+        "Cuantas aplicaciones llevas sin una sola respuesta?",
+        "Sabes que pasa con tu CV en los primeros 7 segundos?",
+        "Por que te rechazan sin siquiera leerte?",
+        "Estas aplicando o estas coleccionando rechazos?",
+        "Cual crees que es el sector que mas contrato este mes?"
+      ]
+    },
+    {
+      "id": "contraste",
+      "name": "Contraste A vs B",
+      "when": "Dos maneras de hacer lo mismo con resultados distintos.",
+      "patterns": [
+        "Mismo perfil, dos resultados. La diferencia es esta.",
+        "Asi aplica el 90%. Asi aplica quien consigue entrevista.",
+        "Tu CV dice esto. El recruiter lee esto otro.",
+        "Lo que crees que buscan vs lo que realmente buscan.",
+        "Antes: silencio. Despues: tres entrevistas."
+      ]
+    },
+    {
+      "id": "detras-de-camara",
+      "name": "Lo que pasa del otro lado",
+      "when": "Se explica el proceso interno de contratacion.",
+      "patterns": [
+        "Esto pasa con tu CV apenas le das a enviar.",
+        "Asi decide un recruiter canadiense en 7 segundos.",
+        "Lo que ve el sistema antes que un humano.",
+        "Te cuento como se ve tu aplicacion desde adentro.",
+        "Nadie te muestra esta parte del proceso."
+      ]
+    },
+    {
+      "id": "advertencia-util",
+      "name": "Advertencia util",
+      "when": "Hay riesgo real de perder tiempo o dinero.",
+      "patterns": [
+        "No hagas esto antes de aplicar en Canada.",
+        "Cuidado con esto si tienes permiso de trabajo.",
+        "Esto te puede costar meses de busqueda.",
+        "Antes de pagar por eso, escucha esto.",
+        "Esta practica te esta cerrando puertas."
+      ]
+    },
+    {
+      "id": "situacion-reconocible",
+      "name": "Situacion reconocible",
+      "when": "Historias o escenarios de candidatos.",
+      "patterns": [
+        "Te suena? Aplicas, esperas, nada.",
+        "Llego a Canada con 8 anos de experiencia y cero respuestas.",
+        "Le dijeron que le faltaba experiencia canadiense.",
+        "Aplico a 200 vacantes. El problema no era el numero.",
+        "Paso de repartir CVs a firmar contrato en 6 semanas."
+      ]
+    }
+  ]
+}

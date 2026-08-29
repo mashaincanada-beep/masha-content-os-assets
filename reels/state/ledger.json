@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "note": "Historial de Reels publicados. Lo escribe record-reel.mjs; no se edita a mano salvo para corregir un error.",
+  "history": [
+    {
+      "id": "RE-2026-08-29",
+      "date": "2026-08-29",
+      "category": "industrias-contratando",
+      "template": "T2-split",
+      "hookFamily": "lista-cerrada",
+      "accent": "verde",
+      "cta": "dm",
+      "offer": null,
+      "evergreen": false,
+      "title": "Las 4 industrias que sumaron empleo en julio 2026",
+      "hook": "Estas 4 industrias están contratando en Canadá.",
+      "captionFirstLine": "Julio fue el mejor mes de empleo del año en Canadá y casi nadie lo comentó.",
+      "keywords": [
+        "industrias contratando",
+        "comercio mayorista minorista",
+        "finanzas seguros bienes raices",
+        "servicios profesionales",
+        "construccion",
+        "labour force survey julio"
+      ],
+      "canvaDesignId": "DAHTqiBkjc8",
+      "published": false
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "cooldownDays": {
+    "category": 8,
+    "template": 5,
+    "hookFamily": 4,
+    "cta": 3,
+    "offer": 6
+  },
+  "promoQuota": {
+    "windowDays": 7,
+    "maxPromoReels": 2,
+    "note": "Como maximo 2 de cada 7 Reels conectan con una oferta MIC. El resto es valor puro."
+  },
+  "keywordOverlap": {
+    "lookbackDays": 21,
+    "maxJaccard": 0.4,
+    "note": "Si el tema de hoy comparte mas del 40% de sus palabras clave con cualquier Reel de las ultimas 3 semanas, se descarta y se busca otro angulo."
+  },
+  "categories": [
+    {
+      "id": "noticia-mercado",
+      "name": "Noticias del mercado laboral canadiense",
+      "newsDriven": true,
+      "brief": "Un dato duro y reciente (Labour Force Survey, vacantes, salarios, despidos, anuncios de contratacion) traducido a que significa para quien busca trabajo.",
+      "defaultAccent": "azul"
+    },
+    {
+      "id": "industrias-contratando",
+      "name": "Empresas o industrias contratando",
+      "newsDriven": true,
+      "brief": "Que sectores o empleadores concretos sumaron puestos y donde estan geograficamente.",
+      "defaultAccent": "verde"
+    },
+    {
+      "id": "sectores-demanda",
+      "name": "Sectores con alta demanda",
+      "newsDriven": false,
+      "brief": "Ocupaciones con escasez estructural, requisitos reales y por donde se entra sin experiencia canadiense.",
+      "defaultAccent": "verde"
+    },
+    {
+      "id": "conseguir-entrevistas",
+      "name": "Estrategias para conseguir entrevistas",
+      "newsDriven": false,
+      "brief": "Tacticas concretas que suben la tasa de respuesta: como aplicar, a quien escribir, cuando hacer seguimiento.",
+      "defaultAccent": "azul"
+    },
+    {
+      "id": "errores-aplicar",
+      "name": "Errores comunes al aplicar",
+      "newsDriven": false,
+      "brief": "El error, por que penaliza en Canada y el arreglo exacto. Siempre con el arreglo, nunca solo el regano.",
+      "defaultAccent": "rosa"
+    },
+    {
+      "id": "networking",
+      "name": "Networking",
+      "newsDriven": false,
+      "brief": "Como construir contactos reales en Canada sin sonar desesperado. Guiones concretos.",
+      "defaultAccent": "verde"
+    },
+    {
+      "id": "linkedin",
+      "name": "LinkedIn",
+      "newsDriven": false,
+      "brief": "Titular, About, keywords, Open to Work, actividad. Cambios que se hacen en minutos.",
+      "defaultAccent": "azul"
+    },
+    {
+      "id": "recruiters",
+      "name": "Recruiters",
+      "newsDriven": false,
+      "brief": "Como piensa y trabaja un recruiter canadiense, que ve primero, que lo hace pasar de largo.",
+      "defaultAccent": "rosa"
+    },
+    {
+      "id": "entrevistas",
+      "name": "Entrevistas",
+      "newsDriven": false,
+      "brief": "Preguntas tipicas, STAR, entrevistas por competencias, panel, video-entrevista asincronica.",
+      "defaultAccent": "azul"
+    },
+    {
+      "id": "salarios",
+      "name": "Salarios y tendencias laborales",
+      "newsDriven": true,
+      "brief": "Rangos reales por rol y provincia, como negociar, que dice la ley sobre transparencia salarial.",
+      "defaultAccent": "verde"
+    },
+    {
+      "id": "trabajo-remoto",
+      "name": "Trabajo remoto",
+      "newsDriven": true,
+      "brief": "Remoto vs hibrido vs regreso a la oficina, empleadores que siguen contratando remoto, reglas fiscales y de residencia.",
+      "defaultAccent": "azul"
+    },
+    {
+      "id": "ai-busqueda-empleo",
+      "name": "AI aplicada a la busqueda laboral",
+      "newsDriven": true,
+      "brief": "ATS, screening automatico, uso honesto de AI para preparar CV y entrevistas, y donde la AI juega en contra del candidato extranjero.",
+      "defaultAccent": "rosa"
+    },
+    {
+      "id": "empleabilidad-post-estudio",
+      "name": "Empleabilidad despues de estudiar en Canada",
+      "newsDriven": true,
+      "brief": "PGWP, co-op, programas que si dan empleo, como pasar de graduado a contratado.",
+      "defaultAccent": "verde"
+    },
+    {
+      "id": "cambios-profesionales-internacionales",
+      "name": "Cambios relevantes para profesionales internacionales",
+      "newsDriven": true,
+      "brief": "Reglas de inmigracion, permisos de trabajo, PNP, Express Entry y acreditacion de titulos, siempre desde el angulo laboral.",
+      "defaultAccent": "azul"
+    },
+    {
+      "id": "consejos-carrera",
+      "name": "Consejos de carrera",
+      "newsDriven": false,
+      "brief": "Decisiones de mediano plazo: cambiar de industria, aceptar un puesto por debajo, pedir ascenso, reconversion.",
+      "defaultAccent": "rosa"
+    },
+    {
+      "id": "herramientas-mic",
+      "name": "Herramientas de Masha In Canada",
+      "newsDriven": false,
+      "brief": "Como funciona una herramienta MIC por dentro y que problema concreto resuelve. Se explica, no se anuncia.",
+      "defaultAccent": "rosa",
+      "alwaysPromo": true
+    },
+    {
+      "id": "historias-candidatos",
+      "name": "Historias o situaciones comunes de candidatos",
+      "newsDriven": false,
+      "brief": "Una situacion reconocible contada en segunda persona, con el giro y la leccion. Sin datos identificables de nadie.",
+      "defaultAccent": "verde"
+    }
+  ]
+}

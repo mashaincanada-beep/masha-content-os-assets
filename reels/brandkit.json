@@ -1,0 +1,96 @@
+{
+  "brand": "Masha In Canada",
+  "handle": "@mashaincanada",
+  "language": "es",
+  "audience": "Personas hispanohablantes que buscan mejores oportunidades laborales en Canada (recien llegados, estudiantes internacionales, profesionales extranjeros y residentes que quieren cambiar de trabajo).",
+  "colors": {
+    "azul": "#1C8FFF",
+    "verde": "#5FE223",
+    "rosa": "#FE007A",
+    "blanco": "#FFFFFF",
+    "tinta": "#0B1220",
+    "grafito": "#141C2B"
+  },
+  "colorRules": {
+    "accentPerReel": 1,
+    "note": "Un solo color de acento manda en todo el Reel. Los otros dos aparecen como maximo en un detalle pequeno (subrayado, punto, borde). Nunca los tres acentos con el mismo peso: satura y rompe la marca.",
+    "accentRotation": [
+      "azul",
+      "verde",
+      "rosa"
+    ],
+    "textOnVideo": "#FFFFFF",
+    "textOnLight": "#0B1220"
+  },
+  "canvas": {
+    "designType": "your_story",
+    "width": 1080,
+    "height": 1920,
+    "aspect": "9:16",
+    "safeArea": {
+      "top": 240,
+      "bottom": 420,
+      "left": 90,
+      "right": 90,
+      "note": "La UI de Instagram tapa arriba y abajo. Nada de texto fuera de esta zona."
+    }
+  },
+  "typography": {
+    "minFontSizePx": 52,
+    "hookFontSizePx": [
+      96,
+      132
+    ],
+    "bodyFontSizePx": [
+      64,
+      88
+    ],
+    "kickerFontSizePx": [
+      44,
+      56
+    ],
+    "ctaFontSizePx": [
+      72,
+      96
+    ],
+    "maxLinesPerScreen": 3,
+    "note": "Tamanos sobre lienzo de 1080x1920. Cualquier texto por debajo de 52 px no se lee en movil."
+  },
+  "signature": {
+    "logoAssetId": null,
+    "fallbackWordmark": "@mashaincanada",
+    "position": "inferior-izquierda",
+    "opacity": 0.7,
+    "maxWidthPx": 260,
+    "note": "Mientras logoAssetId sea null el sistema firma con el wordmark de texto. Para usar el logo real: subelo una vez a Canva, copia su asset_id (empieza por 'M') y ponlo aqui. A partir de ese dia el Reel lo inserta solo."
+  },
+  "timing": {
+    "targetSecondsMin": 15,
+    "targetSecondsMax": 30,
+    "hookSeconds": [
+      2,
+      3
+    ],
+    "bodyScreenSeconds": [
+      3,
+      5
+    ],
+    "ctaSeconds": [
+      3,
+      4
+    ]
+  },
+  "limits": {
+    "bodyScreensMin": 3,
+    "bodyScreensMax": 5,
+    "hookMaxChars": 62,
+    "bodyMaxChars": 60,
+    "kickerMaxChars": 24,
+    "ctaMaxChars": 70,
+    "captionMaxChars": 1200,
+    "hashtagsMin": 6,
+    "hashtagsMax": 12,
+    "bodyMaxCharsNote": "Derivado, no elegido: a 64 px sobre una caja de 900 px entran ~20 caracteres por linea, asi que 60 caracteres son exactamente las 3 lineas que permite maxLinesPerScreen. Si cambias bodyFontSizePx o el ancho de caja, recalcula este limite.",
+    "kickerMaxCharsNote": "A 52 px entran ~24 caracteres en una linea. El kicker nunca ocupa dos."
+  }
+}

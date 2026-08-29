@@ -1,0 +1,67 @@
+{
+  "rules": [
+    "La promocion nunca es el motivo del Reel. Primero se resuelve algo gratis y completo; la oferta solo aparece si es literalmente la continuacion del problema explicado.",
+    "Maximo 2 Reels promocionales cada 7 dias (promoQuota en topics.json).",
+    "Una sola oferta por Reel, y jamas ocupa una pantalla propia: se menciona dentro del CTA o en el caption.",
+    "Si el Reel no deja valor completo por si solo, no se publica aunque la oferta encaje.",
+    "Cooldown de 6 dias por oferta."
+  ],
+  "offers": [
+    {
+      "id": "optimizacion",
+      "name": "Paquete de Optimizacion Profesional (Metodo MIC)",
+      "solves": "CV y LinkedIn que no pasan el filtro canadiense.",
+      "attachTo": ["errores-aplicar", "linkedin", "recruiters", "ai-busqueda-empleo", "conseguir-entrevistas"],
+      "bridge": "Si tu CV tiene este problema, es exactamente lo que corregimos en el Paquete de Optimizacion."
+    },
+    {
+      "id": "job-applications",
+      "name": "Servicio Job Applications MIC",
+      "solves": "Aplicar en volumen y bien orientado cuando no hay tiempo.",
+      "attachTo": ["conseguir-entrevistas", "industrias-contratando", "sectores-demanda", "historias-candidatos"],
+      "bridge": "Si el problema es el volumen y no el perfil, para eso existe Job Applications."
+    },
+    {
+      "id": "simulacion-entrevista",
+      "name": "Simulacion de Entrevista",
+      "solves": "Llegar a la entrevista sin haberla practicado nunca en ingles ni en formato canadiense.",
+      "attachTo": ["entrevistas", "consejos-carrera"],
+      "bridge": "Esto se practica una vez y cambia la entrevista entera."
+    },
+    {
+      "id": "talent-network",
+      "name": "MIC Talent Network",
+      "solves": "Falta de acceso directo a empleadores y recruiters.",
+      "attachTo": ["networking", "industrias-contratando", "recruiters"],
+      "bridge": "Si lo que falta es que alguien te vea, ahi entra el Talent Network."
+    },
+    {
+      "id": "study-pathway",
+      "name": "MIC Study Pathway",
+      "solves": "Elegir un programa de estudio que si tenga salida laboral.",
+      "attachTo": ["empleabilidad-post-estudio", "sectores-demanda", "consejos-carrera"],
+      "bridge": "Elegir el programa correcto se decide antes de inscribirse, no despues."
+    },
+    {
+      "id": "pnp-screen",
+      "name": "MIC PNP Screen Tool",
+      "solves": "Saber que via provincial encaja con tu perfil.",
+      "attachTo": ["cambios-profesionales-internacionales", "sectores-demanda"],
+      "bridge": "Si quieres ver que provincia encaja con tu perfil, para eso esta el PNP Screen."
+    },
+    {
+      "id": "consulta-1a1",
+      "name": "Consulta Personalizada 1-1",
+      "solves": "Casos que no se resuelven con un consejo general.",
+      "attachTo": ["consejos-carrera", "historias-candidatos", "cambios-profesionales-internacionales"],
+      "bridge": "Hay casos que no se resuelven en un Reel y se ven mejor en una consulta."
+    },
+    {
+      "id": "creditos-ai",
+      "name": "Creditos Masha AI",
+      "solves": "Preparar CV, cover letter y matching con ayuda de AI sin pagar un paquete completo.",
+      "attachTo": ["ai-busqueda-empleo", "linkedin", "conseguir-entrevistas"],
+      "bridge": "Se puede probar con creditos sueltos antes de comprometerse con nada."
+    }
+  ]
+}

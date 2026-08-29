@@ -1,0 +1,90 @@
+{
+  "id": "RE-2026-08-29",
+  "date": "2026-08-29",
+  "category": "industrias-contratando",
+  "template": "T2-split",
+  "hookFamily": "lista-cerrada",
+  "accent": "verde",
+  "evergreen": false,
+  "title": "Las 4 industrias que sumaron empleo en julio 2026",
+  "hook": "Estas 4 industrias están contratando en Canadá.",
+  "screens": [
+    {
+      "kicker": "Julio 2026",
+      "text": "+75.000 empleos y el desempleo más bajo desde 2024."
+    },
+    {
+      "kicker": "Comercio",
+      "text": "Mayorista y minorista: +21.000 puestos."
+    },
+    {
+      "kicker": "Finanzas y seguros",
+      "text": "+18.000, incluyendo bienes raíces y leasing."
+    },
+    {
+      "kicker": "Servicios profesionales",
+      "text": "+17.000: consultoría, ingeniería y tecnología."
+    },
+    {
+      "kicker": "Construcción",
+      "text": "+16.000. Administración pública: -15.000."
+    }
+  ],
+  "cta": {
+    "id": "dm",
+    "text": "¿Te interesa saber más? Háblame por DM y te cuento."
+  },
+  "offer": null,
+  "keywords": [
+    "industrias contratando",
+    "comercio mayorista minorista",
+    "finanzas seguros bienes raices",
+    "servicios profesionales",
+    "construccion",
+    "labour force survey julio"
+  ],
+  "caption": {
+    "firstLine": "Julio fue el mejor mes de empleo del año en Canadá y casi nadie lo comentó.",
+    "body": "Statistics Canada publicó que en julio de 2026 se sumaron 75.000 empleos y el desempleo bajó a 6,4%, el nivel más bajo desde julio de 2024.\n\nLo interesante no es el titular, es dónde ocurrió. Comercio mayorista y minorista (+21.000), finanzas, seguros y bienes raíces (+18.000), servicios profesionales, científicos y técnicos (+17.000) y construcción (+16.000). En cambio, administración pública perdió 15.000 puestos y agricultura 9.600.\n\nQué hacer con esto:\n\n· Si estás aplicando a sector público, amplía: ahí el mercado se está cerrando, no abriendo.\n· Si vienes de consultoría, ingeniería, tecnología o legal, servicios profesionales es tu puerta más realista ahora mismo.\n· Revisa que tu perfil use el vocabulario del sector que crece, no el del sector del que vienes.\n\nUn dato de un mes no es una tendencia, pero sí te dice dónde vale la pena poner tus próximas 20 aplicaciones.\n\n¿En cuál de estos cuatro sectores encaja tu experiencia? Cuéntame y te digo por dónde empezaría yo.",
+    "hashtags": [
+      "#MashaInCanada",
+      "#EmpleoEnCanada",
+      "#MercadoLaboralCanada",
+      "#VacantesCanada",
+      "#BusquedaDeEmpleo",
+      "#LatinosEnCanada",
+      "#InmigrantesEnCanada",
+      "#ProfesionalesInternacionales"
+    ]
+  },
+  "visuals": {
+    "clips": [
+      "Hook: plano cenital de una calle céntrica canadiense con gente caminando, movimiento real.",
+      "Comercio: interior de tienda o almacén, alguien reponiendo o escaneando producto.",
+      "Finanzas: manos sobre teclado con hoja de cálculo, o exterior de torre de oficinas con reflejo.",
+      "Servicios profesionales: reunión pequeña de trabajo mirando una pantalla, no posada a cámara.",
+      "Construcción: obra activa con grúa, casco y trabajo en marcha."
+    ],
+    "notes": "Sin apretones de manos ni equipos sonriendo a cámara. Material que se parezca a un día real de trabajo en Canadá. Cada cifra entra con punch-in corto sobre el bloque verde."
+  },
+  "sources": [
+    {
+      "title": "Statistics Canada — The Daily: Labour Force Survey, July 2026",
+      "url": "https://www150.statcan.gc.ca/n1/daily-quotidien/260807/dq260807a-eng.htm"
+    },
+    {
+      "title": "Indeed Hiring Lab Canada — July 2026 Labour Force Survey: The Turn Comes Into View",
+      "url": "https://www.hiringlab.org/en-ca/2026/08/07/july-2026-labour-force-survey-the-turn-comes-into-view/"
+    }
+  ],
+  "canva": {
+    "designId": "DAHTqiBkjc8",
+    "editUrl": "https://www.canva.com/design/DAHTqiBkjc8/edit",
+    "viewUrl": "https://www.canva.com/d/TxT1IqOoymZpNlz",
+    "pages": 7,
+    "exportedMp4": true,
+    "exportNote": "La URL de descarga que devuelve Canva caduca en horas. Vuelve a exportar desde el diseño cuando la necesites."
+  },
+  "durationSeconds": 27,
+  "published": false
+}
