@@ -111,10 +111,25 @@
     "difuminado": 60
   },
 
+  "animacion": {
+    "_comentario": "Entrada del subtitulo. El reel de referencia no la lleva (cambia de golpe); esta se anadio por encargo. escalas son los fotogramas del rebote, fotogramas es cuantos dura cada uno. Se quita con --sin-animacion.",
+    "escalas": [1.16, 1.05, 0.985],
+    "fotogramas": 2
+  },
+
+  "transicion": {
+    "_comentario": "Golpe en cada corte seco: un empujon de zoom que se desinfla y un destello corto. Los tiempos de corte los da quitar_pausas.py.",
+    "zoom": 0.09,
+    "flash": 0.26,
+    "duracion": 0.30,
+    "caida": 14.0
+  },
+
   "sfx": {
-    "_comentario": "Pico relativo de cada efecto, por debajo de la voz. sfx.py los sintetiza.",
-    "bubble": 0.16,
-    "typing": 0.10
+    "_comentario": "Pico relativo de cada efecto. Van bajo la voz pero tienen que oirse por encima: a -18 dBFS quedaban tapados. sfx.py los sintetiza.",
+    "bubble": 0.30,
+    "typing": 0.22,
+    "whoosh": 0.32
   },
 
   "export": {

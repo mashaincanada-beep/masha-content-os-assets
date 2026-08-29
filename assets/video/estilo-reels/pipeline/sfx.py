@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Sintetiza los efectos de sonido del estilo y los coloca en una pista.
 
-No hay libreria de sonidos en el repo: los dos efectos se generan por sintesis,
-asi que suenan igual en cualquier maquina y no arrastran licencias.
+No hay libreria de sonidos en el repo: los efectos se generan por sintesis, asi
+que suenan igual en cualquier maquina y no arrastran licencias.
 
 - `bubble`: burbuja. Seno con la frecuencia subiendo rapido y caida exponencial.
 - `typing`: tecleo. Tres o cuatro clics de ruido filtrado, uno detras de otro.
+- `whoosh`: barrido de aire para los cortes secos.
 
     python3 sfx.py guion.json pista.wav --duracion 60.6
 
@@ -75,8 +76,35 @@ def _normalizar(muestras):
     return [v / pico for v in muestras]
 
 
-EFECTOS = {"bubble": burbuja, "typing": tecleo}
-NIVEL = {"bubble": 0.16, "typing": 0.10}  # pico relativo, bajo la voz
+def whoosh(dur=0.34, semilla=3):
+    """Barrido de aire para los cortes: ruido filtrado que entra y sale.
+
+    Se hace con un pasa-banda barato de un polo cuya frecuencia sube y luego
+    baja; el sonido "pasa" de un lado a otro como en cualquier transicion.
+    """
+    import random
+
+    rnd = random.Random(semilla)
+    n = int(SR * dur)
+    salida = []
+    y1 = y2 = 0.0
+    for i in range(n):
+        x = i / n
+        # Campana: silencio, subida rapida, caida mas larga.
+        env = math.sin(math.pi * x) ** 1.6
+        f = 300.0 + 2600.0 * math.sin(math.pi * x) ** 0.8
+        a = math.exp(-2 * math.pi * f / SR)
+        ruido = rnd.uniform(-1, 1)
+        y1 = a * y1 + (1 - a) * ruido          # pasa-bajos
+        y2 = a * y2 + (1 - a) * y1             # segundo polo, mas suave
+        salida.append((y1 - y2) * 6.0 * env)
+    return _normalizar(salida)
+
+
+EFECTOS = {"bubble": burbuja, "typing": tecleo, "whoosh": whoosh}
+# Pico relativo de cada efecto. Van por debajo de la voz, pero tienen que
+# oirse por encima de ella: a -18 dBFS quedaban tapados.
+NIVEL = {"bubble": 0.30, "typing": 0.22, "whoosh": 0.32}
 
 
 def construir_pista(eventos, duracion, niveles=None):
@@ -137,6 +165,11 @@ def eventos_de_guion(guion):
         if elegido and elegido != "no":
             eventos.append((float(grupo["in"]), elegido))
     return eventos
+
+
+def eventos_de_cortes(cortes, adelanto=0.12):
+    """Un whoosh por corte seco, empezando justo antes para que tape el salto."""
+    return [(max(0.0, float(t) - adelanto), "whoosh") for t in cortes]
 
 
 def main():

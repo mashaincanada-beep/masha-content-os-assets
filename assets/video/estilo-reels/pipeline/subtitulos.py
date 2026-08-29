@@ -13,6 +13,7 @@ Escribe out/subs/cap_000.png ... y out/subs/grupos.json con los tiempos.
 import json
 import os
 import re
+import shutil
 import sys
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
@@ -353,6 +354,76 @@ def dibujar_grupo(grupo, preset):
         dibujar_tramos(dib, lienzo, medidos, reg, x, baseline,
                        color, contorno, grosor, alto_emoji)
     return lienzo
+
+
+def escalar_bloque(img, preset, k):
+    """Escala la imagen alrededor del centro del bloque de subtitulos.
+
+    El bloque tiene que crecer desde su propio centro, no desde el del cuadro,
+    o el rebote de entrada se ve desplazado.
+    """
+    if abs(k - 1.0) < 1e-6:
+        return img
+    W, H = img.size
+    cx, cy = W / 2.0, H * preset["bloque"]["centro_y_rel"]
+    escalada = img.resize((max(1, int(W * k)), max(1, int(H * k))), Image.LANCZOS)
+    lienzo = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    # paste admite coordenadas negativas y recorta lo que se sale.
+    lienzo.paste(escalada, (int(round(cx - cx * k)), int(round(cy - cy * k))), escalada)
+    return lienzo
+
+
+def escribir_secuencia(guion, preset, destino, animacion=True):
+    """Escribe la secuencia completa de PNG con transparencia, uno por fotograma.
+
+    Sale mas barato que meterle a ffmpeg un overlay por grupo, y es lo que
+    permite animar la entrada. Los fotogramas que repiten imagen se enlazan en
+    duro en vez de volver a escribirse.
+    """
+    fps = preset["lienzo"]["fps"]
+    W, H = preset["lienzo"]["ancho"], preset["lienzo"]["alto"]
+    grupos = guion["grupos"]
+    escalas = preset["animacion"]["escalas"] if animacion else []
+    por_fase = max(1, int(preset["animacion"]["fotogramas"]))
+
+    os.makedirs(destino, exist_ok=True)
+    total = int(round(max(float(g["out"]) for g in grupos) * fps)) + 1
+    hechos = {}
+
+    def imagen_de(clave):
+        if clave in hechos:
+            return hechos[clave]
+        ruta = os.path.join(destino, "src_%s.png" % ("vacia" if clave == "vacia"
+                                                     else "%03d_%d" % clave))
+        if clave == "vacia":
+            Image.new("RGBA", (W, H), (0, 0, 0, 0)).save(ruta)
+        else:
+            indice, fase = clave
+            img = dibujar_grupo(grupos[indice], preset)
+            if fase < len(escalas):
+                img = escalar_bloque(img, preset, escalas[fase])
+            img.save(ruta)
+        hechos[clave] = ruta
+        return ruta
+
+    for n in range(total):
+        t = n / float(fps)
+        activo = next((i for i, g in enumerate(grupos)
+                       if float(g["in"]) <= t < float(g["out"])), None)
+        if activo is None:
+            clave = "vacia"
+        else:
+            desde = n - int(round(float(grupos[activo]["in"]) * fps))
+            fase = min(max(0, desde) // por_fase, len(escalas))
+            clave = (activo, fase)
+        marco = os.path.join(destino, "sub_%05d.png" % n)
+        if os.path.exists(marco):
+            os.remove(marco)
+        try:
+            os.link(imagen_de(clave), marco)
+        except OSError:
+            shutil.copyfile(imagen_de(clave), marco)
+    return total
 
 
 def main():

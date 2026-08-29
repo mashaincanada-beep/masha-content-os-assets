@@ -3,7 +3,7 @@
 Toma de cabeza parlante grabada en la oficina, montada con el
 [estilo de reels](../estilo-reels/README.md).
 
-- **Salida:** `beneficios_canada.mp4` — 1080×1920 (9:16), 30 fps, ~60,5 s, CRF 22 (~21 MB).
+- **Salida:** `beneficios_canada.mp4` — 1080×1920 (9:16), 30 fps, ~60,5 s, CRF 22 (~23 MB).
 - **Poster:** `poster.jpg`
 - **Guion de subtítulos:** `guion.json` (38 grupos, transcritos del propio audio).
 
@@ -15,7 +15,9 @@ Toma de cabeza parlante grabada en la oficina, montada con el
 | Encuadre | Ninguno. El original ya era 9:16 (864×1536), solo se escaló a 1080×1920. |
 | Subtítulos quemados | El clip traía los subtítulos automáticos de Instagram entre el 73 % y el 83,5 % de la altura. Se tapan con una banda desenfocada (`--tapar 1330,590`, sigma 90) y encima van los nuevos. |
 | Subtítulos nuevos | Los dos registros del estilo, paleta de marca. El bloque va al 70 % de la altura en vez de al 49 % para caer sobre la banda tapada. |
-| Sonido | 10 efectos sintetizados: burbuja en los grupos con emoji, tecleo en los de color de alarma. Uno cada ~6 s. |
+| Sonido | 16 efectos sintetizados a ~−13 dBFS: burbuja en los grupos con emoji, tecleo en los de color de alarma y whoosh en cada corte seco. Uno cada ~3,8 s. |
+| Animación | Cada grupo de subtítulo entra con un rebote de 0,2 s (1,16× → 1× desde el centro del bloque). |
+| Transiciones | En los 6 cortes secos: empujón de zoom del 9 % que se desinfla en 0,3 s, destello y whoosh. |
 | Maquillaje | `--maquillaje`: piel suavizada al 55 %, brillo suave, algo menos de amarillo de los fluorescentes. Ojos y gafas quedan nítidos. |
 | Voz | Normalizada de −24,3 LUFS a −14 LUFS, con limitador al final. |
 
@@ -28,7 +30,7 @@ cd ../estilo-reels
 #    (umbral fijo a proposito: los tiempos del guion salen de este corte)
 python3 pipeline/quitar_pausas.py CRUDO.mov beneficios_cortado.mp4 --umbral-db -32
 
-# 2. cachear los emoji del guion (⚖️ 👓 💰 💆 👀 🇨🇦)
+# 2. cachear los emoji del guion (📋 👓 💰 💆 👀 🇨🇦)
 python3 pipeline/emoji_cache.py --de-guion ../VID-002-beneficios-canada/guion.json
 
 # 3. montar
@@ -36,7 +38,8 @@ python3 pipeline/montar.py \
   --video beneficios_cortado.mp4 \
   --guion ../VID-002-beneficios-canada/guion.json \
   --salida ../VID-002-beneficios-canada/beneficios_canada.mp4 \
-  --maquillaje --tapar 1330,590
+  --maquillaje --tapar 1330,590 --crf 22 \
+  --cortes 2.35,7.17,11.08,16.34,22.01,48.61
 ```
 
 ## Notas para la próxima toma

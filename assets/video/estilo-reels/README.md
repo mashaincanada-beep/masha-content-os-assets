@@ -19,8 +19,9 @@ como el de referencia aunque cambie el tema, la cara y el idioma.
 3. **Subtítulos de dos líneas, siempre en el mismo sitio.** Centro del bloque al
    49,4 % de la altura, a la altura del pecho. El bloque nunca se mueve entre
    grupos.
-4. **Un grupo de subtítulo por segundo.** 4 o 5 palabras. Cambian de golpe, sin
-   animación de entrada ni fundido.
+4. **Un grupo de subtítulo por segundo.** 4 o 5 palabras. En el reel de
+   referencia cambian de golpe, sin animación; el pipeline les pone un rebote de
+   entrada de 0,2 s que se quita con `--sin-animacion`.
 5. **Dos registros tipográficos con trabajos distintos.** Línea de apoyo en
    grotesca ancha blanca (con *una* palabra en cursiva); línea de golpe en
    condensada pesada, mayúsculas, de color.
@@ -28,9 +29,12 @@ como el de referencia aunque cambie el tema, la cara y el idioma.
    En la paleta de marca: amarillo = concepto clave, rosa = el problema,
    blanco = apoyo.
 
-Y lo que el estilo **no** lleva, que es tan importante como lo anterior:
-sin música de fondo, sin efectos de sonido, sin transiciones, sin animación de
-texto, sin stickers, sin marca de agua, sin intro.
+Y lo que el reel de referencia **no** lleva, que es tan importante como lo
+anterior: sin música de fondo, sin efectos de sonido, sin transiciones, sin
+animación de texto, sin stickers, sin marca de agua, sin intro. El pipeline sí
+trae sonidos, rebote de entrada y golpe en los cortes, porque se pidieron
+aparte; están todos apagables y documentados en
+[Efectos y transiciones](#efectos-y-transiciones).
 
 ## Rodaje
 
@@ -76,6 +80,8 @@ Extras de `montar.py`, todos opcionales:
 | `--maquillaje` | retoque leve de piel y luz |
 | `--tapar 1330,590` | tapa una banda del clip original (subtítulos ya quemados, marcas de agua) con un desenfoque degradado; `y0,alto` en píxeles del lienzo final |
 | `--centro-subs 0.70` | sube o baja el bloque de subtítulos |
+| `--cortes 2.35,7.17` | golpe de zoom, destello y whoosh en cada corte seco |
+| `--sin-animacion` | subtítulos que cambian de golpe, sin rebote de entrada |
 | `--sin-sfx` | monta sin los efectos de sonido |
 | `--paleta viral` | usa la paleta del reel de referencia |
 | `--crf 22` | comprime más el archivo final (por defecto 19) |
@@ -135,25 +141,51 @@ Uno por grupo como máximo y solo cuando aporta: ⚠️ para el aviso, 👀 para
 mayúscula, casi siempre al principio de la línea de apoyo. Si el emoji no está
 cacheado el subtítulo se dibuja sin él y el render avisa; no rompe nada.
 
-## Efectos de sonido
+## Efectos y transiciones
 
-El reel de referencia **no lleva ninguno**: es voz sola. Los que trae el
-pipeline se añadieron después, por encargo, y se sintetizan en `pipeline/sfx.py`
-(nada de librerías ni licencias):
+Nada de esto está en el reel de referencia, que es voz sola y cortes secos sin
+adorno. Se añadió después, por encargo, y todo se puede quitar con un flag.
+
+### Efectos de sonido
+
+Se sintetizan en `pipeline/sfx.py` — nada de librerías ni licencias:
 
 - `bubble` — burbuja corta, un barrido ascendente de 85 ms.
 - `typing` — cuatro clics de tecleo secos, 250 ms en total.
+- `whoosh` — barrido de aire de 340 ms para los cortes.
 
-Se colocan al empezar un grupo de subtítulo, no en cada cambio: con uno cada 5 o
-6 segundos se notan; en cada línea cansan. La regla por defecto, que se puede
-pisar poniendo `"sfx": "bubble" | "typing" | "no"` en cualquier grupo del guion:
+Los dos primeros se colocan al empezar un grupo de subtítulo, no en cada cambio:
+con uno cada 5 o 6 segundos se notan; en cada línea cansan. La regla por defecto,
+que se puede pisar poniendo `"sfx": "bubble" | "typing" | "no"` en cualquier
+grupo del guion:
 
 - burbuja si el grupo lleva emoji,
 - tecleo si la línea de golpe va en el color de alarma (`rosa` o `rojo`),
 - nada en el resto.
 
-Van a −16 dBFS de pico la burbuja y −20 el tecleo, mezclados **debajo** de la
-voz ya normalizada y con un limitador al final para que nada recorte.
+El whoosh va solo, uno por corte seco, y arranca 0,12 s antes del corte para
+taparlo.
+
+Los picos están en `sfx` dentro de `preset.json` y salen a unos **−13 dBFS**,
+mezclados debajo de la voz normalizada y con un limitador al final. La primera
+versión iba a −18 y quedaba tapada por la voz: por debajo de −16 no se oyen.
+
+### Animación de entrada del subtítulo
+
+El grupo entra con un rebote de tres fotogramas: 1,16× → 1,05× → 0,985× → 1×,
+dos fotogramas cada uno (0,2 s en total). Escala desde el centro del bloque, no
+desde el del cuadro. Es lo que hace que la burbuja tenga sentido: el sonido cae
+justo en el fotograma grande.
+
+Está en `animacion` dentro de `preset.json` y se quita con `--sin-animacion`,
+que devuelve el cambio seco del reel de referencia.
+
+### Transición en los cortes
+
+En cada corte seco: un empujón de zoom del 9 % que se desinfla en 0,3 s, un
+destello corto y el whoosh. Los segundos de corte los imprime
+`quitar_pausas.py`; se le pasan a `montar.py` con `--cortes 2.35,7.17,…`. Sin
+esa lista no hay transiciones. Está en `transicion` dentro de `preset.json`.
 
 ## Maquillaje
 

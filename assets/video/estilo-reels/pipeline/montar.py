@@ -13,7 +13,10 @@ Opciones utiles:
                         marcas de agua) con un desenfoque degradado: y0,alto en
                         pixeles del lienzo final
     --centro-subs 0.74  sube o baja el bloque de subtitulos (0 arriba, 1 abajo)
-    --sin-sfx           monta sin los efectos de burbuja y tecleo
+    --cortes 2.3,7.2    golpe de zoom, destello y whoosh en cada corte seco
+                        (los segundos los imprime quitar_pausas.py)
+    --sin-animacion     subtitulos que cambian de golpe, sin rebote de entrada
+    --sin-sfx           monta sin los efectos de burbuja, tecleo y whoosh
     --sin-audio-norm    deja el audio tal cual (para revisar antes de publicar)
     --solo-comando      imprime el ffmpeg y no ejecuta nada
 """
@@ -28,7 +31,8 @@ import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import sfx  # noqa: E402
-from subtitulos import cargar_preset, dibujar_grupo  # noqa: E402
+from subtitulos import (cargar_preset, dibujar_grupo,  # noqa: E402
+                        escribir_secuencia)
 
 
 def ffmpeg():
@@ -104,8 +108,30 @@ def cadena_tapar(preset, entrada, salida, indice_mascara, y0, alto, ancho, alto_
              y0=y0, dz=t["desenfoque"], osc=t["oscurecer"])
 
 
+def cadena_transicion(preset, entrada, salida, cortes):
+    """Golpe visual en cada corte seco: empujon de zoom mas destello.
+
+    scale con eval=frame recalcula el tamano en cada fotograma, asi que el zoom
+    se puede animar; el crop posterior devuelve el cuadro a su medida recortando
+    por el centro. (crop no vale para el zoom: su ancho y alto se evaluan una
+    sola vez al arrancar.)
+    """
+    t = preset["transicion"]
+    pulso = "+".join(
+        "(exp(-(t-%.3f)*%.2f)*between(t,%.3f,%.3f))"
+        % (c, t["caida"], c, c + t["duracion"]) for c in cortes
+    )
+    W, H = preset["lienzo"]["ancho"], preset["lienzo"]["alto"]
+    return (
+        "[{ent}]scale=w='iw*(1+{z}*({p}))':h='ih*(1+{z}*({p}))':eval=frame,"
+        "crop={w}:{h},eq=brightness='{f}*({p})':eval=frame,format=rgba[{sal}]"
+    ).format(ent=entrada, sal=salida, z=t["zoom"], f=t["flash"], p=pulso,
+             w=W, h=H)
+
+
 def construir_filtros(grupos, preset, indice_primer_sub, maquillaje=False,
-                      tapar=None, indice_mascara=None):
+                      tapar=None, indice_mascara=None, cortes=None,
+                      secuencia=False):
     W = preset["lienzo"]["ancho"]
     H = preset["lienzo"]["alto"]
     fps = preset["lienzo"]["fps"]
@@ -118,25 +144,37 @@ def construir_filtros(grupos, preset, indice_primer_sub, maquillaje=False,
     if maquillaje:
         partes.append(cadena_maquillaje(preset, anterior, "mq"))
         anterior = "mq"
+    if cortes:
+        partes.append(cadena_transicion(preset, anterior, "tr", cortes))
+        anterior = "tr"
     if tapar:
         y0, alto = tapar
         partes.append(cadena_tapar(preset, anterior, "tp", indice_mascara,
                                    y0, alto, W, H))
         anterior = "tp"
-    for i, g in enumerate(grupos):
-        etiqueta = "v%d" % i
+    if secuencia:
+        # Una sola entrada con la secuencia completa de subtitulos ya animada.
+        partes.append("[%d:v]format=rgba,setsar=1[subs]" % indice_primer_sub)
         partes.append(
-            "[%d:v]scale=%d:%d,format=rgba,setsar=1[s%d]"
-            % (indice_primer_sub + i, W, H, i)
+            "[%s][subs]overlay=0:0:format=auto:eof_action=pass:shortest=0[vsub]"
+            % anterior
         )
-        # Cada PNG entra como un solo fotograma: repeatlast lo mantiene vivo
-        # hasta el final para que enable pueda encenderlo cuando toque.
-        partes.append(
-            "[%s][s%d]overlay=0:0:format=auto:eof_action=repeat:repeatlast=1:"
-            "shortest=0:enable='between(t,%.3f,%.3f)'[%s]"
-            % (anterior, i, g["in"], g["out"], etiqueta)
-        )
-        anterior = etiqueta
+        anterior = "vsub"
+    else:
+        for i, g in enumerate(grupos):
+            etiqueta = "v%d" % i
+            partes.append(
+                "[%d:v]scale=%d:%d,format=rgba,setsar=1[s%d]"
+                % (indice_primer_sub + i, W, H, i)
+            )
+            # Cada PNG entra como un solo fotograma: repeatlast lo mantiene vivo
+            # hasta el final para que enable pueda encenderlo cuando toque.
+            partes.append(
+                "[%s][s%d]overlay=0:0:format=auto:eof_action=repeat:repeatlast=1:"
+                "shortest=0:enable='between(t,%.3f,%.3f)'[%s]"
+                % (anterior, i, g["in"], g["out"], etiqueta)
+            )
+            anterior = etiqueta
     partes.append(
         "[%s]format=yuv420p,setparams=colorspace=bt709:color_primaries=bt709:"
         "color_trc=bt709:range=tv[v]" % anterior
@@ -155,6 +193,11 @@ def main():
     ap.add_argument("--tapar", help="y0,alto en pixeles del lienzo final")
     ap.add_argument("--centro-subs", type=float,
                     help="centro vertical del bloque de subtitulos (0-1)")
+    ap.add_argument("--cortes",
+                    help="segundos de los cortes secos, separados por comas: "
+                         "en cada uno va un golpe de zoom, un destello y un whoosh")
+    ap.add_argument("--sin-animacion", action="store_true",
+                    help="subtitulos que cambian de golpe, como el reel de referencia")
     ap.add_argument("--crf", type=int,
                     help="calidad de video: cuanto mas alto, mas comprimido")
     ap.add_argument("--sin-sfx", action="store_true")
@@ -175,11 +218,20 @@ def main():
 
     destino = args.conservar_subs or tempfile.mkdtemp(prefix="subs_")
     os.makedirs(destino, exist_ok=True)
-    pngs = []
-    for i, grupo in enumerate(grupos):
-        ruta = os.path.join(destino, "cap_%03d.png" % i)
-        dibujar_grupo(grupo, preset).save(ruta)
-        pngs.append(ruta)
+    cortes = [float(x) for x in args.cortes.split(",")] if args.cortes else []
+    cortes = [c for c in cortes if c > 0.3]
+
+    if args.sin_animacion:
+        pngs = []
+        for i, grupo in enumerate(grupos):
+            ruta = os.path.join(destino, "cap_%03d.png" % i)
+            dibujar_grupo(grupo, preset).save(ruta)
+            pngs.append(ruta)
+        entrada_subs = pngs
+    else:
+        carpeta = os.path.join(destino, "seq")
+        escribir_secuencia(guion, preset, carpeta)
+        entrada_subs = [os.path.join(carpeta, "sub_%05d.png")]
 
     # Entradas: 0 = video, luego la mascara de tapado (si la hay), luego la pista
     # de efectos (si la hay) y por ultimo los PNG de subtitulos.
@@ -195,7 +247,8 @@ def main():
                                     pega_arriba, pega_abajo,
                                     os.path.join(destino, "banda.png")))
 
-    eventos = [] if args.sin_sfx else sfx.eventos_de_guion(guion)
+    eventos = [] if args.sin_sfx else (sfx.eventos_de_guion(guion)
+                                       + sfx.eventos_de_cortes(cortes))
     if eventos:
         fin = max(float(g["out"]) for g in grupos) + 1.0
         indice_sfx = 1 + len(extras)
@@ -219,11 +272,16 @@ def main():
         e["crf"] = args.crf
 
     cmd = [ffmpeg(), "-hide_banner", "-loglevel", "error", "-y", "-i", args.video]
-    for p in extras + pngs:
+    for p in extras:
+        cmd += ["-i", p]
+    for p in entrada_subs:
+        if not args.sin_animacion:
+            cmd += ["-framerate", str(preset["lienzo"]["fps"])]
         cmd += ["-i", p]
     filtros = construir_filtros(grupos, preset, 1 + len(extras),
                                 maquillaje=args.maquillaje, tapar=tapar,
-                                indice_mascara=indice_mascara)
+                                indice_mascara=indice_mascara, cortes=cortes,
+                                secuencia=not args.sin_animacion)
     if indice_sfx is None:
         cmd += ["-filter_complex", filtros, "-map", "[v]", "-map", "0:a?"]
         cmd += filtro_audio
@@ -245,11 +303,13 @@ def main():
         print("\n# subtitulos en %s" % destino)
         return 0
 
-    print("montando %d grupos de subtitulo sobre %s%s%s%s"
+    print("montando %d grupos de subtitulo sobre %s%s%s%s%s%s"
           % (len(grupos), args.video,
              " | maquillaje" if args.maquillaje else "",
              " | banda tapada" if tapar else "",
-             " | %d efectos" % len(eventos) if eventos else ""))
+             " | %d efectos" % len(eventos) if eventos else "",
+             " | %d cortes" % len(cortes) if cortes else "",
+             "" if args.sin_animacion else " | subtitulos animados"))
     subprocess.run(cmd, check=True)
     print("listo: %s (%.1f MB)" % (args.salida, os.path.getsize(args.salida) / 1e6))
     if not args.conservar_subs:
