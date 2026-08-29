@@ -42,6 +42,29 @@ def duracion(ruta, flujo="a"):
     return int(h) * 3600 + int(m) * 60 + float(s)
 
 
+def nivel_medio(ruta):
+    salida = subprocess.run(
+        [ffmpeg(), "-hide_banner", "-i", ruta, "-af", "volumedetect", "-f", "null", "-"],
+        capture_output=True, text=True,
+    ).stderr
+    m = re.search(r"mean_volume: ([\d.-]+) dB", salida)
+    return float(m.group(1)) if m else None
+
+
+def umbral_automatico(ruta, por_defecto):
+    """Umbral de silencio relativo al nivel de la toma.
+
+    Una grabacion floja (esta venia a -27 dB de media) no tiene nada por debajo
+    del -32 dB fijo del preset y no se le corta ni una pausa; una muy caliente,
+    al reves, se come consonantes. Doce dB por debajo de la media separa bien la
+    voz del ruido de sala en los dos casos.
+    """
+    medio = nivel_medio(ruta)
+    if medio is None:
+        return por_defecto
+    return int(max(-50, min(-28, round(medio - 12))))
+
+
 def silencios(ruta, umbral_db, pausa_min):
     salida = subprocess.run(
         [ffmpeg(), "-hide_banner", "-i", ruta,
@@ -73,7 +96,8 @@ def main():
     ap.add_argument("entrada")
     ap.add_argument("salida")
     ap.add_argument("--preset")
-    ap.add_argument("--umbral-db", type=int)
+    ap.add_argument("--umbral-db", type=int,
+                    help="por defecto se calcula a partir del nivel de la toma")
     ap.add_argument("--pausa-min", type=float)
     ap.add_argument("--colchon", type=float)
     ap.add_argument("--mapa", help="guarda la equivalencia de tiempos en un JSON")
@@ -81,7 +105,8 @@ def main():
 
     preset = cargar_preset(args.preset)
     c = preset["cortes"]
-    umbral = args.umbral_db if args.umbral_db is not None else c["umbral_db"]
+    umbral = (args.umbral_db if args.umbral_db is not None
+              else umbral_automatico(args.entrada, c["umbral_db"]))
     pausa_min = args.pausa_min if args.pausa_min is not None else c["pausa_min_s"]
     colchon = args.colchon if args.colchon is not None else c["colchon_s"]
 
@@ -99,8 +124,9 @@ def main():
         raise SystemExit("no encontre nada por encima de %d dB: revisa el umbral" % umbral)
 
     conservado = sum(b - a for a, b in tramos)
-    print("toma cruda: %.2f s   tramos: %d   cortado: %.2f s   fuera: %.2f s"
-          % (total, len(tramos), conservado, total - conservado))
+    print("umbral de silencio: %d dB   toma cruda: %.2f s   tramos: %d   "
+          "cortado: %.2f s   fuera: %.2f s"
+          % (umbral, total, len(tramos), conservado, total - conservado))
 
     expr = "+".join("between(t,%.3f,%.3f)" % (a, b) for a, b in tramos)
     fps = preset["lienzo"]["fps"]

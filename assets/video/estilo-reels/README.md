@@ -69,6 +69,17 @@ python3 pipeline/emoji_cache.py --de-guion guion.json
 python3 pipeline/montar.py --video cortado.mp4 --guion guion.json --salida reel.mp4
 ```
 
+Extras de `montar.py`, todos opcionales:
+
+| Opción | Para qué |
+|---|---|
+| `--maquillaje` | retoque leve de piel y luz |
+| `--tapar 1330,590` | tapa una banda del clip original (subtítulos ya quemados, marcas de agua) con un desenfoque degradado; `y0,alto` en píxeles del lienzo final |
+| `--centro-subs 0.70` | sube o baja el bloque de subtítulos |
+| `--sin-sfx` | monta sin los efectos de sonido |
+| `--paleta viral` | usa la paleta del reel de referencia |
+| `--sin-audio-norm` | deja el audio sin normalizar |
+
 Antes de la primera vez:
 
 ```sh
@@ -123,6 +134,38 @@ Uno por grupo como máximo y solo cuando aporta: ⚠️ para el aviso, 👀 para
 mayúscula, casi siempre al principio de la línea de apoyo. Si el emoji no está
 cacheado el subtítulo se dibuja sin él y el render avisa; no rompe nada.
 
+## Efectos de sonido
+
+El reel de referencia **no lleva ninguno**: es voz sola. Los que trae el
+pipeline se añadieron después, por encargo, y se sintetizan en `pipeline/sfx.py`
+(nada de librerías ni licencias):
+
+- `bubble` — burbuja corta, un barrido ascendente de 85 ms.
+- `typing` — cuatro clics de tecleo secos, 250 ms en total.
+
+Se colocan al empezar un grupo de subtítulo, no en cada cambio: con uno cada 5 o
+6 segundos se notan; en cada línea cansan. La regla por defecto, que se puede
+pisar poniendo `"sfx": "bubble" | "typing" | "no"` en cualquier grupo del guion:
+
+- burbuja si el grupo lleva emoji,
+- tecleo si la línea de golpe va en el color de alarma (`rosa` o `rojo`),
+- nada en el resto.
+
+Van a −16 dBFS de pico la burbuja y −20 el tecleo, mezclados **debajo** de la
+voz ya normalizada y con un limitador al final para que nada recorte.
+
+## Maquillaje
+
+`--maquillaje` es un retoque leve, no un filtro de belleza: desenfoque bilateral
+que empareja la piel pero respeta los bordes (ojos, gafas y pelo se quedan
+nítidos), un punto de glow, algo de brillo y una corrección parcial del amarillo
+de la luz. Todo está en `maquillaje` dentro de `preset.json`; `suavizado` es el
+mando principal (0,55 = leve, 0,75 ya se nota).
+
+Se aplica a todo el cuadro, sin máscara de piel: se probó una y en una oficina
+de paredes beis marcaba las paredes como piel. Como el fondo de estos reels ya
+va desenfocado, suavizarlo no se ve.
+
 ## Audio
 
 - Voz sola. **Sin música de fondo**: en el reel de referencia el nivel cae a
@@ -159,7 +202,12 @@ Ver [`guion.ejemplo.json`](guion.ejemplo.json), que es el que monta la demo.
   la condensada aunque quede sola).
 - `estilo` opcional: `apoyo`, `golpe` o `neutro`.
 - `color` opcional: un nombre de la paleta activa. Por defecto `blanco`.
+- `sfx` opcional: `bubble`, `typing` o `no`. Si no se pone, manda la regla de
+  arriba.
 - `*asteriscos*` para la cursiva. El texto de `l2` se pasa a mayúsculas solo.
+
+A nivel de guion, además de `paleta` y `lienzo`, se puede poner `centro_subs`
+para mover el bloque en ese reel concreto.
 
 ## Demo
 

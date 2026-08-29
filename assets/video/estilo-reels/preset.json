@@ -91,6 +91,32 @@
     "colchon_s": 0.06
   },
 
+  "maquillaje": {
+    "_comentario": "Retoque leve: suaviza la piel sin tocar ojos ni gafas, quita algo del amarillo de la luz de oficina y levanta un punto el brillo. Se activa con --maquillaje.",
+    "suavizado": 0.55,
+    "bilateral": { "sigmaS": 9, "sigmaR": 0.10 },
+    "glow": 0.08,
+    "glow_radio": 18,
+    "nitidez": 0.45,
+    "brillo": 0.015,
+    "contraste": 1.04,
+    "saturacion": 1.04,
+    "balance": { "rm": -0.02, "bm": 0.045, "rh": -0.015, "bh": 0.03 }
+  },
+
+  "tapar": {
+    "_comentario": "Banda desenfocada para tapar lo que ya venia quemado en el clip (subtitulos automaticos, marcas de agua). difuminado son los pixeles de degradado en los bordes que no tocan el borde del cuadro.",
+    "desenfoque": 90,
+    "oscurecer": -0.10,
+    "difuminado": 60
+  },
+
+  "sfx": {
+    "_comentario": "Pico relativo de cada efecto, por debajo de la voz. sfx.py los sintetiza.",
+    "bubble": 0.16,
+    "typing": 0.10
+  },
+
   "export": {
     "crf": 19,
     "preset": "slow",

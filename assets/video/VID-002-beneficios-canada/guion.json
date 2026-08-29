@@ -1,0 +1,165 @@
+{
+  "_nota": [
+    "Subtitulos transcritos del propio audio del clip. Los tiempos van contra",
+    "beneficios_cortado.mp4 (la toma cruda despues de quitar_pausas.py).",
+    "El bloque va mas abajo de lo habitual (0.70) porque ahi se tapa la banda",
+    "de subtitulos automaticos que traia quemados el clip original."
+  ],
+
+  "paleta": "mic",
+  "centro_subs": 0.70,
+  "lienzo": { "ancho": 1080, "alto": 1920, "fps": 30 },
+
+  "grupos": [
+    { "in": 0.20, "out": 2.55,
+      "l1": { "texto": "Bueno, les cuento" },
+      "l2": { "texto": "también algo" } },
+
+    { "in": 2.55, "out": 4.05,
+      "l1": { "texto": "una *recomendación*" },
+      "l2": { "texto": "para los que estén" } },
+
+    { "in": 4.05, "out": 5.20,
+      "l1": { "texto": "🇨🇦 trabajando *aquí*" },
+      "l2": { "texto": "en Canadá", "color": "amarillo" } },
+
+    { "in": 5.20, "out": 6.85,
+      "l1": { "texto": "y tengan un" },
+      "l2": { "texto": "seguro de salud", "color": "amarillo" } },
+
+    { "in": 6.85, "out": 7.80,
+      "l1": { "texto": "que *todas*" },
+      "l2": { "texto": "las empresas" } },
+
+    { "in": 7.80, "out": 9.60,
+      "l1": { "texto": "realmente eso es" },
+      "l2": { "texto": "uno de los" } },
+
+    { "in": 9.60, "out": 11.00,
+      "l1": { "texto": "📋 beneficios" },
+      "l2": { "texto": "legales", "color": "amarillo" } },
+
+    { "in": 11.00, "out": 12.35,
+      "l1": { "texto": "que se llaman" },
+      "l2": { "texto": "mandatorios", "color": "amarillo" } },
+
+    { "in": 12.35, "out": 13.60,
+      "l1": { "texto": "u *obligatorios*" },
+      "l2": { "texto": "para las empresas" } },
+
+    { "in": 13.60, "out": 15.05,
+      "l1": { "texto": "si es dar" },
+      "l2": { "texto": "seguro de salud", "color": "amarillo" } },
+
+    { "in": 15.05, "out": 16.30,
+      "l1": { "texto": "a *sus*" },
+      "l2": { "texto": "empleados" } },
+
+    { "in": 16.30, "out": 18.40,
+      "l1": { "texto": "pero las empresas tienen" },
+      "l2": { "texto": "diferentes niveles", "color": "rosa" } },
+
+    { "in": 18.40, "out": 20.70,
+      "l1": { "texto": "de servicio de" },
+      "l2": { "texto": "seguro de salud", "color": "amarillo" } },
+
+    { "in": 20.70, "out": 21.90,
+      "l1": { "texto": "y hace *poquito*" },
+      "l2": { "texto": "me enteré" } },
+
+    { "in": 21.90, "out": 23.30,
+      "l1": { "texto": "porque fui a llevar" },
+      "l2": { "texto": "a mi hija" } },
+
+    { "in": 23.30, "out": 25.50,
+      "l1": { "texto": "👓 al *oftalmólogo*" },
+      "l2": { "texto": "y le recetaron" } },
+
+    { "in": 25.50, "out": 27.20,
+      "l2": { "texto": "unas gafas", "color": "amarillo" } },
+
+    { "in": 27.20, "out": 29.30,
+      "l1": { "texto": "el seguro de salud" },
+      "l2": { "texto": "de mi empresa" } },
+
+    { "in": 29.30, "out": 30.70,
+      "l1": { "texto": "💰 da" },
+      "l2": { "texto": "100 por 100", "color": "amarillo" } },
+
+    { "in": 30.70, "out": 32.00,
+      "l1": { "texto": "del *valor*" },
+      "l2": { "texto": "de los anteojos", "color": "amarillo" } },
+
+    { "in": 32.00, "out": 33.50,
+      "l1": { "texto": "lo cual fue una" },
+      "l2": { "texto": "gran sorpresa", "color": "rosa" } },
+
+    { "in": 33.50, "out": 35.00,
+      "l1": { "texto": "porque *no todos*" },
+      "l2": { "texto": "los seguros" } },
+
+    { "in": 35.00, "out": 36.20,
+      "l1": { "texto": "cubren" },
+      "l2": { "texto": "100 por 100", "color": "rosa" } },
+
+    { "in": 36.20, "out": 37.90,
+      "l1": { "texto": "entonces fue" },
+      "l2": { "texto": "superbueno", "color": "amarillo" } },
+
+    { "in": 37.90, "out": 39.50,
+      "l1": { "texto": "haberme *enterado*" },
+      "l2": { "texto": "de eso" } },
+
+    { "in": 39.50, "out": 40.70,
+      "l1": { "texto": "que me puse" },
+      "l2": { "texto": "a investigar", "color": "amarillo" } },
+
+    { "in": 40.70, "out": 42.10,
+      "l1": { "texto": "un *poquito* más" },
+      "l2": { "texto": "y me di cuenta" } },
+
+    { "in": 42.10, "out": 44.30,
+      "l1": { "texto": "de otros" },
+      "l2": { "texto": "beneficios que tiene", "color": "amarillo" } },
+
+    { "in": 44.30, "out": 46.40,
+      "l1": { "texto": "💆 como el tema del" },
+      "l2": { "texto": "massage therapy", "color": "amarillo" } },
+
+    { "in": 46.40, "out": 48.60,
+      "l1": { "texto": "y *algunas*" },
+      "l2": { "texto": "otras cosas" } },
+
+    { "in": 48.60, "out": 50.10,
+      "l1": { "texto": "entonces esto es" },
+      "l2": { "texto": "un recordatorio" } },
+
+    { "in": 50.10, "out": 51.90,
+      "l1": { "texto": "para las personas" },
+      "l2": { "texto": "que estén trabajando acá" } },
+
+    { "in": 51.90, "out": 54.00,
+      "l1": { "texto": "👀 averigüen *muy bien*" },
+      "l2": { "texto": "sobre sus beneficios", "color": "amarillo" } },
+
+    { "in": 54.00, "out": 55.30,
+      "l1": { "texto": "porque hay unos" },
+      "l2": { "texto": "beneficios", "color": "amarillo" } },
+
+    { "in": 55.30, "out": 56.50,
+      "l1": { "texto": "que los *empleadores*" },
+      "l2": { "texto": "en Canadá", "color": "amarillo" } },
+
+    { "in": 56.50, "out": 57.80,
+      "l1": { "texto": "tienen como" },
+      "l2": { "texto": "obligatorios", "color": "rosa" } },
+
+    { "in": 57.80, "out": 59.50,
+      "l1": { "texto": "el beneficio" },
+      "l2": { "texto": "de los seguros", "color": "amarillo" } },
+
+    { "in": 59.50, "out": 60.55,
+      "l1": { "texto": "el beneficio" },
+      "l2": { "texto": "de salud", "color": "amarillo" } }
+  ]
+}
