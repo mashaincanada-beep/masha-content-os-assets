@@ -5,7 +5,9 @@
     "El bloque va mas abajo de lo habitual (0.70) porque ahi se tapa la banda",
     "de subtitulos automaticos que traia quemados el clip original.",
     "sfx: typing marca la palabra clave; la burbuja la ponen solas las fotos.",
-    "insertos: las imagenes de fotos/ son marcadores provisionales."
+    "insertos: las imagenes las prepara fotos/preparar_fotos.py desde",
+    "fotos/originales/. La factura y la tarjeta no son documentos reales y por",
+    "eso van rotuladas como ejemplo."
   ],
   "paleta": "mic",
   "centro_subs": 0.7,
@@ -39,7 +41,7 @@
       "in": 4.05,
       "out": 5.2,
       "l1": {
-        "texto": "trabajando *aquí*"
+        "texto": "🇨🇦 trabajando *aquí*"
       },
       "l2": {
         "texto": "en Canadá",
@@ -316,7 +318,7 @@
       "in": 44.3,
       "out": 46.4,
       "l1": {
-        "texto": "como el tema del"
+        "texto": "💆 como el tema del"
       },
       "l2": {
         "texto": "massage therapy",
@@ -423,46 +425,22 @@
   ],
   "insertos": [
     {
-      "in": 4.15,
-      "out": 6.3,
-      "imagen": "fotos/canada.png",
-      "pie": "Trabajas en Canadá"
-    },
-    {
       "in": 13.7,
       "out": 15.9,
       "imagen": "fotos/seguro_salud.png",
-      "pie": "Seguro de salud"
+      "pie": "Ejemplo de tarjeta"
     },
     {
       "in": 23.4,
-      "out": 25.4,
-      "imagen": "fotos/oftalmologo.png",
-      "pie": "Oftalmólogo"
-    },
-    {
-      "in": 25.55,
       "out": 27.15,
       "imagen": "fotos/gafas.png",
-      "pie": "Gafas nuevas"
+      "pie": "Las gafas de mi hija"
     },
     {
       "in": 29.4,
       "out": 31.95,
       "imagen": "fotos/valor_gafas.png",
-      "pie": "100 % del valor"
-    },
-    {
-      "in": 44.4,
-      "out": 46.35,
-      "imagen": "fotos/massage.png",
-      "pie": "Massage therapy"
-    },
-    {
-      "in": 51.95,
-      "out": 53.95,
-      "imagen": "fotos/beneficios.png",
-      "pie": "Tus beneficios"
+      "pie": "Ejemplo de factura"
     }
   ]
 }
