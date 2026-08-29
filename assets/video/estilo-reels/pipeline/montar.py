@@ -155,6 +155,8 @@ def main():
     ap.add_argument("--tapar", help="y0,alto en pixeles del lienzo final")
     ap.add_argument("--centro-subs", type=float,
                     help="centro vertical del bloque de subtitulos (0-1)")
+    ap.add_argument("--crf", type=int,
+                    help="calidad de video: cuanto mas alto, mas comprimido")
     ap.add_argument("--sin-sfx", action="store_true")
     ap.add_argument("--sin-audio-norm", action="store_true")
     ap.add_argument("--solo-comando", action="store_true")
@@ -213,6 +215,8 @@ def main():
                         "[voz][efx]amix=inputs=2:duration=first:normalize=0,"
                         "alimiter=limit=0.97[a]" % (voz, indice_sfx)]
     e = preset["export"]
+    if args.crf is not None:
+        e["crf"] = args.crf
 
     cmd = [ffmpeg(), "-hide_banner", "-loglevel", "error", "-y", "-i", args.video]
     for p in extras + pngs:

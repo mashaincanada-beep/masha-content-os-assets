@@ -3,7 +3,7 @@
 Toma de cabeza parlante grabada en la oficina, montada con el
 [estilo de reels](../estilo-reels/README.md).
 
-- **Salida:** `beneficios_canada.mp4` — 1080×1920 (9:16), 30 fps, ~60,6 s.
+- **Salida:** `beneficios_canada.mp4` — 1080×1920 (9:16), 30 fps, ~60,5 s, CRF 22 (~21 MB).
 - **Poster:** `poster.jpg`
 - **Guion de subtítulos:** `guion.json` (38 grupos, transcritos del propio audio).
 

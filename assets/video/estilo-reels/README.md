@@ -78,6 +78,7 @@ Extras de `montar.py`, todos opcionales:
 | `--centro-subs 0.70` | sube o baja el bloque de subtítulos |
 | `--sin-sfx` | monta sin los efectos de sonido |
 | `--paleta viral` | usa la paleta del reel de referencia |
+| `--crf 22` | comprime más el archivo final (por defecto 19) |
 | `--sin-audio-norm` | deja el audio sin normalizar |
 
 Antes de la primera vez:
