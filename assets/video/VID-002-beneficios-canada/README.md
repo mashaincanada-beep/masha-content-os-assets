@@ -15,9 +15,10 @@ Toma de cabeza parlante grabada en la oficina, montada con el
 | Encuadre | Ninguno. El original ya era 9:16 (864×1536), solo se escaló a 1080×1920. |
 | Subtítulos quemados | El clip traía los subtítulos automáticos de Instagram entre el 73 % y el 83,5 % de la altura. Se tapan con una banda desenfocada (`--tapar 1330,590`, sigma 90) y encima van los nuevos. |
 | Subtítulos nuevos | Los dos registros del estilo, paleta de marca. El bloque va al 70 % de la altura en vez de al 49 % para caer sobre la banda tapada. |
-| Sonido | 16 efectos sintetizados a ~−13 dBFS: burbuja en los grupos con emoji, tecleo en los de color de alarma y whoosh en cada corte seco. Uno cada ~3,8 s. |
-| Animación | Cada grupo de subtítulo entra con un rebote de 0,2 s (1,16× → 1× desde el centro del bloque). |
-| Transiciones | En los 6 cortes secos: empujón de zoom del 9 % que se desinfla en 0,3 s, destello y whoosh. |
+| Fotos | 7 inserciones como tarjeta a la derecha, donde el encuadre deja fondo libre y no tapan la cara. **Las imágenes de `fotos/` son marcadores provisionales**, ver abajo. |
+| Sonido | 13 efectos: 7 burbujas (−10,5 dBFS), una por cada foto que entra, y 6 tecleos (−13,2 dBFS) en las palabras clave. Uno cada ~4,7 s. |
+| Animación | Subtítulos y tarjetas entran con un rebote de 0,2 s desde su propio centro. |
+| Transiciones | Ninguna. Se probó el golpe de zoom + destello + whoosh en los cortes y quedaba raro, así que se quitó. |
 | Maquillaje | `--maquillaje`: piel suavizada al 55 %, brillo suave, algo menos de amarillo de los fluorescentes. Ojos y gafas quedan nítidos. |
 | Voz | Normalizada de −24,3 LUFS a −14 LUFS, con limitador al final. |
 
@@ -38,9 +39,33 @@ python3 pipeline/montar.py \
   --video beneficios_cortado.mp4 \
   --guion ../VID-002-beneficios-canada/guion.json \
   --salida ../VID-002-beneficios-canada/beneficios_canada.mp4 \
-  --maquillaje --tapar 1330,590 --crf 22 \
-  --cortes 2.35,7.17,11.08,16.34,22.01,48.61
+  --maquillaje --tapar 1330,590 --crf 22
 ```
+
+## Las fotos son provisionales
+
+Desde el entorno donde se montó esto no hay salida a ningún banco de imágenes
+(ni Unsplash, ni Pexels, ni Wikimedia), así que los siete huecos llevan
+**marcadores**: tarjetas de marca con el icono del tema, generadas por
+`fotos/generar_marcadores.py`. Sirven para ver el ritmo y oír las burbujas donde
+tocan, pero no son las fotos finales.
+
+Para poner las de verdad basta con sobrescribir el archivo con el mismo nombre y
+volver a montar; el guion no cambia. Se recorta sola para llenar la tarjeta, así
+que da igual el formato que traiga.
+
+| Archivo | Segundo | Qué pide |
+|---|---|---|
+| `fotos/canada.png` | 4,15–6,30 | oficina o calle canadiense, o la bandera |
+| `fotos/seguro_salud.png` | 13,70–15,90 | tarjeta del seguro, o consulta médica |
+| `fotos/oftalmologo.png` | 23,40–25,40 | tu hija en la revisión de la vista |
+| `fotos/gafas.png` | 25,55–27,15 | las gafas que le recetaron |
+| `fotos/valor_gafas.png` | 29,40–31,95 | la factura o el recibo del 100 % |
+| `fotos/massage.png` | 44,40–46,35 | sesión de masaje |
+| `fotos/beneficios.png` | 51,95–53,95 | el portal o el folleto de beneficios |
+
+Las tuyas propias funcionan mejor que cualquier foto de banco: la de tu hija con
+las gafas nuevas es la que sostiene la historia.
 
 ## Notas para la próxima toma
 

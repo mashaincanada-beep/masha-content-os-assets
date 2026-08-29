@@ -373,49 +373,88 @@ def escalar_bloque(img, preset, k):
     return lienzo
 
 
-def escribir_secuencia(guion, preset, destino, animacion=True):
+def _activo_y_fase(elementos, n, fps, escalas, por_fase):
+    """Que elemento esta en pantalla en el fotograma n, y en que fase del rebote."""
+    t = n / float(fps)
+    indice = next((i for i, e in enumerate(elementos)
+                   if float(e["in"]) <= t < float(e["out"])), None)
+    if indice is None:
+        return None, None
+    desde = n - int(round(float(elementos[indice]["in"]) * fps))
+    return indice, min(max(0, desde) // por_fase, len(escalas))
+
+
+def escribir_secuencia(guion, preset, destino, animacion=True, base_fotos=None):
     """Escribe la secuencia completa de PNG con transparencia, uno por fotograma.
 
-    Sale mas barato que meterle a ffmpeg un overlay por grupo, y es lo que
-    permite animar la entrada. Los fotogramas que repiten imagen se enlazan en
+    Lleva los subtitulos y las fotos insertadas en la misma capa: asi ffmpeg
+    recibe una sola entrada en vez de un overlay por elemento, y es lo que
+    permite animar las entradas. Los fotogramas que repiten imagen se enlazan en
     duro en vez de volver a escribirse.
     """
+    sys.path.insert(0, AQUI)
+    import insertos as mod_insertos
+
     fps = preset["lienzo"]["fps"]
     W, H = preset["lienzo"]["ancho"], preset["lienzo"]["alto"]
     grupos = guion["grupos"]
-    escalas = preset["animacion"]["escalas"] if animacion else []
-    por_fase = max(1, int(preset["animacion"]["fotogramas"]))
+    fotos = guion.get("insertos", [])
+    base_fotos = base_fotos or os.path.dirname(os.path.abspath(destino))
+
+    esc_sub = preset["animacion"]["escalas"] if animacion else []
+    fase_sub = max(1, int(preset["animacion"]["fotogramas"]))
+    esc_ins = preset["inserto"]["escalas"] if animacion else []
+    fase_ins = max(1, int(preset["inserto"]["fotogramas"]))
 
     os.makedirs(destino, exist_ok=True)
-    total = int(round(max(float(g["out"]) for g in grupos) * fps)) + 1
-    hechos = {}
+    fin = max([float(g["out"]) for g in grupos]
+              + [float(f["out"]) for f in fotos])
+    total = int(round(fin * fps)) + 1
+    capas_sub, capas_ins, hechos = {}, {}, {}
+
+    def capa_subtitulo(clave):
+        if clave not in capas_sub:
+            indice, fase = clave
+            img = dibujar_grupo(grupos[indice], preset)
+            if fase < len(esc_sub):
+                img = escalar_bloque(img, preset, esc_sub[fase])
+            capas_sub[clave] = img
+        return capas_sub[clave]
+
+    def capa_inserto(clave):
+        if clave not in capas_ins:
+            indice, fase = clave
+            foto = fotos[indice]
+            ruta = foto["imagen"]
+            if not os.path.isabs(ruta):
+                ruta = os.path.join(base_fotos, ruta)
+            img = mod_insertos.tarjeta(ruta, preset, foto.get("pie"))
+            if fase < len(esc_ins):
+                img = mod_insertos.escalar_tarjeta(img, preset, esc_ins[fase])
+            capas_ins[clave] = img
+        return capas_ins[clave]
 
     def imagen_de(clave):
         if clave in hechos:
             return hechos[clave]
-        ruta = os.path.join(destino, "src_%s.png" % ("vacia" if clave == "vacia"
-                                                     else "%03d_%d" % clave))
-        if clave == "vacia":
-            Image.new("RGBA", (W, H), (0, 0, 0, 0)).save(ruta)
-        else:
-            indice, fase = clave
-            img = dibujar_grupo(grupos[indice], preset)
-            if fase < len(escalas):
-                img = escalar_bloque(img, preset, escalas[fase])
-            img.save(ruta)
+        cs, ci = clave
+        nombre = "src_%s_%s.png" % ("x" if cs is None else "%03d-%d" % cs,
+                                    "x" if ci is None else "%03d-%d" % ci)
+        ruta = os.path.join(destino, nombre)
+        img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        if ci is not None:
+            img.alpha_composite(capa_inserto(ci))
+        if cs is not None:
+            img.alpha_composite(capa_subtitulo(cs))
+        img.save(ruta)
         hechos[clave] = ruta
         return ruta
 
     for n in range(total):
-        t = n / float(fps)
-        activo = next((i for i, g in enumerate(grupos)
-                       if float(g["in"]) <= t < float(g["out"])), None)
-        if activo is None:
-            clave = "vacia"
-        else:
-            desde = n - int(round(float(grupos[activo]["in"]) * fps))
-            fase = min(max(0, desde) // por_fase, len(escalas))
-            clave = (activo, fase)
+        i_sub, f_sub = _activo_y_fase(grupos, n, fps, esc_sub, fase_sub)
+        i_ins, f_ins = _activo_y_fase(fotos, n, fps, esc_ins, fase_ins)
+        clave = ((i_sub, f_sub) if i_sub is not None else None,
+                 (i_ins, f_ins) if i_ins is not None else None)
         marco = os.path.join(destino, "sub_%05d.png" % n)
         if os.path.exists(marco):
             os.remove(marco)

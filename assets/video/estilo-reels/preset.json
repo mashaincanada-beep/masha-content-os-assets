@@ -61,14 +61,16 @@
       "blanco": "#FFFFFF",
       "amarillo": "#F5D33F",
       "rosa": "#FF4F97",
-      "verde": "#86F442"
+      "verde": "#86F442",
+      "tinta": "#18282F"
     },
     "viral": {
       "_comentario": "Paleta del reel de referencia. Mas agresiva, sin relacion con la marca.",
       "blanco": "#FFFFFF",
       "verde": "#86F442",
       "rojo": "#E8100C",
-      "amarillo": "#F3D914"
+      "amarillo": "#F3D914",
+      "tinta": "#111111"
     }
   },
 
@@ -114,6 +116,23 @@
   "animacion": {
     "_comentario": "Entrada del subtitulo. El reel de referencia no la lleva (cambia de golpe); esta se anadio por encargo. escalas son los fotogramas del rebote, fotogramas es cuantos dura cada uno. Se quita con --sin-animacion.",
     "escalas": [1.16, 1.05, 0.985],
+    "fotogramas": 2
+  },
+
+  "inserto": {
+    "_comentario": "Tarjeta de foto. Va a la derecha, que es donde el encuadre de estos reels deja fondo y no tapa la cara. Todo relativo al lienzo. escalas es el rebote de entrada, igual que en los subtitulos.",
+    "x_rel": 0.566,
+    "y_rel": 0.292,
+    "ancho_rel": 0.398,
+    "alto_rel": 0.245,
+    "radio": 34,
+    "borde": 10,
+    "color_borde": "#FFFFFF",
+    "pie_tamano": 52,
+    "pie_fondo": "amarillo",
+    "pie_texto": "tinta",
+    "sombra": { "dx": 0, "dy": 14, "desenfoque": 22, "opacidad": 0.45 },
+    "escalas": [1.14, 1.04, 0.99],
     "fotogramas": 2
   },
 

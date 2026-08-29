@@ -230,7 +230,9 @@ def main():
         entrada_subs = pngs
     else:
         carpeta = os.path.join(destino, "seq")
-        escribir_secuencia(guion, preset, carpeta)
+        # Las rutas de las fotos del guion se resuelven contra su propia carpeta.
+        escribir_secuencia(guion, preset, carpeta,
+                           base_fotos=os.path.dirname(os.path.abspath(args.guion)))
         entrada_subs = [os.path.join(carpeta, "sub_%05d.png")]
 
     # Entradas: 0 = video, luego la mascara de tapado (si la hay), luego la pista
@@ -247,10 +249,12 @@ def main():
                                     pega_arriba, pega_abajo,
                                     os.path.join(destino, "banda.png")))
 
-    eventos = [] if args.sin_sfx else (sfx.eventos_de_guion(guion)
-                                       + sfx.eventos_de_cortes(cortes))
+    eventos = [] if args.sin_sfx else sorted(sfx.eventos_de_guion(guion)
+                                            + sfx.eventos_de_insertos(guion)
+                                            + sfx.eventos_de_cortes(cortes))
     if eventos:
-        fin = max(float(g["out"]) for g in grupos) + 1.0
+        fin = max([float(g["out"]) for g in grupos]
+                  + [float(f["out"]) for f in guion.get("insertos", [])]) + 1.0
         indice_sfx = 1 + len(extras)
         extras.append(sfx.escribir_wav(
             sfx.construir_pista(eventos, fin, preset.get("sfx")),
@@ -303,13 +307,15 @@ def main():
         print("\n# subtitulos en %s" % destino)
         return 0
 
-    print("montando %d grupos de subtitulo sobre %s%s%s%s%s%s"
+    print("montando %d grupos de subtitulo sobre %s%s%s%s%s%s%s"
           % (len(grupos), args.video,
              " | maquillaje" if args.maquillaje else "",
              " | banda tapada" if tapar else "",
              " | %d efectos" % len(eventos) if eventos else "",
              " | %d cortes" % len(cortes) if cortes else "",
-             "" if args.sin_animacion else " | subtitulos animados"))
+             "" if args.sin_animacion else " | animado",
+             " | %d fotos" % len(guion.get("insertos", []))
+             if guion.get("insertos") else ""))
     subprocess.run(cmd, check=True)
     print("listo: %s (%.1f MB)" % (args.salida, os.path.getsize(args.salida) / 1e6))
     if not args.conservar_subs:

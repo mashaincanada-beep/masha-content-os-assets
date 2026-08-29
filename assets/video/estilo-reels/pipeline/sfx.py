@@ -145,26 +145,24 @@ def escribir_wav(pista, destino):
 
 
 def eventos_de_guion(guion):
-    """Saca los eventos de sonido del guion.
+    """Eventos de sonido que pide el guion, grupo a grupo.
 
-    Cada grupo puede traer "sfx": "bubble" | "typing" | "no". Si no lo trae, se
-    aplica la regla del estilo: burbuja cuando el grupo lleva emoji, tecleo
-    cuando la linea de golpe va en el color de alarma, y silencio en el resto.
+    Solo suenan los grupos que lo piden a mano con "sfx": el tecleo marca la
+    palabra clave del reel y no vale de nada si suena en todas. Los valores son
+    "typing", "bubble", "whoosh" o "no".
     """
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from subtitulos import agrupar_emoji, es_emoji
-
     eventos = []
     for grupo in guion["grupos"]:
         elegido = grupo.get("sfx")
-        if elegido is None:
-            texto = " ".join((grupo.get(k) or {}).get("texto", "") for k in ("l1", "l2"))
-            tiene_emoji = any(es_emoji(u[0]) for u in agrupar_emoji(texto))
-            color_alarma = (grupo.get("l2") or {}).get("color") in ("rosa", "rojo")
-            elegido = "bubble" if tiene_emoji else ("typing" if color_alarma else "no")
         if elegido and elegido != "no":
             eventos.append((float(grupo["in"]), elegido))
     return eventos
+
+
+def eventos_de_insertos(guion):
+    """Una burbuja por cada foto que entra: la burbuja es el sonido de la foto."""
+    return [(float(i["in"]), i.get("sfx", "bubble"))
+            for i in guion.get("insertos", []) if i.get("sfx", "bubble") != "no"]
 
 
 def eventos_de_cortes(cortes, adelanto=0.12):
@@ -180,7 +178,7 @@ def main():
     args = ap.parse_args()
     with open(args.guion, encoding="utf-8") as fh:
         guion = json.load(fh)
-    eventos = eventos_de_guion(guion)
+    eventos = sorted(eventos_de_guion(guion) + eventos_de_insertos(guion))
     escribir_wav(construir_pista(eventos, args.duracion), args.salida)
     print("%d efectos en %s" % (len(eventos), args.salida))
     for t, n in eventos:

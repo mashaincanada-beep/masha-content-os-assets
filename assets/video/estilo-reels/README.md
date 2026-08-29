@@ -80,7 +80,7 @@ Extras de `montar.py`, todos opcionales:
 | `--maquillaje` | retoque leve de piel y luz |
 | `--tapar 1330,590` | tapa una banda del clip original (subtítulos ya quemados, marcas de agua) con un desenfoque degradado; `y0,alto` en píxeles del lienzo final |
 | `--centro-subs 0.70` | sube o baja el bloque de subtítulos |
-| `--cortes 2.35,7.17` | golpe de zoom, destello y whoosh en cada corte seco |
+| `--cortes 2.35,7.17` | golpe de zoom, destello y whoosh en cada corte seco (VID-002 no lo usa) |
 | `--sin-animacion` | subtítulos que cambian de golpe, sin rebote de entrada |
 | `--sin-sfx` | monta sin los efectos de sonido |
 | `--paleta viral` | usa la paleta del reel de referencia |
@@ -97,6 +97,9 @@ pip install fonttools uharfbuzz cairosvg      # solo para rasterizar emoji nuevo
 
 `quitar_pausas.py` imprime la equivalencia de tiempos entre la toma cruda y el
 clip cortado, que es lo que necesitas para poner los `in`/`out` del guion.
+
+Las fotos que se insertan en el reel van en el propio guion, en `insertos`; ver
+[Fotos dentro del reel](#fotos-dentro-del-reel).
 
 ## El sistema de subtítulos
 
@@ -150,54 +153,67 @@ adorno. Se añadió después, por encargo, y todo se puede quitar con un flag.
 
 Se sintetizan en `pipeline/sfx.py` — nada de librerías ni licencias:
 
-- `bubble` — burbuja corta, un barrido ascendente de 85 ms.
-- `typing` — cuatro clics de tecleo secos, 250 ms en total.
-- `whoosh` — barrido de aire de 340 ms para los cortes.
+- `typing` — cuatro clics de tecleo secos, 250 ms. **Marca la palabra clave.**
+- `bubble` — burbuja corta, un barrido ascendente de 85 ms. **Es el sonido de
+  la foto que entra.**
+- `whoosh` — barrido de aire para los cortes. Existe pero no se usa: en VID-002
+  quedaba raro y se quitó.
 
-Los dos primeros se colocan al empezar un grupo de subtítulo, no en cada cambio:
-con uno cada 5 o 6 segundos se notan; en cada línea cansan. La regla por defecto,
-que se puede pisar poniendo `"sfx": "bubble" | "typing" | "no"` en cualquier
-grupo del guion:
+Las dos reglas son deliberadamente estrictas, porque un efecto que suena en
+todas partes deja de significar nada:
 
-- burbuja si el grupo lleva emoji,
-- tecleo si la línea de golpe va en el color de alarma (`rosa` o `rojo`),
-- nada en el resto.
-
-El whoosh va solo, uno por corte seco, y arranca 0,12 s antes del corte para
-taparlo.
+- El tecleo **solo suena donde lo pide el guion**, poniendo `"sfx": "typing"` en
+  ese grupo. Cinco o seis en un reel de un minuto, en las palabras que quieres
+  que se queden.
+- La burbuja **la ponen solas las fotos**: una por cada inserción, en el
+  fotograma en que aparece. No hay que escribirla.
+- Todo lo demás va en silencio.
 
 Los picos están en `sfx` dentro de `preset.json` y salen a unos **−13 dBFS**,
-mezclados debajo de la voz normalizada y con un limitador al final. La primera
-versión iba a −18 y quedaba tapada por la voz: por debajo de −16 no se oyen.
+mezclados debajo de la voz normalizada y con un limitador al final. Por debajo
+de −16 la voz los tapa: la primera versión iba a −18 y no se oía.
 
-### Animación de entrada del subtítulo
+### Fotos dentro del reel
 
-El grupo entra con un rebote de tres fotogramas: 1,16× → 1,05× → 0,985× → 1×,
-dos fotogramas cada uno (0,2 s en total). Escala desde el centro del bloque, no
-desde el del cuadro. Es lo que hace que la burbuja tenga sentido: el sonido cae
-justo en el fotograma grande.
+Una inserción es una foto que entra como tarjeta con esquinas redondas, marco
+claro, sombra y pie de foto en amarillo de marca. **No ocupa el cuadro entero**:
+va a la derecha, que es donde el encuadre de estos reels deja fondo libre y no
+tapa la cara. Entra con el mismo rebote que los subtítulos y con su burbuja.
 
-Está en `animacion` dentro de `preset.json` y se quita con `--sin-animacion`,
-que devuelve el cambio seco del reel de referencia.
+En el guion, al mismo nivel que `grupos`:
+
+```json
+"insertos": [
+  { "in": 23.40, "out": 25.40,
+    "imagen": "fotos/oftalmologo.png", "pie": "Oftalmólogo" }
+]
+```
+
+- `imagen` se resuelve contra la carpeta del propio guion.
+- `pie` es opcional; si falta, la tarjeta va sin franja.
+- `sfx` opcional por inserción, por si alguna no debe sonar (`"no"`).
+- La foto se recorta para llenar la tarjeta sin deformarse, así que da igual el
+  formato que traiga.
+
+Posición, tamaño, radio, marco y sombra están en `inserto` dentro de
+`preset.json`. Si cambias el encuadre de rodaje, ese es el bloque a mover.
+
+### Animación de entrada
+
+Subtítulos y tarjetas entran con un rebote de tres fotogramas (1,16× → 1,05× →
+0,985× → 1× los subtítulos; 1,14× → 1× las tarjetas), dos fotogramas cada paso,
+0,2 s en total, escalando desde su propio centro. Es lo que hace que el sonido
+tenga sentido: cae justo en el fotograma grande.
+
+Está en `animacion` e `inserto` dentro de `preset.json` y se quita con
+`--sin-animacion`, que devuelve el cambio seco del reel de referencia.
 
 ### Transición en los cortes
 
-En cada corte seco: un empujón de zoom del 9 % que se desinfla en 0,3 s, un
-destello corto y el whoosh. Los segundos de corte los imprime
-`quitar_pausas.py`; se le pasan a `montar.py` con `--cortes 2.35,7.17,…`. Sin
-esa lista no hay transiciones. Está en `transicion` dentro de `preset.json`.
-
-## Maquillaje
-
-`--maquillaje` es un retoque leve, no un filtro de belleza: desenfoque bilateral
-que empareja la piel pero respeta los bordes (ojos, gafas y pelo se quedan
-nítidos), un punto de glow, algo de brillo y una corrección parcial del amarillo
-de la luz. Todo está en `maquillaje` dentro de `preset.json`; `suavizado` es el
-mando principal (0,55 = leve, 0,75 ya se nota).
-
-Se aplica a todo el cuadro, sin máscara de piel: se probó una y en una oficina
-de paredes beis marcaba las paredes como piel. Como el fondo de estos reels ya
-va desenfocado, suavizarlo no se ve.
+`--cortes 2.35,7.17,…` mete en cada corte seco un empujón de zoom del 9 % que se
+desinfla en 0,3 s, un destello y un whoosh. **VID-002 no lo usa**: se probó y
+quedaba raro. Sin esa lista no hay transiciones, que es el comportamiento del
+reel de referencia.
 
 ## Audio
 
@@ -235,8 +251,8 @@ Ver [`guion.ejemplo.json`](guion.ejemplo.json), que es el que monta la demo.
   la condensada aunque quede sola).
 - `estilo` opcional: `apoyo`, `golpe` o `neutro`.
 - `color` opcional: un nombre de la paleta activa. Por defecto `blanco`.
-- `sfx` opcional: `bubble`, `typing` o `no`. Si no se pone, manda la regla de
-  arriba.
+- `sfx` opcional: `typing`, `bubble` o `no`. Si no se pone, el grupo va en
+  silencio; el tecleo se marca a mano solo en las palabras clave.
 - `*asteriscos*` para la cursiva. El texto de `l2` se pasa a mayúsculas solo.
 
 A nivel de guion, además de `paleta` y `lienzo`, se puede poner `centro_subs`
