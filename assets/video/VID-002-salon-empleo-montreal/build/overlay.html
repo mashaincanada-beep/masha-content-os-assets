@@ -1,0 +1,212 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>overlay</title>
+<style>
+@font-face{font-family:Inter;src:url("../fonts/extras/ttf/Inter-Regular.ttf");font-weight:400}
+@font-face{font-family:Inter;src:url("../fonts/extras/ttf/Inter-Medium.ttf");font-weight:500}
+@font-face{font-family:Inter;src:url("../fonts/extras/ttf/Inter-SemiBold.ttf");font-weight:600}
+@font-face{font-family:Inter;src:url("../fonts/extras/ttf/Inter-Bold.ttf");font-weight:700}
+@font-face{font-family:Inter;src:url("../fonts/extras/ttf/Inter-ExtraBold.ttf");font-weight:800}
+html,body{margin:0;padding:0;width:1080px;height:1920px;overflow:hidden;background:transparent;font-family:Inter,system-ui,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+#stage{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden}
+.abs{position:absolute}
+.hide{visibility:hidden}
+/* brand background */
+.brandbg{position:absolute;left:0;top:0;width:1080px;height:1920px;background:
+ radial-gradient(900px 900px at 0% 0%, rgba(232,0,111,.62), rgba(232,0,111,0) 62%),
+ radial-gradient(1000px 1000px at 100% 100%, rgba(34,197,94,.40), rgba(20,184,166,.18) 40%, rgba(34,197,94,0) 70%),
+ radial-gradient(800px 800px at 100% 0%, rgba(37,99,235,.60), rgba(37,99,235,0) 60%),
+ linear-gradient(180deg,#131c40 0%,#0F1234 100%)}
+.dots{position:absolute;left:0;top:0;width:1080px;height:1920px;background-image:radial-gradient(rgba(255,255,255,.07) 1.6px, transparent 1.7px);background-size:40px 40px}
+/* lockup */
+.lockup{display:flex;flex-direction:column;align-items:flex-start}
+.lockup .word{font-size:72px;line-height:1;letter-spacing:-1px;white-space:nowrap}
+.lockup .word b{font-weight:800}
+.lockup .word span{font-weight:400;opacity:.72}
+.tri{display:flex;height:8px;border-radius:4px;overflow:hidden;width:180px;margin-top:14px}
+.tri i{display:block;height:8px}
+.tri i:nth-child(1){width:34%;background:#2563eb}.tri i:nth-child(2){width:33%;background:#22c55e}.tri i:nth-child(3){width:33%;background:#e8006f}
+.appicon{width:112px;height:112px;border-radius:26px;background:#fff;display:flex;align-items:flex-end;justify-content:center;gap:9px;padding-bottom:22px;box-sizing:border-box;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.appicon i{display:block;width:16px;border-radius:5px}
+.appicon i:nth-child(1){height:34px;background:#2563eb}.appicon i:nth-child(2){height:54px;background:#22c55e}.appicon i:nth-child(3){height:44px;background:#e8006f}
+/* scrim + captions */
+#scrim{position:absolute;left:0;top:1220px;width:1080px;height:700px;background:linear-gradient(180deg, rgba(4,6,20,0) 0%, rgba(4,6,20,.55) 38%, rgba(4,6,20,.99) 100%)}
+#capwrap{position:absolute;left:64px;right:64px;bottom:190px}
+.pill{position:absolute;left:0;bottom:290px;display:inline-block;font-size:24px;font-weight:800;letter-spacing:2.6px;padding:12px 22px 11px 24px;border-radius:999px;color:#fff;background:#2563eb;transform-origin:left center;white-space:nowrap}
+.cap{position:absolute;left:0;right:0;bottom:0;}
+.cap .txt{font-size:50px;font-weight:700;line-height:1.18;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.35)}
+.cap .sub{font-size:31px;font-weight:500;line-height:1.3;color:rgba(255,255,255,.58);margin-top:14px;min-height:0}
+.k{font-weight:800}
+/* lower third */
+#lt{position:absolute;left:60px;top:1170px;display:flex;align-items:stretch;gap:0;transform-origin:left center}
+#lt .bar{width:10px;border-radius:6px;background:linear-gradient(180deg,#2563eb 0%,#2563eb 33%,#22c55e 33%,#22c55e 66%,#e8006f 66%)}
+#lt .box{background:rgba(19,28,64,.88);border:1px solid rgba(255,255,255,.14);border-radius:0 20px 20px 0;padding:18px 34px 20px 26px;margin-left:8px}
+#lt .name{font-size:46px;font-weight:800;line-height:1.05;letter-spacing:-.5px}
+#lt .role{font-size:27px;font-weight:500;opacity:.78;margin-top:8px;letter-spacing:.2px}
+/* wow badge */
+#wow{position:absolute;left:130px;top:70px;width:820px;box-sizing:border-box;padding:26px 40px 30px;border-radius:34px;background:linear-gradient(135deg,rgba(19,28,64,.96),rgba(15,18,52,.96));border:2px solid rgba(43,217,107,.55);box-shadow:0 24px 60px rgba(0,0,0,.45), 0 0 0 10px rgba(43,217,107,.10);text-align:center;transform-origin:center center}
+#wow .n{font-size:112px;font-weight:800;line-height:1;color:#2bd96b;letter-spacing:-2px}
+#wow .l{font-size:36px;font-weight:600;line-height:1.1;margin-top:10px;color:#fff}
+#wow .s{font-size:26px;font-weight:500;opacity:.6;margin-top:8px}
+/* cutaway */
+#cut{position:absolute;left:0;top:0;width:1080px;height:1920px}
+.phone{position:absolute;left:182px;top:150px;width:716px;height:1236px;border-radius:64px;background:#0b0e1f;border:2px solid rgba(255,255,255,.14);box-shadow:0 40px 90px rgba(0,0,0,.55);box-sizing:border-box;transform-origin:center center}
+.screen{position:absolute;left:16px;top:16px;width:680px;height:1200px;border-radius:50px;overflow:hidden;background:#fff}
+.screen img{position:absolute;left:0;top:0;width:680px;height:auto;display:block}
+.ring{position:absolute;width:120px;height:120px;border-radius:50%;border:5px solid #5aa2ff;box-shadow:0 0 0 3px rgba(90,162,255,.35), 0 0 30px rgba(90,162,255,.55);margin-left:-60px;margin-top:-60px;transform-origin:center center}
+.sitetag{position:absolute;left:0;right:0;top:1402px;text-align:center;font-size:26px;font-weight:600;letter-spacing:1.4px;opacity:.7}
+/* cards */
+.card{position:absolute;left:0;top:0;width:1080px;height:1920px}
+.card .content{position:absolute;left:90px;right:90px}
+.h1{font-size:96px;font-weight:800;line-height:1.02;letter-spacing:-2.5px}
+.h1 .a{color:#5aa2ff}
+.subt{font-size:40px;font-weight:400;line-height:1.3;opacity:.8;margin-top:28px}
+.url{font-size:62px;font-weight:800;letter-spacing:-1.5px;line-height:1.05;word-break:break-all}
+.foot{position:absolute;left:0;right:0;bottom:120px;text-align:center;font-size:30px;font-weight:500;opacity:.66;letter-spacing:.4px}
+</style>
+<div id="stage">
+  <!-- CUTAWAY -->
+  <div id="cut">
+    <div class="brandbg"></div><div class="dots"></div>
+    <div class="phone" id="phone">
+      <div class="screen"><img id="shot" src=""><div class="ring" id="ring"></div></div>
+    </div>
+  </div>
+  <!-- LOWER THIRD -->
+  <div id="lt"><div class="bar"></div><div class="box"><div class="name">Masha</div><div class="role">Masha In Canada · MIC</div></div></div>
+  <!-- WOW -->
+  <div id="wow"><div class="n">+30 000</div><div class="l">oportunidades de empleo</div><div class="s">250 expositores · Montreal</div></div>
+  <!-- SCRIM + CAPTIONS -->
+  <div id="scrim"></div>
+  <div id="capwrap"><div class="pill" id="pill">PASO 1</div><div id="caps"></div></div>
+  <!-- OPEN CARD -->
+  <div class="card" id="open">
+    <div class="brandbg"></div><div class="dots"></div>
+    <div class="content" style="top:520px" id="o1"><div style="display:flex;align-items:center;gap:34px"><div class="appicon"><i></i><i></i><i></i></div><div class="lockup"><div class="word"><b>MASHA</b><span> Talent</span></div><div class="tri"><i></i><i></i><i></i></div></div></div></div>
+    <div class="content" style="top:760px" id="o2"><div class="h1">Salón del Empleo<br>en <span class="a">Montreal</span></div></div>
+    <div class="content" style="top:1000px" id="o3"><div class="subt">14 y 15 de octubre de 2026<br>Palacio de Congresos · entrada gratuita</div></div>
+  </div>
+  <!-- CLOSE CARD -->
+  <div class="card" id="close">
+    <div class="brandbg"></div><div class="dots"></div>
+    <div class="content" style="top:470px" id="c1"><div style="display:flex;align-items:center;gap:34px"><div class="appicon"><i></i><i></i><i></i></div><div class="lockup"><div class="word"><b>MASHA</b><span> Talent</span></div><div class="tri"><i></i><i></i><i></i></div></div></div></div>
+    <div class="content" style="top:700px" id="c2"><div class="h1">Prepárate<br><span class="a">desde ahora</span></div></div>
+    <div class="content" style="top:960px" id="c3"><div class="url">talent.mashaincanada.com</div><div class="tri" style="width:260px;margin-top:26px"><i></i><i></i><i></i></div></div>
+    <div class="content" style="top:1180px" id="c4"><div class="subt">Info del evento: <b style="font-weight:700;opacity:1">ecarrieres.com</b></div></div>
+    <div class="foot" id="c5">Masha In Canada · MIC</div>
+  </div>
+</div>
+<script>
+// ---------- easing ----------
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const outQuint=x=>1-Math.pow(1-x,5);
+const outExpo=x=>x>=1?1:1-Math.pow(2,-10*x);
+const outCubic=x=>1-Math.pow(1-x,3);
+const outBack=x=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+const lin=(t,a,b)=>clamp((t-a)/(b-a),0,1);
+// ---------- timeline (output seconds) ----------
+const OPEN_END=3.0, CLOSE_START=75.0667, TOTAL=79.3333;
+// output -> reference (source reel) time
+const refT=t=> t<45.7 ? t-2.25 : t-1.95;
+const COLORS={blue:'#5aa2ff',green:'#2bd96b',pink:'#ff3d8f',purple:'#a78bfa'};
+const PILLBG={blue:'#2563eb',green:'#22c55e',pink:'#e8006f',purple:'#7c3aed'};
+// captions in reference time. k = keyword color, p = pill text
+const CAPS=[
+ [1.05,2.75,'Si estás buscando trabajo<br>en <k>Quebec</k>','blue','QUEBEC'],
+ [2.75,4.36,'presta <k>atención</k><br>a esta información','blue','QUEBEC'],
+ [4.80,7.60,'Los próximos <k>14 y 15 de octubre</k><br>de 2026','green','14 – 15 OCT 2026'],
+ [7.60,9.20,'se realizará en <k>Montreal</k>','green','14 – 15 OCT 2026'],
+ [9.20,11.77,'el <k>Salón del Empleo</k><br>y la Formación Continua','green','14 – 15 OCT 2026'],
+ [11.96,13.60,'Quiero mostrarte<br>un poco la información','pink','PÁGINA OFICIAL'],
+ [13.60,15.53,'que ya está publicada<br>en su <k>página oficial</k>','pink','PÁGINA OFICIAL'],
+ [16.03,18.50,'El evento será en el<br><k>Palacio de Congresos</k> de Montreal','blue','MONTREAL'],
+ [18.50,20.20,'y la entrada es <k>gratuita</k>','blue','MONTREAL'],
+ [20.20,23.23,'Anuncian más de<br><k>30.000 oportunidades</k> de empleo','green','+30 000 EMPLEOS'],
+ [23.71,25.50,'Como pueden ver<br>en la página,','pink','SECTORES'],
+ [25.50,27.72,'el evento reúne <k>empleadores</k><br>de diferentes sectores','pink','SECTORES'],
+ [27.87,30.20,'<k>Salud</k>, educación,<br>manufactura,','pink','SECTORES'],
+ [30.20,32.58,'construcción,<br><k>transporte</k> y logística,','pink','SECTORES'],
+ [32.70,34.60,'<k>banca</k> y finanzas,<br>entre otros','pink','SECTORES'],
+ [35.07,36.90,'También van a encontrar<br>espacios dedicados','blue','REGIONES'],
+ [36.90,38.95,'a diferentes <k>regiones</k><br>de Quebec','blue','REGIONES'],
+ [39.23,41.20,'además de <k>organizaciones</k><br>y servicios','green','SERVICIOS'],
+ [41.20,43.21,'para apoyar a quienes<br>estén buscando empleo','green','SERVICIOS'],
+ [43.84,45.80,'Y algo que me parece<br><k>muy útil</k>:','purple','PREPÁRATE'],
+ [45.80,48.20,'en la misma página<br>pueden consultar <k>información</k>','purple','PREPÁRATE'],
+ [48.20,50.27,'sobre el evento y<br><k>prepararse</k> con anticipación','purple','PREPÁRATE'],
+ [50.62,53.61,'Mi recomendación:<br><k>no esperen</k> hasta octubre','pink','TIP'],
+ [53.85,55.70,'<k>Revisen</k> desde ahora<br>la página','blue','PASO 1'],
+ [55.70,58.20,'<k>investiguen</k> los empleadores<br>que participan','green','PASO 2'],
+ [58.20,59.90,'<k>identifiquen</k> cuáles tienen','pink','PASO 3'],
+ [59.90,61.70,'<k>oportunidades</k> relacionadas<br>con su perfil','pink','PASO 3'],
+ [61.70,64.36,'y preparen un <k>CV adaptado</k><br>para el mercado canadiense','purple','PASO 4'],
+ [64.76,66.80,'Les voy a dejar<br>la <k>información</k> del evento','blue','INFO'],
+ [66.80,69.00,'para que puedan<br>revisarla directamente','blue','INFO'],
+ [69.34,70.90,'<k>Guarda</k> este video<br>y compártelo','green','¡GUARDA!'],
+ [70.90,72.58,'con alguien que esté<br>buscando trabajo en <k>Quebec</k>','green','¡GUARDA!'],
+];
+// cutaways in reference time: [start,end, frame image, ring x,y (screen px) , ring time (ref)]
+const CUTS=[
+ [8.80,13.95,'../recframes/r_0150.jpg',343,963,11.2],
+ [23.80,28.95,'../recframes/r_0520.jpg',null,null,null],
+ [39.80,44.90,'../recframes/r_0760.jpg',null,null,null],
+ [55.80,60.95,'../recframes/r_0400.jpg',312,885,58.4],
+];
+const WOW=[20.15,23.60];
+const LT=[3.3,7.3]; // output time
+// ---------- build DOM ----------
+const caps=document.getElementById('caps');
+CAPS.forEach((c,i)=>{const d=document.createElement('div');d.className='cap';d.id='cap'+i;
+ const html=c[2].replace(/<k>/g,`<span class="k" style="color:${COLORS[c[3]]}">`).replace(/<\/k>/g,'</span>');
+ d.innerHTML=`<div class="txt">${html}</div><div class="sub"></div>`;caps.appendChild(d);});
+// pill segments (merge consecutive equal pills)
+const PILLS=[];CAPS.forEach(c=>{const last=PILLS[PILLS.length-1];if(last&&last.text===c[4]&&c[0]-last.end<0.8){last.end=c[1];}else PILLS.push({start:c[0],end:c[1],text:c[4],color:c[3]});});
+const $=id=>document.getElementById(id);
+function setEl(el,{o=1,x=0,y=0,s=1,vis=true}={}){el.style.display=vis?'':'none';el.style.opacity=o;el.style.transform=`translate(${x}px,${y}px) scale(${s})`;}
+// enter/exit helper: returns {o,y,s} progress values for a window [a,b] with enter dur ei and exit dur eo (in same time units)
+function winAnim(t,a,b,ei,eo,easeIn,easeOut){
+ if(t<a||t>b) return null;
+ const pin=easeIn(lin(t,a,a+ei)); const pout=1-easeOut(lin(t,b-eo,b));
+ return {pin,pout};
+}
+// ---------- render ----------
+function render(t){
+ const r=refT(t);
+ const onVideo = t>=OPEN_END && t<CLOSE_START;
+ // --- open card ---
+ {const el=$('open'); if(t<OPEN_END+0.45){ const fo=1-outCubic(lin(t,OPEN_END,OPEN_END+0.42)); setEl(el,{o:fo});
+   const st=[[0.10,'o1'],[0.38,'o2'],[0.64,'o3']]; st.forEach(([d,id])=>{const p=outQuint(lin(t,d,d+0.75)); const out=outCubic(lin(t,OPEN_END,OPEN_END+0.42)); setEl($(id),{o:p,y:44*(1-p)-30*out});});
+  } else setEl(el,{vis:false});}
+ // --- close card ---
+ {const el=$('close'); const a=CLOSE_START-0.45; if(t>=a){ const fi=outCubic(lin(t,a,CLOSE_START)); setEl(el,{o:fi});
+   const st=[[0.15,'c1'],[0.40,'c2'],[0.65,'c3'],[0.90,'c4'],[1.05,'c5']]; st.forEach(([d,id])=>{const p=outQuint(lin(t,a+d,a+d+0.8)); setEl($(id),{o:p,y:46*(1-p)});});
+  } else setEl(el,{vis:false});}
+ // --- scrim ---
+ {const el=$('scrim'); if(onVideo||t>=OPEN_END-0.1){ const o=outCubic(lin(t,OPEN_END,OPEN_END+0.4))*(1-outCubic(lin(t,CLOSE_START-0.45,CLOSE_START))); setEl(el,{o:o,vis:o>0}); } else setEl(el,{vis:false});}
+ // --- lower third ---
+ {const el=$('lt'); const w=winAnim(t,LT[0],LT[1],0.6,0.4,outExpo,outCubic); if(w){ setEl(el,{o:Math.min(w.pin,w.pout),x:-70*(1-w.pin)-30*(1-w.pout)}); } else setEl(el,{vis:false});}
+ // --- wow badge ---
+ {const el=$('wow'); const w=winAnim(r,WOW[0],WOW[1],0.7,0.35,outBack,outCubic); if(w&&onVideo){ const o=Math.min(outCubic(lin(r,WOW[0],WOW[0]+0.25)),w.pout); setEl(el,{o:o,s:0.45+0.55*w.pin,y:-40*(1-w.pout)}); } else setEl(el,{vis:false});}
+ // --- cutaway ---
+ {const el=$('cut'); let active=null; for(const c of CUTS){ if(r>=c[0]&&r<=c[1]){active=c;break;} }
+  if(active&&onVideo){ const [a,b,src,rx,ry,rt]=active; const pin=outQuint(lin(r,a,a+0.45)); const pout=1-outCubic(lin(r,b-0.25,b));
+   const bgo=Math.min(outCubic(lin(r,a,a+0.14)),1-outCubic(lin(r,b-0.10,b))); setEl(el,{o:bgo});
+   const img=$('shot'); if(img.getAttribute('src')!==src) img.setAttribute('src',src);
+   const drift=-70*lin(r,a,b); img.style.transform=`translateY(${drift}px)`;
+   setEl($('phone'),{o:Math.min(pin,pout),y:90*(1-pin)-30*(1-pout),s:0.96+0.04*pin});
+   const ring=$('ring'); if(rx!=null&&r>=rt&&r<=rt+0.75){ const p=lin(r,rt,rt+0.75); ring.style.left=rx+'px'; ring.style.top=(ry+drift)+'px'; setEl(ring,{o:1-outCubic(p),s:0.25+1.4*outQuint(p)}); } else setEl(ring,{vis:false});
+  } else setEl(el,{vis:false});}
+ // --- captions ---
+ CAPS.forEach((c,i)=>{const el=$('cap'+i); const [a,b]=c; const w=winAnim(r,a-0.06,b+0.12,0.32,0.20,outQuint,outCubic);
+  const inCut=CUTS.some(cc=>a>=cc[0]-0.15&&b<=cc[1]+0.15);
+  el.querySelector('.sub').textContent = inCut ? 'ecarrieres.com · página oficial del evento' : '';
+  if(w&&onVideo){ setEl(el,{o:Math.min(w.pin,w.pout),y:26*(1-w.pin)-14*(1-w.pout)}); } else setEl(el,{vis:false});});
+ // --- pill ---
+ {const el=$('pill'); let seg=null; for(const p of PILLS){ if(r>=p.start-0.06&&r<=p.end+0.12){seg=p;break;} }
+  if(seg&&onVideo){ if(el.textContent!==seg.text){el.textContent=seg.text;} el.style.background=PILLBG[seg.color];
+   const w=winAnim(r,seg.start-0.06,seg.end+0.12,0.35,0.2,outQuint,outCubic); setEl(el,{o:Math.min(w.pin,w.pout),s:0.85+0.15*w.pin,y:14*(1-w.pin)-10*(1-w.pout)});
+  } else setEl(el,{vis:false});}
+}
+window.render=render; window.TOTAL=TOTAL; window.CUTS=CUTS;
+render(0);
+</script>
