@@ -1,0 +1,245 @@
+{
+ "lines": [
+  {
+   "who": "max",
+   "text": "Grandpa's birthday is on Saturday.",
+   "t0": 2.9,
+   "t1": 5.094625
+  },
+  {
+   "who": "lin",
+   "text": "Mm-hm. What do you want to give him?",
+   "t0": 5.474625,
+   "t1": 7.452562499999999
+  },
+  {
+   "who": "max",
+   "text": "His almond cookies. The ones he always buys.",
+   "t0": 7.8325625,
+   "t1": 11.058895833333333
+  },
+  {
+   "who": "max",
+   "text": "But this time... I want to buy them myself.",
+   "t0": 11.438895833333333,
+   "t1": 14.629145833333332
+  },
+  {
+   "who": "lin",
+   "text": "With your own money?",
+   "t0": 15.009145833333333,
+   "t1": 16.048520833333335
+  },
+  {
+   "who": "max",
+   "text": "Every coin.",
+   "t0": 16.428520833333334,
+   "t1": 17.526479166666668
+  },
+  {
+   "who": "mr_hassan",
+   "text": "Morning, Max! Just you today?",
+   "t0": 19.03333333333333,
+   "t1": 20.858
+  },
+  {
+   "who": "max",
+   "text": "Just me. Just these, please.",
+   "t0": 21.238,
+   "t1": 23.793229166666666
+  },
+  {
+   "who": "mr_hassan",
+   "text": "That's four twenty-five.",
+   "t0": 24.173229166666665,
+   "t1": 25.802
+  },
+  {
+   "who": "max",
+   "text": "Twenty-five... fifty... seventy-five...",
+   "t0": 26.7,
+   "t1": 31.162145833333334
+  },
+  {
+   "who": "max",
+   "text": "a dollar... a dollar... um...",
+   "t0": 31.542145833333333,
+   "t1": 34.210208333333334
+  },
+  {
+   "who": "mr_hassan",
+   "text": "Hey. Take your time, buddy.",
+   "t0": 38.4,
+   "t1": 41.00033333333333
+  },
+  {
+   "who": "max",
+   "text": "It's okay.",
+   "t0": 42.28033333333333,
+   "t1": 43.45
+  },
+  {
+   "who": "max",
+   "text": "I'll come back.",
+   "t0": 44.33,
+   "t1": 45.46597916666667
+  },
+  {
+   "who": "lin",
+   "text": "No cookies?",
+   "t0": 51.766666666666666,
+   "t1": 52.702979166666665
+  },
+  {
+   "who": "max",
+   "text": "I couldn't count it fast enough. There were people waiting.",
+   "t0": 53.08297916666667,
+   "t1": 56.655
+  },
+  {
+   "who": "lin",
+   "text": "That's a hard moment.",
+   "t0": 57.735,
+   "t1": 58.97120833333334
+  },
+  {
+   "who": "lin",
+   "text": "Want to practise a little? Just ten minutes.",
+   "t0": 59.75120833333333,
+   "t1": 62.2541875
+  },
+  {
+   "who": "max",
+   "text": "...Right now?",
+   "t0": 62.634187499999996,
+   "t1": 63.641375
+  },
+  {
+   "who": "lin",
+   "text": "Right now. Just us.",
+   "t0": 64.021375,
+   "t1": 65.10972916666667
+  },
+  {
+   "who": "max",
+   "text": "Quarter, quarter... that's fifty.",
+   "t0": 66.7,
+   "t1": 69.3729375
+  },
+  {
+   "who": "lin",
+   "text": "And the next one?",
+   "t0": 69.7529375,
+   "t1": 70.71827083333334
+  },
+  {
+   "who": "max",
+   "text": "Seventy-five!",
+   "t0": 71.09827083333333,
+   "t1": 72.2740625
+  },
+  {
+   "who": "max",
+   "text": "A dollar ten... no, wait.",
+   "t0": 73.46666666666667,
+   "t1": 76.2593125
+  },
+  {
+   "who": "max",
+   "text": "A dollar fifteen.",
+   "t0": 77.0393125,
+   "t1": 78.3236875
+  },
+  {
+   "who": "lin",
+   "text": "You caught that yourself.",
+   "t0": 78.7036875,
+   "t1": 79.88033333333334
+  },
+  {
+   "who": "max",
+   "text": "Four dollars... and twenty-five cents.",
+   "t0": 80.96666666666667,
+   "t1": 84.11858333333333
+  },
+  {
+   "who": "mr_hassan",
+   "text": "Four twenty-five, right?",
+   "t0": 85.93333333333334,
+   "t1": 87.58727083333333
+  },
+  {
+   "who": "max",
+   "text": "Right.",
+   "t0": 87.96727083333334,
+   "t1": 88.66060416666667
+  },
+  {
+   "who": "max",
+   "text": "One, two, three, four dollars. And twenty-five cents.",
+   "t0": 89.04060416666667,
+   "t1": 92.82739583333334
+  },
+  {
+   "who": "mr_hassan",
+   "text": "Exactly right.",
+   "t0": 93.50739583333333,
+   "t1": 94.81039583333335
+  },
+  {
+   "who": "jonah",
+   "text": "Nice counting.",
+   "t0": 96.0,
+   "t1": 96.92958333333333
+  },
+  {
+   "who": "max",
+   "text": "Happy birthday, Grandpa.",
+   "t0": 97.8,
+   "t1": 99.49247916666667
+  },
+  {
+   "who": "grandpa_wei",
+   "text": "My almond cookies!",
+   "t0": 99.87247916666666,
+   "t1": 101.3593125
+  },
+  {
+   "who": "max",
+   "text": "I bought them myself. I counted every coin.",
+   "t0": 101.7393125,
+   "t1": 105.03693750000001
+  },
+  {
+   "who": "grandpa_wei",
+   "text": "Every coin?",
+   "t0": 106.0169375,
+   "t1": 107.1836875
+  },
+  {
+   "who": "max",
+   "text": "Every single one.",
+   "t0": 107.5636875,
+   "t1": 108.76754166666667
+  },
+  {
+   "who": "narrator",
+   "text": "It was never really about the cookies.",
+   "t0": 111.16666666666666,
+   "t1": 113.02577083333333
+  },
+  {
+   "who": "narrator",
+   "text": "Sometimes practice shows up far from the page.",
+   "t0": 113.93333333333332,
+   "t1": 116.47935416666667
+  },
+  {
+   "who": "narrator",
+   "text": "In a gift they chose... and paid for, all by themselves.",
+   "t0": 117.17935416666666,
+   "t1": 120.71227083333333
+  }
+ ],
+ "total": 126.43333333333334
+}

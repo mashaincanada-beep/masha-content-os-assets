@@ -1,0 +1,8 @@
+episodes/*/master.mp4
+episodes/*/_work/
+episodes/*/preview/
+episodes/*/qc/frames/
+episodes/*/stems/
+episodes/*/__pycache__/
+episodes/*/x264p*
+engine/**/__pycache__/

@@ -1,0 +1,17 @@
+{
+ "issues": [],
+ "warnings": [],
+ "stages": {
+  "timeline": {
+   "shots": 15,
+   "duration": 126.43
+  },
+  "upload_copy": {
+   "compressed": true,
+   "bytes": 9282208,
+   "video_kbps": 481,
+   "ssim": 0.994985
+  },
+  "render_seconds": 833
+ }
+}

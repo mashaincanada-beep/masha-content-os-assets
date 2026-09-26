@@ -1,0 +1,23 @@
+{
+ "checks": {
+  "duration_s": 126.44,
+  "upload_bytes": 9282208,
+  "video": "1080x1920 h264 yuv420p 30/1",
+  "mean_volume_db": -18.6,
+  "max_volume_db": -0.6,
+  "speech_match_avg": 0.879,
+  "lines": 40,
+  "subtitle_cues": 40,
+  "cover": "1080x1920"
+ },
+ "blocking": [],
+ "warnings": [],
+ "contact_sheets": [
+  "/home/claude/masha-content-os-assets/childhood-stories/episodes/_pilot-four-quarters/qc/contact_01.jpg",
+  "/home/claude/masha-content-os-assets/childhood-stories/episodes/_pilot-four-quarters/qc/contact_02.jpg",
+  "/home/claude/masha-content-os-assets/childhood-stories/episodes/_pilot-four-quarters/qc/contact_03.jpg",
+  "/home/claude/masha-content-os-assets/childhood-stories/episodes/_pilot-four-quarters/qc/contact_04.jpg",
+  "/home/claude/masha-content-os-assets/childhood-stories/episodes/_pilot-four-quarters/qc/contact_05.jpg"
+ ],
+ "pass": true
+}
