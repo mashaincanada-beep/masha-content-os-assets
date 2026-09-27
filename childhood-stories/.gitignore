@@ -6,3 +6,4 @@ episodes/*/stems/
 episodes/*/__pycache__/
 episodes/*/x264p*
 engine/**/__pycache__/
+engine/_auditions/

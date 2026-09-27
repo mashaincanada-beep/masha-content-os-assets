@@ -1,5 +1,5 @@
 {
-  "_about": "The recurring MIC Study Childhood Stories cast. Reuse these people so the world feels familiar; add new ones when a story needs them (keep ages within Grades 1-9 for children). Voice ids are Kokoro voices; pitch > 1 raises the voice (used for children).",
+  "_about": "The recurring MIC Study Childhood Stories cast. Reuse these people so the world feels familiar; add new ones when a story needs them (keep ages within Grades 1-9 for children). The 'voice' entries here are only the Kokoro LAST-RESORT fallback (voice system v1). Real voices: engine/voice_cast.json (README section 2b).",
   "narrator": {"voice": {"id": "af_heart", "speed": 0.92, "pitch": 1.0}},
 
   "elena":  {"name": "Elena Rivera", "role": "mom", "kind": "adult", "sex": "f", "skin": "olive",

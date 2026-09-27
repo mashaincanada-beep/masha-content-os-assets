@@ -12,6 +12,7 @@ import soundfile as sf
 
 from . import character as C
 from . import audio as A
+from . import voice as V
 
 ENGINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 W, H, FPS = 1080, 1920, 30
@@ -98,6 +99,7 @@ def build_timeline(ep, cast):
     for si, sh in enumerate(ep["shots"]):
         t = sh.get("start", 0.5)
         lines, sfx_ev = [], []
+        spoken = [it for it in sh.get("script", []) if "who" in it]
         for item in sh.get("script", []):
             if "pause" in item:
                 t += item["pause"]
@@ -110,11 +112,11 @@ def build_timeline(ep, cast):
             who = item["who"]
             t += item.get("gap", 0.0)
             spec = cast[who.split("#")[0]]
-            vid, spd, pit = C.voice_for(spec)
-            spd = item.get("speed", spd)
-            clip = A.synth(item.get("say", item["line"]), vid, spd, pit)
+            k = spoken.index(item)
+            clip, vmeta = V.speak(who, spec, item, spoken[k - 1] if k else None,
+                                  spoken[k + 1] if k + 1 < len(spoken) else None)
             d = len(clip) / A.SR
-            lines.append({"who": who, "text": A.display_text(item["line"]), "t0": t, "t1": t + d, "clip": clip,
+            lines.append({"who": who, "text": V.display_text(item["line"]), "t0": t, "t1": t + d, "clip": clip, "vmeta": vmeta,
                           "expr": item.get("expr"), "to": item.get("to"), "narr": who == "narrator",
                           "sub": item.get("sub", True), "env": A.envelope(clip, FPS), "loud": item.get("loud", False)})
             t += d + item.get("after", 0.38)
@@ -929,7 +931,7 @@ def produce(ep_path, out_dir=None, only_cover=False, keep_segments=False, resume
             if not ln["narr"] and ln["who"] in sh.get("actors", {}):
                 x = sh["actors"][ln["who"]].get("x", 540)
                 pan = max(-1, min(1, (x - 540) / 540))
-            dialogue.append((s["T"] + ln["t0"], ln["clip"], pan, ln["narr"]))
+            dialogue.append((s["T"] + ln["t0"], ln["clip"], pan, ln["narr"], sh.get("amb", "room")))
             if ln["sub"]:
                 srt.append((s["T"] + ln["t0"], s["T"] + ln["t1"] + 0.25, ln["text"]))
         for e in s["sfx"]:
@@ -959,7 +961,9 @@ def produce(ep_path, out_dir=None, only_cover=False, keep_segments=False, resume
                     "-pix_fmt", "yuv420p", "-r", str(FPS), "-c:a", "aac", "-b:a", "192k", "-ar", "48000",
                     "-movflags", "+faststart", "-shortest", master], check=True)
     make_upload_copy(master, os.path.join(out_dir, "upload.mp4"), qc)
-    json.dump({"lines": [{"who": ln["who"], "text": ln["text"], "t0": s["T"] + ln["t0"], "t1": s["T"] + ln["t1"]}
+    json.dump({"voice": {k: v for k, v in V.report().items() if k != "lines"},
+               "lines": [{"who": ln["who"], "text": ln["text"], "t0": s["T"] + ln["t0"], "t1": s["T"] + ln["t1"],
+                          "voice": {k: v for k, v in ln.get("vmeta", {}).items() if k not in ("who", "text")}}
                          for s in shots for ln in s["lines"]], "total": total},
               open(os.path.join(out_dir, "timeline.json"), "w"), indent=1)
     qc["stages"]["render_seconds"] = round(time.time() - t_start)

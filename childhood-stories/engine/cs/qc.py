@@ -157,6 +157,26 @@ def run_qc(ep_dir, min_dur=105, max_dur=135, whisper_model="base.en"):
             rep["checks"]["unclear_lines"] = bad
     except Exception as e:  # pragma: no cover
         rep["warnings"].append(f"speech check skipped: {e}")
+    # VOICE QUALITY GATE (voice system v2): robotic dialogue must not pass
+    vs = tl.get("voice", {})
+    vlines = [ln for ln in tl["lines"] if ln.get("voice")]
+    rep["checks"]["voice_provider"] = vs.get("provider")
+    rep["checks"]["voice_regenerated_lines"] = vs.get("regenerated", 0)
+    if vs.get("fallback_lines"):
+        rep["blocking"].append(f"PREMIUM VOICES UNAVAILABLE ({vs.get('reason', '')}) - {vs['fallback_lines']} lines "
+                               "voiced with the basic fallback engine; do not publish, report to Maria")
+    flagged = [{"who": ln["who"], "line": ln["text"], "emo": ln["voice"].get("emo"), "problems": ln["voice"]["problems"]}
+               for ln in vlines if ln["voice"].get("problems")]
+    rep["checks"]["voice_flagged"] = flagged
+    hard = [f for f in flagged if any(k in p for p in f["problems"] for k in ("unclear", "high-pitched", "clipping", "like an adult"))]
+    soft = [f for f in flagged if f not in hard]
+    if hard:
+        rep["blocking"].append(f"{len(hard)} line(s) still unclear / too high / distorted after retakes: "
+                               + "; ".join(f"{f['who']}: '{f['line'][:40]}' {f['problems']}" for f in hard[:4]))
+    if len(soft) > 2:
+        rep["blocking"].append(f"{len(soft)} lines still sound monotone or rushed after retakes - rewrite/redirect them")
+    elif soft:
+        rep["warnings"].append("voice lines to re-check: " + "; ".join(f"{f['who']}: '{f['line'][:40]}' {f['problems']}" for f in soft))
     # subtitles present for every line
     srt = open(os.path.join(ep_dir, "subtitles.srt")).read() if os.path.exists(os.path.join(ep_dir, "subtitles.srt")) else ""
     rep["checks"]["subtitle_cues"] = srt.count("-->")

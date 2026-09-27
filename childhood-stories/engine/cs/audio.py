@@ -1,8 +1,8 @@
 """MIC Study Childhood Stories - audio: voices, score, sound design, mix.
 
 Everything here is generated locally:
-  * voices   - Kokoro TTS (downloaded by setup.sh); children use a gentle
-               pitch/formant lift so they sound like kids.
+  * voices   - see voice.py (voice system v2: ElevenLabs performance voices).
+               synth() below is the Kokoro LAST-RESORT fallback only.
   * score    - an original piano / strings / celesta score synthesised note
                by note, following the mood of each part of the story.
   * sound    - procedural foley (pages, pencils, footsteps, kitchen, crowd,
@@ -572,20 +572,64 @@ def ambience(kind, dur, seed=0):
 
 
 # ============================================================== mix
-def mix(total, dialogue, sfx_events, amb_regions, music, out_path, room=None):
-    """dialogue: [(t, clip, pan, is_narrator)], sfx_events: [(t, clip, gain, pan)],
+# small, believable rooms per scene: (wet, seconds, brightness Hz, early-reflection delay ms)
+ROOMS = {
+    "bedroom":   (0.05, 0.35, 3800, 7),  "home": (0.06, 0.45, 4200, 9),  "room": (0.06, 0.45, 4200, 9),
+    "kitchen":   (0.08, 0.55, 5200, 8),  "library": (0.07, 0.8, 3800, 14), "classroom": (0.10, 0.75, 4800, 13),
+    "school":    (0.10, 0.75, 4800, 13), "cafeteria": (0.13, 0.95, 4800, 16), "hallway": (0.15, 1.1, 4200, 18),
+    "gym":       (0.16, 1.4, 4200, 22),  "stage": (0.14, 1.3, 4200, 20),  "store": (0.08, 0.6, 5000, 10),
+    "car":       (0.02, 0.15, 3000, 3),  "outdoor": (0.02, 0.2, 6000, 0), "park": (0.02, 0.2, 6000, 0),
+    "street":    (0.03, 0.25, 6000, 0),  "yard": (0.02, 0.2, 6000, 0),
+}
+
+
+def room(x, kind, pan=0.0, narrator=False):
+    """Place a (mono) voice inside the scene: a touch of early reflection +
+    a short, dark tail.  Subtle on purpose - no obvious reverb."""
+    if narrator:
+        return reverb(to_stereo(x, 0), 0.04, 0.5, 6000)          # close, intimate
+    wet, secs, bright, er = ROOMS.get(kind or "room", ROOMS["room"])
+    st = to_stereo(x, pan * 0.35)
+    if er:
+        d = int(er / 1000 * SR)
+        refl = np.zeros_like(st)
+        refl[d:] += st[:-d, ::-1] * 0.10                          # crossed early reflection
+        st = st + lowpass(refl, bright)
+    return reverb(st, wet, secs, bright)
+
+
+def duck_curve(speech_mask, depth_db=-10.0, look_ahead=0.20, attack=0.12, release=0.65):
+    """Smooth music ducking: starts slightly before a line, eases down,
+    and breathes back up slowly after it (no pumping, no abrupt steps)."""
+    n = len(speech_mask)
+    la = int(look_ahead * SR)
+    m = np.zeros(n)
+    m[:n - la] = speech_mask[la:]
+    m = np.maximum(m, speech_mask)
+    step = 240                                                    # control rate 200 Hz
+    c = m[::step]
+    env = np.zeros_like(c)
+    a_c = 1 - math.exp(-step / (attack * SR))
+    r_c = 1 - math.exp(-step / (release * SR))
+    e = 0.0
+    for i, v in enumerate(c):
+        e += (v - e) * (a_c if v > e else r_c)
+        env[i] = e
+    env = np.interp(np.arange(n), np.arange(len(c)) * step, env)
+    return 10 ** (depth_db * env / 20)
+
+
+def mix(total, dialogue, sfx_events, amb_regions, music, out_path, room_kind=None):
+    """dialogue: [(t, clip, pan, is_narrator[, room])], sfx_events: [(t, clip, gain, pan)],
     amb_regions: [(s, e, kind)], music: stereo array."""
     n = int(total * SR)
     dia = np.zeros((n, 2))
     speech_mask = np.zeros(n)
-    for t, clip, pan, narr in dialogue:
-        c = clip.copy()
-        c = highpass(c, 90)
-        if narr:
-            cs = reverb(c, 0.08, 0.8, 6000)
-        else:
-            cs = reverb(to_stereo(c, pan * 0.35), 0.12, 0.9, 5000)
-        place(dia, cs, t)
+    for d in dialogue:
+        t, clip, pan, narr = d[:4]
+        kind = d[4] if len(d) > 4 else room_kind
+        c = highpass(clip.copy(), 80)
+        place(dia, room(c, kind, pan, narr), t)
         i = int(t * SR)
         speech_mask[i:min(n, i + len(clip))] = 1
     fx = np.zeros((n, 2))
@@ -597,12 +641,12 @@ def mix(total, dialogue, sfx_events, amb_regions, music, out_path, room=None):
             continue
         a = ambience(kind, e - s + 1.0, seed=int(s))
         place(amb, a, max(0, s - 0.5))
-    # music ducking under speech
-    k = int(0.35 * SR)
-    sm = np.convolve(speech_mask, np.ones(k) / k, mode="same")
-    duck = 1 - 0.55 * np.clip(sm * 1.5, 0, 1)
+    # music ducking under speech (smooth, anticipatory)
+    duck = duck_curve(speech_mask)
     mus = music[:n] if len(music) >= n else np.pad(music, ((0, n - len(music)), (0, 0)))
     mus = mus * duck[:, None]
+    # ambience dips a little under dialogue too, so words stay in front
+    amb = amb * (0.55 + 0.45 * duck_curve(speech_mask, depth_db=-4.0))[:, None] if len(amb) else amb
     mixd = dia * 1.0 + fx * 0.9 + amb * 0.9 + mus * db(-6)
     peak = np.max(np.abs(mixd)) or 1
     mixd = mixd / peak * 0.9

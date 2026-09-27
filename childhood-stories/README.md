@@ -61,11 +61,65 @@ Hard rules
   Bad: "Reading comprehension is important because it develops cognitive abilities."
   Good: "I read it." / "What happened?" / "...I don't know." / (pause) / "Want to read it again with me?"
 - Use `|0.6|` inside a line for a hesitation pause, and `{"pause": 0.8}` between lines for silence. Silence is a tool.
-- Narration: sparingly, warm female narrator (`narrator` = Kokoro `af_heart`), only near the middle or end, never describing what we can see.
+- Narration: sparingly, only near the middle or end, never describing what we can see. Voice rules: section 2b.
 - The end card narration is **two short lines**, different every week (see registry). Example of the shape:
   "Practice doesn't only change what children can do on a page." / "Sometimes it changes what they feel ready to do outside of it."
 - Brand line rotates weekly (never the same as the last 3): "Practice for more than the page." · "Learning shows up everywhere." ·
   "Small practice. Bigger moments." · "Build skills for the moments that matter." · "Learning can be simpler." (new ones welcome, same tone).
+
+## 2b. VOICE STANDARD (permanent, high priority - Maria, Sept 2026)
+
+**Voice acting quality is as important as visual quality. A beautiful film with robotic dialogue does NOT pass QC.**
+Engine: `engine/cs/voice.py` (voice system v2), cast: `engine/voice_cast.json`, tool: `engine/voices.py`.
+
+**Providers, in order**
+1. **ElevenLabs** `eleven_v3` (expressive, audio tags). Needs the API key in `$ELEVENLABS_API_KEY` or
+   `~/.config/micstudy/elevenlabs.key` (never commit it - this repo is public).
+2. **Kokoro** (the old local voices) - last-resort fallback only. Before using it, say so: the run reports
+   "PREMIUM VOICES UNAVAILABLE: <reason>". A film voiced with the fallback is blocked by QC: it is saved to the repo as
+   "Ready - not scheduled" and Maria decides. Never raise the pitch of an adult voice to make a child.
+
+**Voice cast** (fixed, so recurring characters sound the same every week - `engine/voice_cast.json`)
+- Narrator: warm adult woman, Canadian/North American English, calm, intimate, cinematic, thoughtful, never commercial. Different from every mom.
+- Mothers: natural, conversational, warm but real. Fathers: calm, reassuring, conversational, never announcer-like.
+- Young children (6-8) and older children (9-13): natural young voices designed for their age - not cartoonish, not squeaky,
+  slightly imperfect rhythm; friends/classmates always distinct from the main child.
+- Adults use ElevenLabs built-in voices; the narrator, the children and Grandma Rosa are custom voices made once with
+  `python3 engine/voices.py design` (their ids are then committed). One-off adults come from `pools`. Avoid new child
+  characters; if one is essential, add a designed voice for them to `voice_cast.json` (run `voices.py design <name>`).
+
+**Acting direction - every spoken line has an intention.** Add `"emo"` to each line (default comes from the face `expr`):
+`neutral, curious, hesitant, embarrassed, frustrated, tired, excited, quiet, whisper, reassuring, playful, proud, nervous,
+relieved, thoughtful, sad, tender, storytelling`. The engine turns it into a v3 performance tag. You may also write tags inside
+`"say"` for one-off moments, e.g. `"say": "[sighs] Okay. |0.4| One more time."` (tags never show in subtitles).
+Real people pause, breathe, change speed and volume, stress a word, restart a phrase: write that in (`...`, `|0.4|`, a restart
+like "I- I know this one"), but do not overdo stutters, and never make a child sound younger than their age.
+
+**Child dialogue**: contractions, short sentences, pauses.
+Bad "I do not understand this word." -> "I... don't know this word." Bad "Can you please read this book to me?" -> "Can you read it to me?"
+Bad "I am bad at mathematics." -> "I'm just bad at math."
+
+**Line by line, never a whole scene in one block.** Every line is generated on its own (pace, emotion, pauses, pronunciation,
+volume and character stay controllable), then assembled with 150-600 ms of breathing room (`"after"`, default 0.38 s);
+emotional pauses longer (`{"pause": 1.2}`).
+
+**Narration** = storytelling, not advertising: slower, softer emphasis, natural pauses, slightly lower energy, warm. No
+commercial rhythm, no constant enthusiasm, no radio voice, no perfectly even cadence.
+
+**Emotional scenes: less dialogue. Let silence work.** Example: "I got the star." / "That sounds fun." / (pause) /
+"...I don't have to say anything." The pause is part of the performance - do not fill it with narration.
+
+**Post-processing (automatic)**: every line is levelled to the same loudness, lightly EQ'd, de-essed and gently compressed;
+then placed in a small room matching the shot's `amb` (bedroom, kitchen, classroom, hallway, gym, outdoor...) - subtle, no
+obvious reverb. Music ducks smoothly (about -10 dB, starting just before each line, easing back after); ambience dips slightly.
+
+**Voice QC (automatic + you)** - every line is checked right after it is generated and **regenerated automatically (up to 3
+takes)** if it is: unclear/mispronounced, too fast, too high-pitched, too low for a child's age (= an adult pretending to be a
+child), monotone, or distorted. Then `qc/qc.json` -> `voice_flagged` lists anything still wrong. Blocking: any fallback voice,
+any line still unclear / too high / adult-sounding child / distorted, or more than 2 lines still monotone or rushed.
+The machine cannot judge acting taste, so also **read every line's transcript + emotion in `timeline.json`** and ask: would a
+real child/parent say it like this? Anything unnaturally cheerful, emotionally wrong, or over-written: rewrite the line or change
+its `emo`, and regenerate before the final render.
 
 ## 3. Production
 
@@ -128,7 +182,7 @@ SHOT keys:
 
 `produce.py` runs `cs/qc.py` automatically (exit code 2 = blocked). It checks: file opens, duration, 1080x1920, H.264 yuv420p 30 fps,
 audio present and loud enough, no decode errors, no unexpected black frames, long frozen stretches, every dialogue line heard at
-its time (speech recognition vs script), subtitles present, subtitles inside the safe area, speakers on screen, cover size, upload size.
+its time (speech recognition vs script), the VOICE QUALITY GATE (section 2b), subtitles present, subtitles inside the safe area, speakers on screen, cover size, upload size.
 
 Then **look** at every `qc/contact_*.jpg` and `cover.png` (Read them): faces and hands not malformed, nothing clipped, logo correct
 on the brand card and cover, staging makes sense, nothing realistic or photographic. Fix and re-render if anything is off.

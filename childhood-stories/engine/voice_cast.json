@@ -1,0 +1,46 @@
+{
+  "_about": "MIC Study Childhood Stories VOICE CAST (voice system v2). One fixed voice per recurring character so they sound the same every week. Adults use ElevenLabs built-in voices (no voice slots needed). The narrator, the children and Grandma Rosa are custom voices made once with ElevenLabs Voice Design by `python3 engine/voices.py design` - their voice_id is filled in automatically and must then be committed. Voice ids are not secret; the API key is (never commit it). `fallback` = what Kokoro uses when premium voices are unavailable (reported, never auto-published).",
+  "provider": "elevenlabs",
+  "model": "eleven_v3",
+  "design_model": "eleven_ttv_v3",
+  "voices": {
+    "narrator": {"voice_id": null, "speed": 0.94,
+      "design": "Warm adult woman in her late thirties, Canadian English. Calm, intimate and thoughtful storyteller, speaking softly and close, unhurried, with gentle warmth and natural breaths. Sounds like a mother telling a true story at bedtime. Never commercial, never announcer-like, never radio voice."},
+
+    "elena":  {"voice_id": "EXAVITQu4vr4xnSDxMaL", "premade": "Sarah", "speed": 0.98},
+    "grace":  {"voice_id": "XrExE9yKIg1WjnnlVkGX", "premade": "Matilda", "speed": 0.97},
+    "lin":    {"voice_id": "hpp4J3VqNfWAUOO0d1Us", "premade": "Bella", "speed": 0.98},
+    "ms_patel": {"voice_id": "Xb7hH8MSUJpSbSDYk0k2", "premade": "Alice", "speed": 0.97},
+    "marco":  {"voice_id": "iP95p4xoKVk53GoZ742B", "premade": "Chris", "speed": 0.97},
+    "daniel": {"voice_id": "CwhRBWXzGAHq8TQ4Fs17", "premade": "Roger", "speed": 0.97},
+    "coach_ben": {"voice_id": "bIHbv24MWmeRgasZH58o", "premade": "Will", "speed": 1.0},
+    "grandpa_wei": {"voice_id": "pqHfZKP75CvOlQylNhV4", "premade": "Bill", "speed": 0.9},
+    "grandma_rosa": {"voice_id": null, "speed": 0.92,
+      "design": "Grandmother in her seventies, North American English with a light, warm Spanish lilt. Soft, slow and kind, a little husky, smiling as she speaks. Natural and conversational, like talking to her grandchild in the kitchen."},
+
+    "leo":   {"voice_id": null, "age": 6,
+      "design": "Real six-year-old boy speaking at home, North American English. Small, soft young voice with a slightly breathy, earnest quality and imperfect, natural rhythm. Not cartoonish, not squeaky, not an adult imitating a child. Relaxed and genuine."},
+    "ava":   {"voice_id": null, "age": 7,
+      "design": "Real seven-year-old girl, North American English. Light, bright but natural young voice, a little shy, with small natural hesitations. Not cartoonish, not high-pitched squeaky, not an adult imitating a child. Genuine and relaxed."},
+    "tobi":  {"voice_id": null, "age": 8,
+      "design": "Real eight-year-old boy, Canadian English. Clear, slightly husky young voice, thoughtful and a bit self-conscious, natural rhythm with small pauses. Not cartoonish, not high-pitched, not an adult imitating a child."},
+    "max":   {"voice_id": null, "age": 9,
+      "design": "Real nine-year-old boy, Canadian English. Curious, careful and earnest, a clear natural young voice with relaxed, slightly uneven pacing. Not cartoonish, not squeaky, not an adult imitating a child."},
+    "sofia": {"voice_id": null, "age": 10,
+      "design": "Real ten-year-old girl, North American English. Warm, lively and natural, confident but still clearly a child, relaxed everyday speech with natural ups and downs. Not cartoonish, not squeaky, not an adult imitating a child."},
+    "kai":   {"voice_id": null, "age": 10,
+      "design": "Real ten-year-old boy, Canadian English. Friendly, energetic but relaxed young voice, a little raspy, natural and casual. Clearly different from a shy child. Not cartoonish, not an adult imitating a child."},
+    "noor":  {"voice_id": null, "age": 11,
+      "design": "Real eleven-year-old girl, Canadian English. Calm, kind and thoughtful, a slightly lower soft young voice, natural and relaxed. Not cartoonish, not squeaky, not an adult imitating a child."},
+    "amara": {"voice_id": null, "age": 12,
+      "design": "Preteen girl, twelve years old, Canadian English. Relaxed, a little dry and grown-up for her age, but still clearly a child. Natural, casual speech with real pauses. Not cartoonish, not an adult."},
+    "jonah": {"voice_id": null, "age": 13,
+      "design": "Adolescent boy, thirteen, Canadian English, voice not fully broken yet. Laid-back, slightly mumbly and casual, natural teen rhythm. Clearly a young teenager, not an adult."}
+  },
+  "pools": {
+    "_about": "Voices for characters that are not in the fixed cast (one-off shopkeepers, neighbours...). Picked in order, skipping voices already used in the same film. New CHILD characters should be avoided: reuse the recurring children, or add a designed voice to 'voices' above.",
+    "adult_male":   ["cjVigY5qzO86Huf0OWal", "nPczCjzI2devNBz1zQrb", "bIHbv24MWmeRgasZH58o", "iP95p4xoKVk53GoZ742B"],
+    "adult_female": ["pFZP5JQG7iQjIQuC4Bku", "Xb7hH8MSUJpSbSDYk0k2", "hpp4J3VqNfWAUOO0d1Us", "EXAVITQu4vr4xnSDxMaL"]
+  },
+  "narrator_fallback": {"id": "af_heart", "speed": 0.92}
+}
