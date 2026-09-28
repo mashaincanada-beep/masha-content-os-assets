@@ -28,7 +28,7 @@ Hard rules
 - Never guilt parents. Never imply a child who struggles is worth less. Never promise outcomes.
 - What changes is confidence, participation, independence, understanding, willingness to try, expression, everyday problem solving - never the child's value.
 - No product pitch inside the story. A MIC Study-style printable may appear naturally in a practice scene (`p_worksheet`). No features, prices, bundles or checkout, ever. No "BUY NOW".
-- Visuals: illustrated storybook characters only (the engine rig). No photos, no realistic people.
+- Visuals: MIC Study v3 handmade doodle style only (section 2c). No photos, no realistic people, no flat vector.
 - All text written for Maria or the audience uses normal hyphens (-), never em or en dashes.
 
 ## 2. Story engine (do this before writing any screenplay)
@@ -67,62 +67,88 @@ Hard rules
 - Brand line rotates weekly (never the same as the last 3): "Practice for more than the page." · "Learning shows up everywhere." ·
   "Small practice. Bigger moments." · "Build skills for the moments that matter." · "Learning can be simpler." (new ones welcome, same tone).
 
-## 3. Production
+## 2c. VISUAL STANDARD - MIC Study v3 handmade doodle (permanent, approved by Maria Sept 2026)
+
+Every new Wednesday film uses the **same approved MIC Study v3 illustration style as the daily Stories, Carousels and Reels**,
+brought to life as a short film. Same art language, different storytelling depth (daily = simpler and educational;
+Childhood Stories = cinematic, emotional, more detailed). Think: **"a child's drawing brought gently to life."**
+
+- Style: warm cream paper `#FFF8EC` with subtle grain; colored-pencil / crayon hatching; thin wobbly ink; childlike doodle
+  people (big round heads, dot eyes with a highlight, soft brows, red curved smile, soft blush, scribbled two-tone hair, stick
+  arms and legs, clothes filled with pencil strokes and real details: knit rows, cuffs, buttons, prints, bows, laced sneakers).
+  Props and decorations (books, pencils, hearts, stars, flowers, moon...) drawn the same way. Built on the daily kit
+  (`engine/v3/kit2.py`, style reference "Mom-daughter dates"), unchanged.
+- The whole world is drawn: rooms, furniture and skies use the same pencil and ink. Never doodle characters on vector or
+  realistic backgrounds. Avoid flat vector, Canva/stock, corporate, 3D, glossy, photoreal, generic AI cartoon, perfect anatomy.
+- It must feel like a SHORT FILM, never a slideshow: wide / medium / close / insert / reaction shots and cuts; slow push-ins
+  and pans; subtle parallax (background, midground, foreground); character movement (walking, sitting, looking away, hands,
+  page turns, pointing); small facial reactions; pauses; environment motion (steam, clouds, floating pencil hearts). The ink
+  "boils" gently (redrawn every 4 frames) so it reads as a living drawing.
+- Emotion stays subtle: a child looking down at the page, a parent sitting beside them, a hand on a pencil, a small smile,
+  silence before a line. Never exaggerated faces.
+- Character continuity: recurring characters are generated from `engine/cast.json` by `engine/v3/cast_v3.py`, so face design,
+  skin, hair style and colour, clothing palette and relative age stay the same every week (and their approved voice).
+  Clothing may change by scene via `cast_overrides`; the illustration language never does.
+- Text: minimal. Anything inside the art is handwritten (Architects Daughter / Gochi Hand). Subtitles stay highly readable
+  (Nunito 800 on a cream card with a thin ink border, in the Reels safe area). No big corporate title cards inside scenes;
+  MIC Study appears only on the end card, the brand card and the cover.
+- Cover: a hand-drawn miniature movie poster - the main character(s) at the key emotional moment, a short handwritten title
+  (ALL CAPS, yellow crayon underline), warm cream paper, small official MIC Study logo. Never an educational infographic.
+- Upload size: the 9.5 MB upload limit softens the finest hatching; keep scenes uncluttered (1-3 characters, a few props),
+  and prefer slow camera moves - the engine already keeps hatching stable between frames so texture survives.
+
+## 3. Production (v3 engine)
 
 ```
-bash childhood-stories/engine/setup.sh                                 # once per session (~1-2 min)
-python3 childhood-stories/engine/produce.py episodes/<folder>/episode.py --preview   # stills + timing, ~2 min
-python3 childhood-stories/engine/produce.py episodes/<folder>/episode.py             # full render + QC, ~8-10 min
+bash childhood-stories/engine/setup.sh                                                   # once per session
+python3 childhood-stories/engine/v3/produce_v3.py episodes/<folder>/episode.py --preview   # stills + timing + cover, ~1 min
+python3 childhood-stories/engine/v3/produce_v3.py episodes/<folder>/episode.py             # full render + QC, ~20-30 min
 ```
-Episode folder name: `YYYY-MM-DD-<slug>` (the Wednesday date). Outputs in that folder: `master.mp4`, `upload.mp4` (<= 9.5 MB,
-what gets uploaded), `cover.png` (1080x1920), `subtitles.srt`, `timeline.json`, `render_log.json`, `qc/qc.json`, `qc/contact_*.jpg`,
-`preview/` (stills). Start from `episodes/_pilot-four-quarters/episode.py` as a worked example.
+Run the full render in the background (nohup) and poll: it takes longer than one shell command allows. `--resume` reuses
+shots already rendered in `_work/` (only if those shots did not change). Episode folder: `YYYY-MM-DD-<slug>`. Outputs (same
+as before): `master.mp4`, `upload.mp4` (<= 9.5 MB, what gets uploaded), `cover.png`, `subtitles.srt`, `timeline.json`,
+`render_log.json`, `qc/qc.json`, `qc/contact_*.jpg`, `preview/` (sheet_*.jpg + cover.png).
+Worked example: `episodes/_v3-pipeline-test/episode.py`. The old flat engine (`engine/produce.py`, `cs/scenekit.py`) is
+retired for new films and kept only for the pilot.
 
-### Screenplay format (`episode.py` defines `EPISODE`)
+### Screenplay format (`episode.py` defines `EPISODE`; plain data, no imports needed)
 ```python
-from cs.scenekit import *            # sets + props helpers (see engine/cs/scenekit.py)
 EPISODE = {
-  "title": "Four Quarters", "slug": "four-quarters",
-  "key": "D", "bpm": 76, "seed": 11,          # score key/tempo; change key + seed weekly
+  "title": "Through", "slug": "through", "key": "F", "bpm": 72, "seed": 23,   # change key + seed weekly
   "brand_line": "Small practice. Bigger moments.",
-  "extra_cast": {...},                         # new characters (same fields as cast.json)
-  "sets": {"kitchen": {"far": svg, "mid": svg, "front": svg, "near": svg}},
+  "extra_cast": {...},            # new characters, same fields as cast.json (they are drawn in v3 automatically)
+  "cast_overrides": {"ava": {"top": {"style": "hoodie", "color": "#90CAF9"}}},   # wardrobe change for this film
+  "sets_v3": {"my_room": fn},     # optional custom set functions (same return shape as sets_v3.py)
   "shots": [ SHOT, ... ],
   "end": {"narration": ["line 1", "line 2"], "music": "gentle"},
-  "cover": {"shot": 2, "cam": [x, y, zoom], "title_y": 300, "override": {...}},
+  "cover": {"shot": 2, "t": "L0.end+1.2", "title": "Through"},
 }
 ```
-Layers and depth (camera parallax): `far` 0.55 (walls, sky), `mid` 1.0 (things behind the characters), actors 1.0,
-`front` 1.0 (**furniture at the characters' depth that must cover them**: counters, tables, chair arms), `near` 1.35 (true
-foreground only: blurred plants, leaves, audience heads). World view is 1080x1920; sets can extend to -240..1320 x -260..2180.
-
 SHOT keys:
-- `set`, `music` (curious, playful, uncertain, reflective, tender, hopeful, warm, gentle, silence), `amb` (home, kitchen,
-  classroom, school, library, market, party, fair, gym, park, field, street, outdoor, night, room, none), `grade` (soft, warm,
-  golden, cool, night, dim), `fx` (vignette, vignette_strong, dust), `trans` (cut, dissolve, fade) + `tdur`.
-- `cam`: keyframes `[t, x, y, zoom]` (`t` may be `"end"`). Close-up ~1.5-1.8, medium ~1.2-1.4, wide ~1.0.
-- `actors`: `{key: {x, y, s, expr, armL, armR, legs("stand"|"sit"), look(dx,dy), turn(-1..1), tilt, lean, eye, mouth, brow, auto_look}}`.
-  Use `"key#2"` for a second copy. Children ~`s` 1.1-1.2 at y ~1760-1790; adults ~1.0 at y ~1690-1740.
-- `expr`: neutral, calm, happy, joy, proud, tender, hopeful, determined, shy, curious, thinking, focused, unsure, worried, sad,
-  disappointed, embarrassed, frustrated, surprised, tired, nervous.
-- Arm poses: down, relaxed, hold, hold_low, raise, wave, hip, point, reach, chin, cross, shrug, cheer, chest, face, write, give,
-  hug, tablet, counter, rest, thumbs, open, pocket - or explicit `[upper, fore]` angles.
-- `script`: ordered items: `{"who", "line", "expr", "speed", "gap", "after", "say"}` (say = pronunciation override),
-  `{"pause": s}`, `{"sfx": name, "gain", "pan"}`. Subtitles are generated from lines automatically.
-- `beats`: `{"t", "who", "set": {...}, "dur"}`; `t` = seconds or `"L2"`, `"L2.end"`, `"L2+0.4"`, `"end-1"`.
-  `set` can tween x/y/s/lean/tilt/turn/look/arms, switch expr/legs/eye/mouth, `walk_to: x`, `wave: true`, `auto_look`.
-  Props: `{"t", "who": prop_id, "set": {x, y, s, rot, op, attach: [actor, "L"|"R", dx, dy] | None}}`.
-- `props`: `{"id", "svg", "x", "y", "s", "rot", "squash" (0.5 = lying flat on a table), "layer" (front|back|near), "attach", "show": [t0, t1]}`.
-- `sfx`: timed list `{"name", "t", "gain", "pan", "kw"}`. Sounds: page, pencil, footsteps, knock, door, chair, clink, pour,
-  sizzle, chop, bell, chime, whistle, ball, kick, applause, coins, zip, click, whoosh, tick, birds, heartbeat, laugh_kid, gasp.
-- `caption` (+`caption_t`) for small time cards ("That evening", "Saturday"); `title: True` on shot 1 shows the film title.
-- `start`, `tail`, `min`, `dur` control timing. Target total **1:50-2:05** (hard limits 1:45-2:15 incl. the 4.8 s brand card).
+- `set`: kitchen, bedroom, classroom, living_room, park, store, stage, library, hallway (engine/v3/sets_v3.py) or a custom
+  one; `set_kw` (e.g. `{"night": True}`, `{"chairs": [430, 700]}`, `{"desks": [300, 780]}`). Floor line y 1640 (park 1700,
+  stage 1600); table tops ~1250 (kitchen), desks ~1300 (classroom), counter ~1180 (store).
+- `music`, `amb`, `trans` (cut, dissolve, fade) + `tdur`, `start`, `tail`, `min`, `dur`, `sfx` - exactly as before.
+- `cam`: keyframes `[t, x, y, zoom]` (`t` may be seconds, `"end"`, `"L2"`, `"L2.end+0.4"`). Wide 1.0-1.15, medium 1.35-1.55,
+  close two-shot 1.8-2.1, insert on hands/page 2.2-2.6.
+- `actors`: `{key: {"keys": [[t, state], ...]}}`. State fields (world coords): `x`, `y` (head centre), `pose`
+  (stand | sit | walk), `expr`, `look` [dx, dy], `smile`, `brow`, `tilt`, `hand` / `hand2` [x, y] (right / left hand
+  targets), `point` [dx, dy] (finger), `floor`, `scale`, `ease` (seconds the move takes before this key). Numbers ease
+  smoothly between keys; walking = a key with a new `x` and `"pose": "walk"`. Blinks, talking mouths (from the voice),
+  and looking at whoever is speaking are automatic. Give standing adults an explicit `y` (~760) if they later sit (~880).
+- `expr`: neutral, calm, happy, proud, tender, hopeful, curious, focused, unsure, worried, nervous, sad, disappointed,
+  embarrassed, tired, determined, excited, surprised, relieved, frustrated, thoughtful, playful. A line's `expr` applies to
+  the speaker from that line on.
+- `props`: `[["book", {"x", "y", "word", "glow_from": "L0"}], ["mug", {...}], ...]` - book, worksheet, mug, pencil, coins,
+  backpack, ball, lunchbox, plate_cookies, jar, trophy, plant.
+- `fx`: `[["hearts", "L0.end+0.3"]]` floating pencil hearts.
+- `script`: as before (`who`, `line`, `expr`, `emo`, `speed`, `after`, `say`, `{"pause": s}`, `{"sfx": ...}`).
 
-### Staging checklist (use the preview sheets)
-- Every speaking character's face is on screen and not covered. Children's hands reach what they touch (counters at chest height).
-- Furniture at character depth goes in `front`, never `near`. Seated characters sit behind a `front` table.
-- Vary shot sizes: open wide, move to medium and close-ups for emotion, wide again for payoff.
-- Keep subtitles readable (engine keeps them in the Reels safe area; QC flags anything outside).
+### Staging checklist (use preview/sheet_*.jpg)
+- Every speaking character is in the shot and their face is visible; hands reach what they touch (child at table: hand y ~1242).
+- Seated characters sit behind the table (set `mid`); standing ones behind counters look natural.
+- Vary shot sizes: open wide, go medium and close for emotion, insert on hands/page, wide or close again for the payoff.
+- Keep 1-3 characters per shot and a few props; subtitles stay readable.
 
 ## 4. Quality control (fail-safe)
 

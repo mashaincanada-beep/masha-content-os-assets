@@ -1,9 +1,6 @@
 # Childhood Stories - MIC Study v3 visual standard
 
-**Status: PENDING MARIA'S APPROVAL of the visual test (`episodes/_v3-visual-test/`). Not active yet.**
-When approved, this section moves into `README.md` (the production bible) and the Wednesday task switches
-its renderer to `engine/v3/doodlefilm.py`. Nothing else in the Wednesday workflow changes: schedule, story
-logic, voices, storage, GitHub backup, Meta publishing, registry, captions, QC structure, duration.
+**Status: ACTIVE (approved by Maria, 2026-09-28).** The permanent rules live in README.md section 2c; production commands and the screenplay format in section 3.
 
 ## Style (same art language as the daily Stories, Carousels and Reels)
 - Built on the approved daily kit `engine/v3/kit2.py` (style reference "Mom-daughter dates", v3 layout), unchanged.

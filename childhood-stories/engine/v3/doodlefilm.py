@@ -23,9 +23,13 @@ ENGINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAPER = '#FFF8EC'
 
 
+HATCH_GAP_ADD = 2      # slightly wider pencil strokes: survive the 9.5 MB upload compression
+
+
 def spoly(p, color, **k):
     """kit2.poly() on an opaque paper-coloured base, so shapes hide what is behind them
     (pencil hatching alone is see-through)."""
+    k['gap'] = k.get('gap', 5) + HATCH_GAP_ADD
     return f'<path d="{K.pts2d(p)}Z" fill="{PAPER}"/>' + K.poly(p, color, **k)
 
 
@@ -347,7 +351,10 @@ def glow_def():
 
 
 def svg_frame(layers, boil):
-    d = K.defs(4 + boil).replace('</defs>', K.paper_filter() + glow_def() + '</defs>')
+    """Only the INK wobble boils (changes seed); the pencil grain stays fixed, so hatching
+    texture is stable between drawings - it looks handmade and compresses far better."""
+    d = K.defs(4).replace('seed="4"', f'seed="{4 + boil}"', 1)
+    d = d.replace('</defs>', K.paper_filter() + glow_def() + '</defs>')
     return f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">{d}{layers}</svg>'
 
 

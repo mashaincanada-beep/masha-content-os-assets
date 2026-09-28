@@ -18,6 +18,7 @@ import doodlefilm as D
 from doodlefilm import lerp, seg
 
 FPS, DUR = 30, 18.0
+FROM_T = 0.0
 SUBS = [(6.2, 8.0, "I... don't know this word."),
         (11.3, 13.2, "Let's try the first sound. Together."),
         (14.3, 16.3, "Th... thr... through!")]
@@ -102,7 +103,7 @@ def mom_state(t):
 
 
 def frame_svg(t, fi):
-    boil = (fi // 3) % 4                                  # drawings change "on threes"
+    boil = (fi // 4) % 3                                  # ink redrawn every 4 frames (7.5 drawings/s)
     cx, cy, s = camera(t)
     word_glow = seg(t, 14.4, 15.4) if t < 17 else 1.0
     bg = D.set_back(t)
@@ -125,7 +126,7 @@ def render(out, stills=False):
     from playwright.sync_api import sync_playwright
     fdir = os.path.join(out, 'frames')
     os.makedirs(fdir, exist_ok=True)
-    times = [0.5, 4.5, 6.8, 9.3, 11.9, 14.8, 17.0] if stills else [i / FPS for i in range(int(DUR * FPS))]
+    times = [0.5, 4.5, 6.8, 9.3, 11.9, 14.8, 17.0] if stills else [i / FPS for i in range(int(FROM_T * FPS), int(DUR * FPS))]
     t0 = time.time()
     with sync_playwright() as p:
         b = p.chromium.launch()
@@ -175,9 +176,11 @@ def mux(out, wav):
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument('--stills', action='store_true')
+    ap.add_argument('--from-t', type=float, default=0.0)
     ap.add_argument('--out', default=os.path.join(HERE, 'out'))
     a = ap.parse_args()
     os.makedirs(a.out, exist_ok=True)
+    FROM_T = a.from_t
     render(a.out, a.stills)
     if not a.stills:
         print(mux(a.out, audio(a.out)))
