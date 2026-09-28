@@ -6,3 +6,5 @@ episodes/*/stems/
 episodes/*/__pycache__/
 episodes/*/x264p*
 engine/**/__pycache__/
+episodes/*/out/
+engine/v3/__pycache__/
