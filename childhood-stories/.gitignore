@@ -8,3 +8,7 @@ episodes/*/x264p*
 engine/**/__pycache__/
 episodes/*/out/
 engine/v3/__pycache__/
+# test-episode outputs (keep only episode.py and cover.png)
+episodes/_v3-pipeline-test/*
+!episodes/_v3-pipeline-test/episode.py
+!episodes/_v3-pipeline-test/cover.png
